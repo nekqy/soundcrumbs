@@ -1,5 +1,5 @@
 define([], function() {
-    function MainCtrl($scope, VKApi) {
+    function MainCtrl($scope, VKApi, $sce) {
         var self = this;
         var fields = ['uid', 'first_name', 'last_name', 'nickname', 'sex',
             'birthdate', 'city', 'country', 'timezone', 'photo', 'photo_medium',
@@ -8,10 +8,20 @@ define([], function() {
         self.$scope = $scope;
         self.VKApi = VKApi;
 
+        $scope.trustSrc = function(src) {
+            return $sce.trustAsResourceUrl(src);
+        };
+
         VKApi.getUser(fields).then(user => {
             self.$scope.user = user;
             self.countFriends = user.counters.friends;
             self.countFollowers = user.counters.followers;
+        });
+
+        VKApi.getAudio({
+            q: 'the Beatles'
+        }).then(audioList => {
+            self.$scope.audioList = audioList;
         });
     }
 

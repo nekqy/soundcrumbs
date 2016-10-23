@@ -1,1 +1,14 @@
-<div user-item ng-if="user" user="{{ user }}">{{user}}</div>
+<!--<div user-item ng-if="user" user="{{ user }}">{{user}}</div>-->
+
+<!--<div user-item ng-if="audioList">{{audioList}}</div>-->
+
+<div ng-if="audioList" ng-repeat="(key, value) in audioList">
+
+   <div ng-if="value.aid">
+      <div>{{value.artist}} - {{value.title}}</div>
+      <audio controls preload="none">
+         <source ng-src="{{trustSrc(value.url)}}">
+      </audio>
+   </div>
+
+</div>

@@ -67,6 +67,19 @@ define([], function() {
                 })
             });
 
+            var getAudio = params => authenticate().then(mid => {
+                params = params || {};
+                params.mid = mid;
+
+                return $q((resolve, reject) => {
+                    VK.api('audio.search', params, response => {
+                        if(response.response) {
+                            $timeout(() => resolve(response.response), 0);
+                        }
+                    });
+                })
+            });
+
             var getFriends = fields => authenticate().then(mid =>
                   $q((resolve, reject) => {
                       VK.api('friends.get', {
@@ -96,6 +109,7 @@ define([], function() {
                 getUser,
                 getSession,
                 getFollowers,
+                getAudio,
                 getFriends,
                 photosSearch
             };
