@@ -1,9 +1,19 @@
-define(['./bower_components/angular/angular', './bower_components/angular-route/angular-route', './services/main.es6', './controllers/main.es6', './bower_components/angularjs-geolocation/src/geolocation'], function() {
+define([
+    './bower_components/angular/angular', 
+    './bower_components/angular-route/angular-route',
+    './bower_components/firebase/firebase',
+    './bower_components/angularfire/dist/angularfire',
+    './bower_components/chance/chance',
+    './services/main.es6',
+    './controllers/main.es6', 
+    './bower_components/angularjs-geolocation/src/geolocation'
+], function() {
     'use strict';
 
     // Declare app level module which depends on views, and components
     var app = angular.module('SoundCrumbs', [
         'ngRoute',
+        'firebase',
         'SoundCrumbs.service',
         'SoundCrumbs.controllers',
         'geolocation'
@@ -24,6 +34,15 @@ define(['./bower_components/angular/angular', './bower_components/angular-route/
         $locationProvider.hashPrefix('!');
 
         $routeProvider.otherwise({redirectTo: '/me'});
+    }]).
+    config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+        $locationProvider.hashPrefix('!');
+
+        $routeProvider.when('/firebase', {
+            templateUrl: 'partials/firebase.html',
+            controller: 'FirebaseCtrl'
+        });
+
     }]).
     config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');

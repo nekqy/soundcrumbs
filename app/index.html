@@ -8,12 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
-  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/firebase.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
   <script src="vendor/jquery.form.js"></script>
   <script src="//vk.com/js/api/openapi.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
 </head>
 <body>
   <ul class="menu">
@@ -21,6 +23,7 @@
     <li><a href="#!/audioList">Search Audio</a></li>
     <li><a href="#!/createAudio">Create Audio</a></li>
     <li><a href="#!/recordAudio">Record Audio</a></li>
+    <li><a href="#!/firebase">Firebase page</a></li>
   </ul>
 
   <div ng-view></div>

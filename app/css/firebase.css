@@ -1,0 +1,29 @@
+.SoundCrumbs__Firebase-container {
+   margin: 4px;
+}
+.SoundCrumbs__Firebase-table th, .SoundCrumbs__Firebase-table td {
+   padding: 4px;
+}
+.SoundCrumbs__Firebase-tableBorder th, .SoundCrumbs__Firebase-tableBorder td {
+   border: 1px solid black;
+}
+.SoundCrumbs__Firebase-buttons {
+   margin-bottom: 4px;
+}
+.SoundCrumbs__Firebase-createCrumbForm {
+   background-color: #ffe;
+   border: 1px solid #333;
+   width: 650px;
+   height: 100px;
+   margin-bottom: 4px;
+}
+.SoundCrumbs__Firebase-createCrumbForm button {
+   float: right;
+   float: right;
+   height: 60px;
+   margin: 20px;
+   width: 76px;
+}
+.SoundCrumbs__Firebase-createCrumbForm table {
+   float: left;
+}
