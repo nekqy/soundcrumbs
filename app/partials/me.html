@@ -1,14 +1,8 @@
-<!--<div user-item ng-if="user" user="{{ user }}">{{user}}</div>-->
+<div ng-if="user">
 
-<!--<div user-item ng-if="audioList">{{audioList}}</div>-->
-
-<div ng-if="audioList" ng-repeat="(key, value) in audioList">
-
-   <div ng-if="value.aid">
-      <div>{{value.artist}} - {{value.title}}</div>
-      <audio controls preload="none">
-         <source ng-src="{{trustSrc(value.url)}}">
-      </audio>
-   </div>
+    <img ng-src="{{user.photo_big}}" alt="photo">
+    <div>{{user.first_name}} {{user.last_name}}</div>
+    <div>Online: <input type="checkbox" ng-model="isOnline" disabled readonly></div>
+    <div>День рождения: {{user.bdate}}</div>
 
 </div>

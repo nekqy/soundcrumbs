@@ -1,8 +1,8 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
-  "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
+  "name": "SoundCrumbs",
+  "description": "tensor.ru student scholarship competition 2016",
+  "version": "0.0.1",
+  "homepage": "https://github.com/nekqy/soundcrumbs",
   "license": "MIT",
   "private": true,
   "dependencies": {

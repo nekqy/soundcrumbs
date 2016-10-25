@@ -7,6 +7,7 @@ define([], function() {
 
         self.$scope = $scope;
         self.VKApi = VKApi;
+        $scope.readonly = true;
 
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
@@ -14,15 +15,16 @@ define([], function() {
 
         VKApi.getUser(fields).then(user => {
             self.$scope.user = user;
+            self.$scope.isOnline = (user.online !== 0);
             self.countFriends = user.counters.friends;
             self.countFollowers = user.counters.followers;
         });
 
-        VKApi.getAudio({
-            q: 'the Beatles'
-        }).then(audioList => {
-            self.$scope.audioList = audioList;
-        });
+        //VKApi.getAudio({
+        //    q: 'the Beatles'
+        //}).then(audioList => {
+        //    self.$scope.audioList = audioList;
+        //});
     }
 
     return MainCtrl;
