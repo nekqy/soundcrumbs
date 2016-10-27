@@ -5,7 +5,15 @@
   "description": "tensor.ru student scholarship competition 2016",
   "repository": "https://github.com/nekqy/soundcrumbs",
   "license": "MIT",
-    "devDependencies": {
+  "devDependencies": {
     "bower": "^1.7.7"
+  },
+  "dependencies": {
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "express-fileupload": "0.0.5",
+    "node-uuid": "^1.4.7",
+    "request": "^2.76.0",
+    "vksdk": "^5.3.2"
   }
 }

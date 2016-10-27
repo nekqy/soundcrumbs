@@ -16,7 +16,7 @@ define(['./bower_components/angular/angular', './bower_components/angular-route/
     config(['VKApiProvider', function(VKApiProvider) {
         VKApiProvider.setSettings({
             apiId: 5491230,
-            apiVersion: '5.19'
+            apiVersion: '5.59'
         });
     }]).
     config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
@@ -24,7 +24,7 @@ define(['./bower_components/angular/angular', './bower_components/angular-route/
 
         $routeProvider.otherwise({redirectTo: '/me'});
     }]).
-    config(['$locationProvider', '$routeProvider', 'fields', function($locationProvider, $routeProvider) {
+    config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');
 
         $routeProvider.when('/me', {
@@ -33,12 +33,21 @@ define(['./bower_components/angular/angular', './bower_components/angular-route/
         });
 
     }]).
-    config(['$locationProvider', '$routeProvider', 'fields', function($locationProvider, $routeProvider) {
+    config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');
 
         $routeProvider.when('/audioList', {
             templateUrl: 'partials/audioList.html',
             controller: 'AudioListCtrl'
+        });
+
+    }]).
+    config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+        $locationProvider.hashPrefix('!');
+
+        $routeProvider.when('/createAudio', {
+            templateUrl: 'partials/createAudio.html',
+            controller: 'CreateAudioCtrl'
         });
 
     }]);
