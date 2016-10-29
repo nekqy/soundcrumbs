@@ -8,6 +8,12 @@ define([], function() {
             return $sce.trustAsResourceUrl(src);
         };
 
+        // надо иметь актуальный sid
+        setTimeout(function() {
+            VKApi.getSession().then(session => {
+                $scope.sid = session.sid;
+            });
+        }, 60000);
         VKApi.getSession().then(session => {
             $scope.sid = session.sid;
         });
@@ -17,7 +23,6 @@ define([], function() {
         };
 
         $('#uploadForm').ajaxForm(function(res) {
-            //alert("Thank you for your comment!");
             res = JSON.parse(res);
             if (res.error) {
                 console.error(res.error);

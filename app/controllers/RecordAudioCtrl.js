@@ -8,10 +8,6 @@ define(['recorder'], function(Recorder) {
             return $sce.trustAsResourceUrl(src);
         };
 
-        VKApi.getSession().then(session => {
-            $scope.sid = session.sid;
-        });
-
         var audio_context;
         var recorder;
         function startUserMedia(stream) {
@@ -56,20 +52,23 @@ define(['recorder'], function(Recorder) {
                 var au = document.createElement('audio');
                 var hf = document.createElement('a');
 
+                // надо иметь актуальный sid
+                VKApi.getSession().then(session => {
+                    $scope.sid = session.sid;
 
-                var fd = new FormData();
-                fd.append('file', blob);
-                fd.append('sid', $scope.sid);
-                $.ajax({
-                    type: 'POST',
-                    url: 'http://localhost:3000/upload',
-                    data: fd,
-                    processData: false,
-                    contentType: false
-                }).done(function(data) {
-                    console.log(data);
+                    var fd = new FormData();
+                    fd.append('file', blob);
+                    fd.append('sid', $scope.sid);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:3000/upload',
+                        data: fd,
+                        processData: false,
+                        contentType: false
+                    }).done(function(data) {
+                        console.log(data);
+                    });
                 });
-
 
                 au.controls = true;
                 au.src = url;
