@@ -9,11 +9,11 @@ define([], function() {
         };
 
         // надо иметь актуальный sid
-        setTimeout(function() {
+        setInterval(function() {
             VKApi.getSession().then(session => {
                 $scope.sid = session.sid;
             });
-        }, 60000);
+        }, 60 * 1000);
         VKApi.getSession().then(session => {
             $scope.sid = session.sid;
         });
