@@ -11,8 +11,8 @@
       method='post'
       encType="multipart/form-data">
     <input type="hidden" name="sid" value="{{sid}}"/>
-    <input type="file" name="sampleFile" />
-    <input type='submit' ng-click="submitClick()" value='Upload!' />
+    <input id="file" type="file" name="file" />
+    <input id="submitButton" type='submit' ng-click="submitClick()" value='Upload!' />
 </form>
 
 <div>{{wait}}</div>
@@ -22,3 +22,4 @@
         <source ng-src="{{trustSrc(audio.url)}}">
     </audio>
 </div>
+

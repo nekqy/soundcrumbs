@@ -50,5 +50,14 @@ define(['./bower_components/angular/angular', './bower_components/angular-route/
             controller: 'CreateAudioCtrl'
         });
 
+    }]).
+    config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+        $locationProvider.hashPrefix('!');
+
+        $routeProvider.when('/recordAudio', {
+            templateUrl: 'partials/recordAudio.html',
+            controller: 'RecordAudioCtrl'
+        });
+
     }]);
 });
