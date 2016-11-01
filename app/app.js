@@ -1,11 +1,12 @@
-define(['./bower_components/angular/angular', './bower_components/angular-route/angular-route', './services/main.es6', './controllers/main.es6'], function() {
+define(['./bower_components/angular/angular', './bower_components/angular-route/angular-route', './services/main.es6', './controllers/main.es6', './bower_components/angularjs-geolocation/src/geolocation'], function() {
     'use strict';
 
     // Declare app level module which depends on views, and components
     var app = angular.module('SoundCrumbs', [
         'ngRoute',
         'SoundCrumbs.service',
-        'SoundCrumbs.controllers'
+        'SoundCrumbs.controllers',
+        'geolocation'
     ]);
 
     app.constant('fields', ['uid', 'first_name', 'last_name', 'nickname', 'sex',

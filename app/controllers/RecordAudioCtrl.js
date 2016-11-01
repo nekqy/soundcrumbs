@@ -1,5 +1,5 @@
 define(['recorder'], function(Recorder) {
-    function CreateAudioCtrl($scope, VKApi, $http, $sce) {
+    function CreateAudioCtrl($scope, VKApi, $http, $sce, geolocation) {
         var self = this;
         self.$scope = $scope;
         self.VKApi = VKApi;
@@ -25,6 +25,38 @@ define(['recorder'], function(Recorder) {
             log.innerHTML += "\n" + e + " " + (data || '');
         }
 
+        function getValueForSave(blob) {
+            return new Promise(function(resolve, reject) {
+                // надо иметь актуальный sid
+                VKApi.getSession().then(session => {
+                    $scope.sid = session.sid;
+
+                    geolocation.getLocation().then(function(geoData){
+
+                        var fd = new FormData();
+                        fd.append('file', blob);
+                        fd.append('sid', $scope.sid);
+                        $.ajax({
+                            type: 'POST',
+                            url: 'http://localhost:3000/upload',
+                            data: fd,
+                            processData: false,
+                            contentType: false
+                        }).done(function(vkData) {
+                            vkData = JSON.parse(vkData).response;
+                            resolve({
+                                geoData: geoData,
+                                vkData: vkData
+                            });
+                        }).fail(function(err) {
+                            reject(err);
+                        });
+                    }, function(err) {
+                        reject(err);
+                    });
+                });
+            });
+        }
 
         $scope.startRecording = function() {
             var button = $('.startButton')[0];
@@ -51,25 +83,6 @@ define(['recorder'], function(Recorder) {
                 var li = document.createElement('li');
                 var au = document.createElement('audio');
                 var hf = document.createElement('a');
-
-                // надо иметь актуальный sid
-                VKApi.getSession().then(session => {
-                    $scope.sid = session.sid;
-
-                    var fd = new FormData();
-                    fd.append('file', blob);
-                    fd.append('sid', $scope.sid);
-                    $.ajax({
-                        type: 'POST',
-                        url: 'http://localhost:3000/upload',
-                        data: fd,
-                        processData: false,
-                        contentType: false
-                    }).done(function(data) {
-                        console.log(data);
-                    });
-                });
-
                 au.controls = true;
                 au.src = url;
                 hf.href = url;
@@ -78,6 +91,8 @@ define(['recorder'], function(Recorder) {
                 li.appendChild(au);
                 li.appendChild(hf);
                 $('#recordingslist').append($(li));
+
+                getValueForSave(blob).then(console.log);
             });
         }
 
