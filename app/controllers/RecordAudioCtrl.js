@@ -38,7 +38,7 @@ define(['recorder'], function(Recorder) {
                         fd.append('sid', $scope.sid);
                         $.ajax({
                             type: 'POST',
-                            url: 'https://soundcrumbs.herokuapp.com/upload',
+                            url: window.location.origin + '/upload',
                             data: fd,
                             processData: false,
                             contentType: false
@@ -59,13 +59,16 @@ define(['recorder'], function(Recorder) {
         }
 
         // Initialize firebase module
-        firebase.initializeApp({
-            apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-            authDomain: "soundcrumbs-168a9.firebaseapp.com",
-            databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-            storageBucket: "soundcrumbs-168a9.appspot.com",
-            messagingSenderId: "443143749176"
-        });
+        try {
+            firebase.initializeApp({
+                apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+                authDomain: "soundcrumbs-168a9.firebaseapp.com",
+                databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+                storageBucket: "soundcrumbs-168a9.appspot.com",
+                messagingSenderId: "443143749176"
+            });
+        } catch(e) {
+        }
 
         $scope.startRecording = function() {
             var button = $('.startButton')[0];

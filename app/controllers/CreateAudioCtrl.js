@@ -8,6 +8,8 @@ define([], function() {
             return $sce.trustAsResourceUrl(src);
         };
 
+        $scope.pathUrl = window.location.origin + '/upload';
+
         // надо иметь актуальный sid
         setInterval(function() {
             VKApi.getSession().then(session => {
