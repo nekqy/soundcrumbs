@@ -58,6 +58,15 @@ define(['recorder'], function(Recorder) {
             });
         }
 
+        // Initialize firebase module
+        firebase.initializeApp({
+            apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+            authDomain: "soundcrumbs-168a9.firebaseapp.com",
+            databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+            storageBucket: "soundcrumbs-168a9.appspot.com",
+            messagingSenderId: "443143749176"
+        });
+
         $scope.startRecording = function() {
             var button = $('.startButton')[0];
             recorder && recorder.record();
@@ -92,7 +101,16 @@ define(['recorder'], function(Recorder) {
                 li.appendChild(hf);
                 $('#recordingslist').append($(li));
 
-                getValueForSave(blob).then(console.log);
+                getValueForSave(blob).then(function(res) {
+                    firebase.database().ref('SoundCrumbs' + '/' + chance.guid()).set({
+                        uid: res.vkData.owner_id,
+                        date: res.geoData.timestamp,
+                        sound: res.vkData.url,
+                        coord_x: res.geoData.coords.longitude,
+                        coord_y: res.geoData.coords.latitude,
+                        rating: 0
+                    });
+                });
             });
         }
 
