@@ -38,7 +38,7 @@ define(['recorder'], function(Recorder) {
                         fd.append('sid', $scope.sid);
                         $.ajax({
                             type: 'POST',
-                            url: 'http://localhost:3000/upload',
+                            url: 'https://soundcrumbs.herokuapp.com/upload',
                             data: fd,
                             processData: false,
                             contentType: false
