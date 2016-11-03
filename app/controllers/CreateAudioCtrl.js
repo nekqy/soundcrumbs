@@ -8,7 +8,7 @@ define([], function() {
             return $sce.trustAsResourceUrl(src);
         };
 
-        $scope.pathUrl = window.location.origin + '/upload';
+        $scope.uploadUrl = window.location.origin + '/upload';
 
         // надо иметь актуальный sid
         setInterval(function() {
