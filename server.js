@@ -1,7 +1,5 @@
 var
    app = require('./server/app'),
-   filesApi = require('./server/filesApi'),
-   firebaseApi = require('./server/firebaseApi');
+   filesApi = require('./server/filesApi');
 
 filesApi.init(app.app);
-firebaseApi.init(app.app);
