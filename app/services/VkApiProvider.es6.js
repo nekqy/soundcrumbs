@@ -20,7 +20,7 @@ define([], function() {
                             var mid = response.session.mid;
                             $timeout(() => resolve(mid), 0);
                         } else {
-                            VK.Auth.login(response => $log.info(response, 'response'), 2 + 4 + 8 + 16);
+                            VK.Auth.login(response => $log.info(response, 'response'), 2 + 4 + 8 + 16 + 65536);
                         }
                     });
                 });
