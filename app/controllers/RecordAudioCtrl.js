@@ -26,11 +26,16 @@ define(['recorder'], function(Recorder) {
         }
 
         function getValueForSave(blob) {
+            $scope.info = 'audio save started';
             return new Promise(function(resolve, reject) {
                 // надо иметь актуальный sid
+                $scope.info = 'getting session';
                 VKApi.getSession().then(session => {
+                    $scope.info = 'getting upload server';
                     VKApi.getUploadServer().then(response => {
+                        $scope.info = 'getting location';
                         geolocation.getLocation().then(function(geoData){
+                            $scope.info = 'posting audio';
 
                             var fd = new FormData();
                             fd.append('file', blob);
@@ -57,10 +62,10 @@ define(['recorder'], function(Recorder) {
                             reject(err);
                         });
                     }, function(err) {
-                        $scope.err = JSON.stringify(err);
+                        $scope.info = JSON.stringify(err);
                     });
                 }, function(err) {
-                    $scope.err = JSON.stringify(err);
+                    $scope.info = JSON.stringify(err);
                 });
             });
         }
@@ -120,8 +125,11 @@ define(['recorder'], function(Recorder) {
                         coord_y: res.geoData.coords.latitude,
                         rating: 0
                     });
+                    $scope.info = JSON.stringify(res);
+                    $scope.$apply();
                 }, function(err) {
-                    $scope.err = JSON.stringify(err);
+                    $scope.info = JSON.stringify(err);
+                    $scope.$apply();
                 });
             });
         }
