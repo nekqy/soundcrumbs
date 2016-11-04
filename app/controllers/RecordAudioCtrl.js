@@ -147,10 +147,11 @@ define(['recorder'], function(Recorder) {
             alert('No web audio support in this browser!');
         }
 
-        navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-            __log('No live audio input: ' + e);
+        navigator.mediaDevices.getUserMedia({audio: true}).then(startUserMedia, function(e) {
+            navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+                __log('No live audio input: ' + e);
+            });
         });
-
     }
 
     return CreateAudioCtrl;
