@@ -29,30 +29,33 @@ define(['recorder'], function(Recorder) {
             return new Promise(function(resolve, reject) {
                 // надо иметь актуальный sid
                 VKApi.getSession().then(session => {
-                    $scope.sid = session.sid;
+                    VKApi.getUploadServer().then(response => {
+                        geolocation.getLocation().then(function(geoData){
 
-                    geolocation.getLocation().then(function(geoData){
-
-                        var fd = new FormData();
-                        fd.append('file', blob);
-                        fd.append('sid', $scope.sid);
-                        $.ajax({
-                            type: 'POST',
-                            url: window.location.origin + '/upload',
-                            data: fd,
-                            processData: false,
-                            contentType: false
-                        }).done(function(vkData) {
-                            vkData = JSON.parse(vkData).response;
-                            resolve({
-                                geoData: geoData,
-                                vkData: vkData
+                            var fd = new FormData();
+                            fd.append('file', blob);
+                            fd.append('sid', session.sid);
+                            fd.append('uploadUrl', response['upload_url']);
+                            $.ajax({
+                                type: 'POST',
+                                url: window.location.origin + '/upload',
+                                data: fd,
+                                processData: false,
+                                contentType: false
+                            }).done(function(res) {
+                                res = JSON.parse(res);
+                                VKApi.audioSave(res).then(vkData => {
+                                    resolve({
+                                        geoData: geoData,
+                                        vkData: vkData
+                                    });
+                                });
+                            }).fail(function(err) {
+                                reject(err);
                             });
-                        }).fail(function(err) {
+                        }, function(err) {
                             reject(err);
                         });
-                    }, function(err) {
-                        reject(err);
                     });
                 });
             });

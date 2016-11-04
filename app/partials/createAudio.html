@@ -7,7 +7,7 @@
 
 <form ref='uploadForm'
       id='uploadForm'
-      action='{{uploadUrl}}'
+      action='{{trustSrc(uploadUrl)}}'
       method='post'
       encType="multipart/form-data">
     <input type="hidden" name="sid" value="{{sid}}"/>

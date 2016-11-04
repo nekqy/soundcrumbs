@@ -16,6 +16,10 @@ exports.init = function(app) {
             mainRes.send('{"error": "error! no sid"}');
             return;
         }
+        if (!req.body.uploadUrl) {
+            mainRes.send('{"error": "error! no uploadUrl"}');
+            return;
+        }
 
         sampleFile = req.files.file;
         var uuid = require('node-uuid');
@@ -42,14 +46,14 @@ exports.init = function(app) {
                 });
                 job.on('end', function() {
                     console.log('audiofile converted');
-                    saveToVk(req.body.sid, name, mainRes);
+                    saveToVk(req.body.sid, name, mainRes, req.body.uploadUrl);
                 });
                 job.start();
             }
         });
     });
 
-    function saveToVk(sid, name, mainRes) {
+    function saveToVk(sid, name, mainRes, uploadUrl) {
         var VK = require('vksdk');
 
         var vk = new VK({
@@ -61,51 +65,31 @@ exports.init = function(app) {
         vk.setSecureRequests(true);
         vk.setToken(sid);
 
-        vk.request('audio.getUploadServer');
-        vk.on('done:audio.getUploadServer', function(_o) {
-            if (!_o.response) {
-                console.log('_o.response not found!', _o);
+        var request = require('request');
+
+        var params = {
+            uri: uploadUrl,
+            method: 'POST',
+            json: true,
+            formData: {file: fs.createReadStream(__dirname + '/' + name + '.mp3')}
+        };
+
+        request(params, function (err, resp, body) {
+            if (err) {
+                console.log('Error!');
+                unlinkFiles(name);
+                mainRes.status(500).send(err);
+            } else {
+                unlinkFiles(name);
+                mainRes.write(JSON.stringify({
+                    server: body.server,
+                    audio: body.audio,
+                    hash: body.hash,
+                    artist: 'soundcrumbs',
+                    title: name
+                }));
+                mainRes.end();
             }
-            var uploadUrl = _o.response['upload_url'];
-
-            var request = require('request');
-
-            var params = {
-                uri: uploadUrl,
-                method: 'POST',
-                json: true,
-                formData: {file: fs.createReadStream(__dirname + '/' + name + '.mp3')}
-            };
-
-            request(params, function (err, resp, body) {
-                if (err) {
-                    console.log('Error!');
-                    mainRes.status(500).send(err);
-                } else {
-                    vk.request('audio.save', {
-                        server: body.server,
-                        audio: body.audio,
-                        hash: body.hash,
-                        artist: 'soundcrumbs',
-                        title: name
-                    });
-                    vk.on('http-error', function(_e) {
-                        mainRes.status(500).send(_e);
-                        unlinkFiles(name);
-                    });
-                    vk.on('parse-error', function(_e) {
-                        mainRes.status(500).send(_e);
-                        unlinkFiles(name);
-                    });
-                    vk.on('done:audio.save', function(_o) {
-                        mainRes.write(JSON.stringify(_o));
-                        mainRes.end();
-
-                        unlinkFiles(name);
-                    });
-
-                }
-            });
         });
     }
     function unlinkFiles(name) {

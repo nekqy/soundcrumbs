@@ -93,6 +93,19 @@ define([], function() {
                 })
             );
 
+            var audioSave = fields => authenticate().then(mid => {
+                fields = fields || {};
+                fields.mid = mid;
+
+                return $q((resolve, reject) => {
+                    VK.api('audio.save', fields, response => {
+                        if (response.response) {
+                            $timeout(() => resolve(response.response), 0);
+                        }
+                    });
+                })
+            });
+
             var photosSearch = (lat, long) => authenticate().then(mid =>
                 $q((resolve, reject) => {
                     VK.api('photos.search', { lat, long }, (response) => {
@@ -117,6 +130,7 @@ define([], function() {
                 authenticate,
                 getMid,
                 getUser,
+                audioSave,
                 getSession,
                 getFollowers,
                 getAudio,
