@@ -56,7 +56,11 @@ define(['recorder'], function(Recorder) {
                         }, function(err) {
                             reject(err);
                         });
+                    }, function(err) {
+                        $scope.err = JSON.stringify(err);
                     });
+                }, function(err) {
+                    $scope.err = JSON.stringify(err);
                 });
             });
         }
@@ -116,6 +120,8 @@ define(['recorder'], function(Recorder) {
                         coord_y: res.geoData.coords.latitude,
                         rating: 0
                     });
+                }, function(err) {
+                    $scope.err = JSON.stringify(err);
                 });
             });
         }
