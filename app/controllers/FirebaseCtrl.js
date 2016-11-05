@@ -42,6 +42,23 @@ define(['bower_components/firebase/firebase'], function() {
             firebase.database().ref('SoundCrumbs').remove();
          }
       };
+      $scope.crumbsFilter = {
+         start: {
+            x: 39,
+            y: 34
+         },
+         end: {
+            x: 40,
+            y: 35
+         }
+      };
+      $scope.applyCrumbsFilter = function(crumbsFilter) {
+         $scope.crumbs = $firebaseArray(ref.orderByChild('coord_x').startAt(crumbsFilter.start.x).endAt(crumbsFilter.end.x));
+      };
+      $scope.filterFormVisible = false;
+      $scope.toggleFilterForm = function() {
+         $scope.filterFormVisible = !$scope.filterFormVisible;
+      };
       $scope.createCrumbFormVisible = false;
       $scope.toggleCreateCrumbForm = function() {
          $scope.createCrumbFormVisible = !$scope.createCrumbFormVisible;

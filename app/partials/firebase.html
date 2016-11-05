@@ -1,6 +1,7 @@
 <div class="SoundCrumbs__Firebase-container">
 	<div class="SoundCrumbs__Firebase-buttons">
 		<button ng-click="toggleCreateCrumbForm()">Toggle create crumb form</button>
+		<button ng-click="toggleFilterForm()">Toggle filter form</button>
 		<button ng-click="createRandomCrumb()">Create random crumb</button>
 		<button ng-click="clearAllData()">Clear all data</button>
 	</div>
@@ -26,6 +27,23 @@
 			</tr>
 		</table>
 		<button ng-click="createCrumb(crumb)">Create crumb</button>
+	</div>
+	<div class="SoundCrumbs__Firebase-createCrumbForm" ng-class="{ 'SoundCrumbs__displayNone': !filterFormVisible }">
+		<table class="SoundCrumbs__Firebase-table">
+			<tr>
+				<td>Start X</td>
+				<td><input type="number" ng-model="crumbsFilter.start.x"/></td>
+				<td>End X</td>
+				<td><input type="number" ng-model="crumbsFilter.end.x"/></td>
+			</tr>
+			<tr>
+				<td>Start Y</td>
+				<td><input type="number" ng-model="crumbsFilter.start.y"/></td>
+				<td>End Y</td>
+				<td><input type="number" ng-model="crumbsFilter.end.y"/></td>
+			</tr>
+		</table>
+		<button ng-click="applyCrumbsFilter(crumbsFilter)">Apply filter</button>
 	</div>
 	<table class="SoundCrumbs__Firebase-table SoundCrumbs__Firebase-tableBorder">
 		<thead>
