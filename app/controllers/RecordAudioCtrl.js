@@ -121,8 +121,8 @@ define(['recorder'], function(Recorder) {
                         uid: res.vkData.owner_id,
                         date: res.geoData.timestamp,
                         sound: res.vkData.url,
-                        coord_x: res.geoData.coords.longitude,
-                        coord_y: res.geoData.coords.latitude,
+                        coord_x: res.geoData.coords.latitude,
+                        coord_y: res.geoData.coords.longitude,
                         rating: 0
                     });
                     $scope.info = JSON.stringify(res);

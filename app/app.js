@@ -79,5 +79,14 @@ define([
             controller: 'RecordAudioCtrl'
         });
 
+    }]).
+    config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+        $locationProvider.hashPrefix('!');
+
+        $routeProvider.when('/map', {
+            templateUrl: 'partials/map.html',
+            controller: 'mapCtrl'
+        });
+
     }]);
 });
