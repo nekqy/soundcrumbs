@@ -60,9 +60,9 @@ define(['bower_components/firebase/firebase'], function() {
       };
 
       $scope.crumbsFilter = {
-         x: 57.5,
-         y: 39.5,
-         radius: 30
+         x: 50,
+         y: 50,
+         radius: 50
       };
       $scope.applyCrumbsFilter = function(crumbsFilter) {
          var

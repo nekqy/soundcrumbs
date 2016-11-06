@@ -9,21 +9,21 @@
 		<table class="SoundCrumbs__Firebase-table">
 			<tr>
 				<td>Date</td>
-				<td><input ng-model="crumb.date"/></td>
+				<td><input type="number" ng-model="crumb.date"/></td>
 				<td>Coord-x</td>
-				<td><input ng-model="crumb.coord_x"/></td>
+				<td><input type="number" ng-model="crumb.coord_x"/></td>
 			</tr>
 			<tr>
 				<td>UID</td>
-				<td><input ng-model="crumb.uid"/></td>
+				<td><input type="number" ng-model="crumb.uid"/></td>
 				<td>Coord-y</td>
-				<td><input ng-model="crumb.coord_y"/></td>
+				<td><input type="number" ng-model="crumb.coord_y"/></td>
 			</tr>
 			<tr>
 				<td>Sound</td>
 				<td><input ng-model="crumb.sound"/></td>
 				<td>Rating</td>
-				<td><input ng-model="crumb.rating"/></td>
+				<td><input type="number" ng-model="crumb.rating"/></td>
 			</tr>
 		</table>
 		<button ng-click="createCrumb(crumb)">Create crumb</button>
