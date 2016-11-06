@@ -12,25 +12,52 @@
   <link rel="stylesheet" href="css/firebase.css">
 
   <link rel="stylesheet" href="vendor/mapbox-gl.css">
+  <link rel="stylesheet" href="vendor/rb.css">
 
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
   <script src="vendor/jquery.form.js"></script>
+  <script src="vendor/rb.js"></script>
   <script src="//vk.com/js/api/openapi.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
 </head>
 <body>
-  <ul class="menu">
-    <li><a href="#!/me">me</a></li>
-    <li><a href="#!/audioList">Search Audio</a></li>
-    <!--<li><a href="#!/createAudio">Create Audio</a></li>-->
-    <li><a href="#!/recordAudio">Record Audio</a></li>
-    <li><a href="#!/firebase">Firebase page</a></li>
-    <li><a href="#!/map">map</a></li>
-  </ul>
 
-  <div ng-view></div>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+
+  <div id="rb1" class="rb-wrapper"></div>
+
+  <script>
+    var mainScreen = new rb.Screen("");
+    var mapScreen = new rb.Screen("" +
+            "<div ng-controller='mapCtrl'>" +
+            "<div id='map'></div>" +
+            "<div class='recordButton'>" +
+            "<button class='recordButton-button' ng-click='goToRecord()'>+</button>" +
+            "</div>" +
+            "</div>", undefined, true);
+    mainScreen.addChild(mapScreen);
+    rb.start({rb1: mapScreen}, function() {
+      rb.Instances.rb1.getControlManager().disableAll();
+      window.rb1 = rb.Instances.rb1;
+    });
+
+    $.get('partials/mapRecord.html', function(data) {
+      var recordScreen = new rb.Screen('<div ng-controller="RecordAudioCtrl">' + data + '</div>', undefined, true);
+      mapScreen.addChild(recordScreen);
+    });
+    $.get('partials/audioListener.html', function(data) {
+      var audioListenerScreen = new rb.Screen('<div ng-controller="AudioListenerCtrl">' + data + '</div>', undefined, true);
+      mainScreen.addChild(audioListenerScreen);
+    });
+
+  </script>
 
   <script src="bundle.js"></script>
 </body>

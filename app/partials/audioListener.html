@@ -1,0 +1,17 @@
+<style>
+    .audioContainer {
+        margin: 5px;
+    }
+</style>
+
+<div><button ng-click="goToBack()">back</button></div>
+
+<div ng-if="audioList" ng-repeat="(key, value) in audioList">
+
+    <div class="audioContainer">
+        <audio controls preload="none">
+            <source ng-src="{{trustSrc(value.sound)}}">
+        </audio>
+    </div>
+
+</div>

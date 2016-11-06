@@ -1,0 +1,8 @@
+<div class="recordContainer">
+    <div>
+        <button ng-if="isNotRecording" class="startButton" ng-click="startRecording()">record</button>
+        <button ng-if="isRecording" class="stopButton" ng-click="stopRecording()">stop</button>
+        <button ng-if="isNotRecording" class="stopButton" ng-click="goToBack()">back</button>
+    </div>
+    <div ng-if="isRecording">Recording...</div>
+</div>

@@ -7,7 +7,7 @@ define([
     './services/main.es6',
     './controllers/main.es6', 
     './bower_components/angularjs-geolocation/src/geolocation'
-], function() {
+], function(rb) {
     'use strict';
 
     // Declare app level module which depends on views, and components
@@ -33,7 +33,7 @@ define([
     config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');
 
-        $routeProvider.otherwise({redirectTo: '/me'});
+        $routeProvider.otherwise({redirectTo: '/map'});
     }]).
     config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
         $locationProvider.hashPrefix('!');

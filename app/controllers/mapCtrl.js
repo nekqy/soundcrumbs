@@ -1,4 +1,4 @@
-define(['mapbox-gl'], function(mapboxgl) {
+define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
     function mapCtrl($scope, geolocation) {
        const
           // R = 0.00045 / 2 = ~25 метров, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
@@ -34,6 +34,7 @@ define(['mapbox-gl'], function(mapboxgl) {
              if (Math.pow(px - x, 2) + Math.pow(py - y, 2) <= sqrRadius) {
                 $scope.markers.push({
                    "type": "Feature",
+                   "properties": val,
                    "geometry": {
                       "type": "Point",
                       "coordinates": [px, py]
@@ -73,6 +74,10 @@ define(['mapbox-gl'], function(mapboxgl) {
        };
        /***************** END FireBase *******************/
 
+       $scope.goToRecord = function() {
+           rb1.move('right');
+       };
+
         function getLocation(init) {
             geolocation.getLocation().then(function(geoData){
                 $scope.geoData = geoData;
@@ -81,7 +86,7 @@ define(['mapbox-gl'], function(mapboxgl) {
 
                 $scope.applyCrumbsFilter();
 
-                if ($scope.map.loaded()) {
+                if ($scope.map && $scope.map.loaded()) {
                    $scope.map.setCenter([$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]);
                    $scope.map.getSource('userCircle').setData({
                       "type": "Feature",
@@ -96,7 +101,7 @@ define(['mapbox-gl'], function(mapboxgl) {
 
         setInterval(function() {
             getLocation();
-        }, 3000);
+        }, 5000);
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';
@@ -199,6 +204,52 @@ define(['mapbox-gl'], function(mapboxgl) {
                         ],
                         "text-size": 12
                     }
+                });
+
+
+                // When a click event occurs near a place, open a popup at the location of
+                // the feature, with description HTML from its properties.
+                $scope.map.on('click', function (e) {
+                    var features = $scope.map.queryRenderedFeatures(e.point, { layers: ['layer1', 'layer2'] });
+
+                    if (!features.length) {
+                        return;
+                    }
+                    var feature = features[0];
+
+                    var begin = 0,
+                        foundFeatures = [];
+                    var superclusters = supercluster($scope.map.getSource('route').workerOptions.superclusterOptions).load($scope.map.getSource('route')._data.features);
+                    var clusters17 = superclusters.getClusters([-180, -90, 180, 90], 17);
+                    var clusters18 = superclusters.getClusters([-180, -90, 180, 90], 18);
+                    clusters17.forEach(function(point, index) {
+                        var numPoints = superclusters.trees[17].points[index].numPoints;
+                        if (Math.abs(point.geometry.coordinates[0] - feature.geometry.coordinates[0]) < 0.000001 &&
+                            Math.abs(point.geometry.coordinates[1] - feature.geometry.coordinates[1]) < 0.000001) {
+                            var count = numPoints;
+                            foundFeatures = clusters18.slice(begin, begin + count);
+                        }
+                        begin += numPoints;
+                    });
+
+                    var audios = foundFeatures.map(function(feature) {
+                        return feature.properties;
+                    });
+
+                    var audioListener = $('[ng-controller="AudioListenerCtrl"]');
+                    var scope = angular.element(audioListener[0]).scope();
+                    scope.audioList = audios;
+
+                    rb1.move('bottom');
+
+                    scope.$apply();
+                });
+
+                // Use the same approach as above to indicate that the symbols are clickable
+                // by changing the cursor style to 'pointer'.
+                $scope.map.on('mousemove', function (e) {
+                    var features = $scope.map.queryRenderedFeatures(e.point, { layers: ['layer1', 'layer2'] });
+                    $scope.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
                 });
             });
         });

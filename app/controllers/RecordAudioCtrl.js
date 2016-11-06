@@ -22,7 +22,10 @@ define(['recorder'], function(Recorder) {
         }
 
         function __log(e, data) {
-            log.innerHTML += "\n" + e + " " + (data || '');
+            var log = $('#log')[0];
+            if (log) {
+                log.innerHTML += "\n" + e + " " + (data || '');
+            }
         }
 
         function getValueForSave(blob) {
@@ -82,24 +85,41 @@ define(['recorder'], function(Recorder) {
         } catch(e) {
         }
 
+        $scope.isRecording = false;
+        $scope.isNotRecording = true;
+
         $scope.startRecording = function() {
-            var button = $('.startButton')[0];
+            //var button = $('.startButton')[0];
             recorder && recorder.record();
-            button.disabled = true;
-            button.nextElementSibling.disabled = false;
+            //button.disabled = true;
+            //button.nextElementSibling.disabled = false;
             __log('Recording...');
+
+            $scope.isRecording = true;
+            $scope.isNotRecording = false;
         };
         $scope.stopRecording = function() {
-            var button = $('.stopButton')[0];
             recorder && recorder.stop();
-            button.disabled = true;
-            button.previousElementSibling.disabled = false;
+            //button.disabled = true;
+            //button.previousElementSibling.disabled = false;
             __log('Stopped recording.');
+
+            var button = $('.stopButton');
+            button.toggleClass('button-disabled', true);
 
             // create WAV download link using audio data blob
             createDownloadLink();
 
             recorder.clear();
+        };
+        $scope.goToBack = function() {
+            $scope.isRecording = false;
+            $scope.isNotRecording = true;
+
+            var button = $('.stopButton');
+            button.toggleClass('button-disabled', false);
+
+            rb1.move('left');
         };
         function createDownloadLink() {
             recorder && recorder.exportWAV(function(blob) {
@@ -121,12 +141,14 @@ define(['recorder'], function(Recorder) {
                         uid: res.vkData.owner_id,
                         date: res.geoData.timestamp,
                         sound: res.vkData.url,
-                        coord_x: res.geoData.coords.latitude,
-                        coord_y: res.geoData.coords.longitude,
+                        coord_x: res.geoData.coords.longitude,
+                        coord_y: res.geoData.coords.latitude,
                         rating: 0
                     });
                     $scope.info = JSON.stringify(res);
                     $scope.$apply();
+
+                    $scope.goToBack();
                 }, function(err) {
                     $scope.info = JSON.stringify(err);
                     $scope.$apply();
@@ -147,11 +169,17 @@ define(['recorder'], function(Recorder) {
             alert('No web audio support in this browser!');
         }
 
-        navigator.mediaDevices.getUserMedia({audio: true}).then(startUserMedia, function(e) {
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({audio: true}).then(startUserMedia, function(e) {
+                navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+                    __log('No live audio input: ' + e);
+                });
+            });
+        } else {
             navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
                 __log('No live audio input: ' + e);
             });
-        });
+        }
     }
 
     return CreateAudioCtrl;
