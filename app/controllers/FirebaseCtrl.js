@@ -31,6 +31,9 @@ define(['bower_components/firebase/firebase'], function() {
                $scope.crumbs.push(val);
             }
          });
+         if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
+            $scope.$apply();
+         }
       }
 
       $scope.createCrumb = function (properties) {
@@ -69,7 +72,7 @@ define(['bower_components/firebase/firebase'], function() {
             applySnapshot(snapshot);
          });
       };
-      //$scope.applyCrumbsFilter($scope.crumbsFilter);
+      $scope.applyCrumbsFilter($scope.crumbsFilter);
       $scope.filterFormVisible = false;
       $scope.toggleFilterForm = function() {
          $scope.filterFormVisible = !$scope.filterFormVisible;
