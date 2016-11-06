@@ -1,17 +1,8 @@
 define(['mapbox-gl'], function(mapboxgl) {
     function mapCtrl($scope, geolocation) {
-
-       function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
-          var R = 6378.137; // Radius of earth in KM
-          var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
-          var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
-          var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-             Math.sin(dLon/2) * Math.sin(dLon/2);
-          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-          var d = R * c;
-          return d * 1000; // meters
-       }
+       const
+          // R = 0.00045 / 2 = ~25 метров, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
+          crumbsFilterRadius = 0.000225;
 
        /***************** BEGIN FireBase *******************/
        try {
@@ -31,16 +22,16 @@ define(['mapbox-gl'], function(mapboxgl) {
 
        function applySnapshot(snapshot) {
           var
-             x = parseFloat($scope.crumbsFilter.x),
-             y = parseFloat($scope.crumbsFilter.y),
-             radius = Math.pow(parseFloat($scope.crumbsFilter.radius), 2),
+             x = $scope.geoData.coords.longitude,
+             y = $scope.geoData.coords.latitude,
+             sqrRadius = Math.pow(crumbsFilterRadius, 2),
              val, px, py;
           $scope.markers = [];
           snapshot.forEach(function(point) {
              val = point.val();
              px = val['coord_x'];
              py = val['coord_y'];
-             if (Math.pow(px - x, 2) + Math.pow(py - y, 2) <= radius) {
+             if (Math.pow(px - x, 2) + Math.pow(py - y, 2) <= sqrRadius) {
                 $scope.markers.push({
                    "type": "Feature",
                    "geometry": {
@@ -68,18 +59,17 @@ define(['mapbox-gl'], function(mapboxgl) {
           }
        }
 
-       $scope.crumbsFilter = {
-          x: 50,
-          y: 50,
-          radius: 0.000225 //R = 0.00045 / 2 - примерно 25 метров, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
-       };
        $scope.applyCrumbsFilter = function(crumbsFilter) {
           var
-             startX = parseFloat(crumbsFilter.x) - parseFloat(crumbsFilter.radius),
-             endX = parseFloat(crumbsFilter.x) + parseFloat(crumbsFilter.radius);
+             startX = $scope.geoData.coords.longitude - crumbsFilterRadius,
+             endX = $scope.geoData.coords.longitude + crumbsFilterRadius;
           ref.orderByChild('coord_x').startAt(startX).endAt(endX).on('value', function(snapshot) {
              applySnapshot(snapshot);
           });
+       };
+
+       $scope.createCrumb = function (properties) {
+          firebase.database().ref('SoundCrumbs' + '/' + chance.guid()).set(properties);
        };
        /***************** END FireBase *******************/
 
@@ -87,12 +77,9 @@ define(['mapbox-gl'], function(mapboxgl) {
             geolocation.getLocation().then(function(geoData){
                 $scope.geoData = geoData;
 
-                $scope.crumbsFilter.y =  geoData.coords.latitude;
-                $scope.crumbsFilter.x =  geoData.coords.longitude;
-
                 init && init();
 
-                $scope.applyCrumbsFilter($scope.crumbsFilter);
+                $scope.applyCrumbsFilter();
 
                 if ($scope.map.loaded()) {
                    $scope.map.setCenter([$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]);
@@ -144,7 +131,7 @@ define(['mapbox-gl'], function(mapboxgl) {
                      "type": "Feature",
                      "geometry": {
                         "type": "Point",
-                        "coordinates": [$scope.crumbsFilter.x, $scope.crumbsFilter.y]
+                        "coordinates": [$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]
                      }
                   },
                   cluster: false
