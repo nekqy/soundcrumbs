@@ -142,7 +142,7 @@ define(['mapbox-gl'], function(mapboxgl) {
                   "source": "userCircle",
                   "type": "circle",
                   "paint": {
-                     "circle-radius": 50,
+                     "circle-radius": 75,
                      "circle-color": '#aff',
                      "circle-opacity": 0.3,
                      "circle-pitch-scale": 'viewport'
