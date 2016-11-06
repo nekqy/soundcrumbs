@@ -4,6 +4,6 @@ define(['./MainCtrl.es6', './AudioListCtrl', './CreateAudioCtrl', './RecordAudio
         'AudioListCtrl': ['$scope', 'VKApi', '$sce', AudioListCtrl],
         'CreateAudioCtrl': ['$scope', 'VKApi', '$http', '$sce', CreateAudioCtrl],
         'RecordAudioCtrl': ['$scope', 'VKApi', '$http', '$sce', 'geolocation', RecordAudioCtrl],
-        'FirebaseCtrl': ['$scope', '$firebaseArray', FirebaseCtrl]
+        'FirebaseCtrl': ['$scope', FirebaseCtrl]
     });
 });

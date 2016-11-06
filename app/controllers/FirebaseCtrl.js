@@ -1,5 +1,5 @@
 define(['bower_components/firebase/firebase'], function() {
-   function FirebaseCtrl($scope, $firebaseArray) {
+   function FirebaseCtrl($scope) {
 
       try {
          // Initialize firebase module
@@ -15,50 +15,66 @@ define(['bower_components/firebase/firebase'], function() {
 
       var
          ref = firebase.database().ref('SoundCrumbs');
-      $scope.crumbs = $firebaseArray(ref);
+
+      function applySnapshot(snapshot) {
+         var
+            x = parseFloat($scope.crumbsFilter.x),
+            y = parseFloat($scope.crumbsFilter.y),
+            radius = Math.pow(parseFloat($scope.crumbsFilter.radius), 2),
+            val, px, py;
+         $scope.crumbs = [];
+         snapshot.forEach(function(point) {
+            val = point.val();
+            px = val['coord_x'];
+            py = val['coord_y'];
+            if (Math.pow(px - x, 2) + Math.pow(py - y, 2) <= radius) {
+               $scope.crumbs.push(val);
+            }
+         });
+      }
+
       $scope.createCrumb = function (properties) {
          firebase.database().ref('SoundCrumbs' + '/' + chance.guid()).set(properties);
       };
-      $scope.crumb = {
-         uid: '',
-         date: '',
-         sound: '',
-         coord_x: '',
-         coord_y: '',
-         rating: ''
-      };
+
+      $scope.crumb = { uid: '', date: '', sound: '', coord_x: '', coord_y: '', rating: '' };
+
       $scope.createRandomCrumb = function() {
          $scope.createCrumb({
             uid: chance.fbid(),
             date: chance.date({ string: true, american: false }),
             sound: chance.url({ domain: 'vk.com/music', extensions: ['mp3'] }),
-            coord_x: chance.floating({min: -100, max: 100, fixed: 2}) ,
-            coord_y: chance.floating({min: -100, max: 100, fixed: 2}) ,
-            rating: chance.integer({ min: -20, max: 20 })
+            coord_x: chance.floating({min: 0, max: 100, fixed: 5}) ,
+            coord_y: chance.floating({min: 0, max: 100, fixed: 5}) ,
+            rating: chance.integer({ min: -10, max: 10 })
          });
       };
+
       $scope.clearAllData = function() {
          if (confirm('Внимание! Операция необратима! Вы действительно желаете очистить все данные?')) {
-            firebase.database().ref('SoundCrumbs').remove();
+            ref.remove();
          }
       };
+
       $scope.crumbsFilter = {
-         start: {
-            x: 39,
-            y: 34
-         },
-         end: {
-            x: 40,
-            y: 35
-         }
+         x: 57.5,
+         y: 39.5,
+         radius: 30
       };
       $scope.applyCrumbsFilter = function(crumbsFilter) {
-         $scope.crumbs = $firebaseArray(ref.orderByChild('coord_x').startAt(crumbsFilter.start.x).endAt(crumbsFilter.end.x));
+         var
+            startX = parseFloat(crumbsFilter.x) - parseFloat(crumbsFilter.radius),
+            endX = parseFloat(crumbsFilter.x) + parseFloat(crumbsFilter.radius);
+         ref.orderByChild('coord_x').startAt(startX).endAt(endX).on('value', function(snapshot) {
+            applySnapshot(snapshot);
+         });
       };
+      //$scope.applyCrumbsFilter($scope.crumbsFilter);
       $scope.filterFormVisible = false;
       $scope.toggleFilterForm = function() {
          $scope.filterFormVisible = !$scope.filterFormVisible;
       };
+
       $scope.createCrumbFormVisible = false;
       $scope.toggleCreateCrumbForm = function() {
          $scope.createCrumbFormVisible = !$scope.createCrumbFormVisible;

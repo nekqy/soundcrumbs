@@ -31,16 +31,16 @@
 	<div class="SoundCrumbs__Firebase-createCrumbForm" ng-class="{ 'SoundCrumbs__displayNone': !filterFormVisible }">
 		<table class="SoundCrumbs__Firebase-table">
 			<tr>
-				<td>Start X</td>
-				<td><input type="number" ng-model="crumbsFilter.start.x"/></td>
-				<td>End X</td>
-				<td><input type="number" ng-model="crumbsFilter.end.x"/></td>
+				<td>X</td>
+				<td><input ng-model="crumbsFilter.x"/></td>
 			</tr>
 			<tr>
-				<td>Start Y</td>
-				<td><input type="number" ng-model="crumbsFilter.start.y"/></td>
-				<td>End Y</td>
-				<td><input type="number" ng-model="crumbsFilter.end.y"/></td>
+				<td>Y</td>
+				<td><input ng-model="crumbsFilter.y"/></td>
+			</tr>
+			<tr>
+				<td>Radius</td>
+				<td><input ng-model="crumbsFilter.radius"/></td>
 			</tr>
 		</table>
 		<button ng-click="applyCrumbsFilter(crumbsFilter)">Apply filter</button>
@@ -54,13 +54,15 @@
 			<th>Y</th>
 			<th>Rating</th>
 		</thead>
-		<tr ng-repeat="crumb in crumbs">
-			<td>{{ crumb.date }}</td>
-			<td>{{ crumb.uid }}</td>
-			<td>{{ crumb.sound }}</td>
-			<td>{{ crumb.coord_x }}</td>
-			<td>{{ crumb.coord_y }}</td>
-			<td>{{ crumb.rating }}</td>
-		</tr>
+		<tbody>
+			<tr ng-repeat="crumb in crumbs">
+				<td>{{ crumb.date }}</td>
+				<td>{{ crumb.uid }}</td>
+				<td>{{ crumb.sound }}</td>
+				<td>{{ crumb.coord_x }}</td>
+				<td>{{ crumb.coord_y }}</td>
+				<td>{{ crumb.rating }}</td>
+			</tr>
+		</tbody>
 	</table>
 </div>
