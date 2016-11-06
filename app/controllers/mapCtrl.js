@@ -115,7 +115,8 @@ define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
                 dragPan: false,
                 scrollZoom: false,
                 boxZoom: false,
-                doubleClickZoom: false
+                doubleClickZoom: false,
+                touchZoomRotate: false
             });
 
             $scope.map.on('load', function() {
