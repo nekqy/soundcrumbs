@@ -1,6 +1,18 @@
 define(['mapbox-gl'], function(mapboxgl) {
     function mapCtrl($scope, geolocation) {
 
+       function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+          var R = 6378.137; // Radius of earth in KM
+          var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+          var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+          var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+             Math.sin(dLon/2) * Math.sin(dLon/2);
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+          var d = R * c;
+          return d * 1000; // meters
+       }
+
        /***************** BEGIN FireBase *******************/
        try {
           // Initialize firebase module
@@ -38,15 +50,28 @@ define(['mapbox-gl'], function(mapboxgl) {
                 });
              }
           });
-          if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
-             $scope.$apply();
+          function updateMarkers() {
+             var route = $scope.map.getSource('route');
+             if (route) {
+                route.setData({
+                   "type": "FeatureCollection",
+                   "features": $scope.markers
+                });
+             }
+          }
+          if ($scope.map.loaded()) {
+             updateMarkers();
+          } else {
+             $scope.map.on('load', function() {
+                updateMarkers();
+             });
           }
        }
 
        $scope.crumbsFilter = {
           x: 50,
           y: 50,
-          radius: 50
+          radius: 0.000225 //R = 0.00045 / 2 - примерно 25 метров, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
        };
        $scope.applyCrumbsFilter = function(crumbsFilter) {
           var
@@ -56,39 +81,35 @@ define(['mapbox-gl'], function(mapboxgl) {
              applySnapshot(snapshot);
           });
        };
-       $scope.applyCrumbsFilter($scope.crumbsFilter);
        /***************** END FireBase *******************/
 
         function getLocation(init) {
-            function setMarkers(markerPoints) {
-                var route = $scope.map.getSource('route');
-                if (route) {
-                    route.setData({
-                        "type": "FeatureCollection",
-                        "features": markerPoints
-                    });
-                }
-            }
-
             geolocation.getLocation().then(function(geoData){
                 $scope.geoData = geoData;
 
+                $scope.crumbsFilter.y =  geoData.coords.latitude;
+                $scope.crumbsFilter.x =  geoData.coords.longitude;
+
                 init && init();
 
-                if ($scope.map.loaded()) {
-                    setMarkers($scope.markers);
-                } else {
-                    $scope.map.on('load', function() {
-                        setMarkers($scope.markers);
-                    });
-                }
+                $scope.applyCrumbsFilter($scope.crumbsFilter);
 
+                if ($scope.map.loaded()) {
+                   $scope.map.setCenter([$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]);
+                   $scope.map.getSource('userCircle').setData({
+                      "type": "Feature",
+                      "geometry": {
+                         "type": "Point",
+                         "coordinates": [$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]
+                      }
+                   });
+                }
             });
         }
 
         setInterval(function() {
             getLocation();
-        }, 30000);
+        }, 3000);
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';
@@ -116,6 +137,30 @@ define(['mapbox-gl'], function(mapboxgl) {
                     clusterMaxZoom: 20, // Max zoom to cluster points on
                     clusterRadius: 30 // Radius of each cluster when clustering points (defaults to 50)
                 });
+
+               $scope.map.addSource('userCircle', {
+                  "type": "geojson",
+                  "data": {
+                     "type": "Feature",
+                     "geometry": {
+                        "type": "Point",
+                        "coordinates": [$scope.crumbsFilter.x, $scope.crumbsFilter.y]
+                     }
+                  },
+                  cluster: false
+               });
+
+               $scope.map.addLayer({
+                  "id": "userCircle2",
+                  "source": "userCircle",
+                  "type": "circle",
+                  "paint": {
+                     "circle-radius": 50,
+                     "circle-color": '#aff',
+                     "circle-opacity": 0.3,
+                     "circle-pitch-scale": 'viewport'
+                  }
+               });
 
                 $scope.map.addLayer({
                     "id": "layer1",
