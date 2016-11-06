@@ -1,9 +1,10 @@
-define(['./MainCtrl.es6', './AudioListCtrl', './CreateAudioCtrl', './RecordAudioCtrl', './FirebaseCtrl'], function(MainCtrl, AudioListCtrl, CreateAudioCtrl, RecordAudioCtrl, FirebaseCtrl) {
+define(['./MainCtrl.es6', './AudioListCtrl', './CreateAudioCtrl', './RecordAudioCtrl', './FirebaseCtrl', './mapCtrl'], function(MainCtrl, AudioListCtrl, CreateAudioCtrl, RecordAudioCtrl, FirebaseCtrl, mapCtrl) {
     angular.module('SoundCrumbs.controllers', []).controller({
         'MainCtrl': ['$scope', 'VKApi', MainCtrl],
         'AudioListCtrl': ['$scope', 'VKApi', '$sce', AudioListCtrl],
         'CreateAudioCtrl': ['$scope', 'VKApi', '$http', '$sce', CreateAudioCtrl],
         'RecordAudioCtrl': ['$scope', 'VKApi', '$http', '$sce', 'geolocation', RecordAudioCtrl],
-        'FirebaseCtrl': ['$scope', FirebaseCtrl]
+        'FirebaseCtrl': ['$scope', FirebaseCtrl],
+        'mapCtrl': ['$scope', 'geolocation', '$firebaseArray', mapCtrl]
     });
 });
