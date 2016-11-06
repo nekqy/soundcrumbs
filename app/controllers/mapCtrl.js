@@ -1,24 +1,63 @@
 define(['mapbox-gl'], function(mapboxgl) {
-    function mapCtrl($scope, geolocation, $firebaseArray) {
+    function mapCtrl($scope, geolocation) {
 
-        try {
-            // Initialize firebase module
-            firebase.initializeApp({
-                apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-                authDomain: "soundcrumbs-168a9.firebaseapp.com",
-                databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-                storageBucket: "soundcrumbs-168a9.appspot.com",
-                messagingSenderId: "443143749176"
-            });
-        } catch(e) {
-        }
+       /***************** BEGIN FireBase *******************/
+       try {
+          // Initialize firebase module
+          firebase.initializeApp({
+             apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+             authDomain: "soundcrumbs-168a9.firebaseapp.com",
+             databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+             storageBucket: "soundcrumbs-168a9.appspot.com",
+             messagingSenderId: "443143749176"
+          });
+       } catch(e) {
+       }
 
-        var ref = firebase.database().ref('SoundCrumbs');
+       var
+          ref = firebase.database().ref('SoundCrumbs');
 
-        $scope.crumbs = $firebaseArray(ref);
-        $scope.markers = [];
+       function applySnapshot(snapshot) {
+          var
+             x = parseFloat($scope.crumbsFilter.x),
+             y = parseFloat($scope.crumbsFilter.y),
+             radius = Math.pow(parseFloat($scope.crumbsFilter.radius), 2),
+             val, px, py;
+          $scope.markers = [];
+          snapshot.forEach(function(point) {
+             val = point.val();
+             px = val['coord_x'];
+             py = val['coord_y'];
+             if (Math.pow(px - x, 2) + Math.pow(py - y, 2) <= radius) {
+                $scope.markers.push({
+                   "type": "Feature",
+                   "geometry": {
+                      "type": "Point",
+                      "coordinates": [px, py]
+                   }
+                });
+             }
+          });
+          if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
+             $scope.$apply();
+          }
+       }
 
-
+       $scope.crumbsFilter = {
+          x: 50,
+          y: 50,
+          radius: 50
+       };
+       $scope.applyCrumbsFilter = function(crumbsFilter) {
+          var
+             startX = parseFloat(crumbsFilter.x) - parseFloat(crumbsFilter.radius),
+             endX = parseFloat(crumbsFilter.x) + parseFloat(crumbsFilter.radius);
+          ref.orderByChild('coord_x').startAt(startX).endAt(endX).on('value', function(snapshot) {
+             applySnapshot(snapshot);
+          });
+       };
+       $scope.applyCrumbsFilter($scope.crumbsFilter);
+       /***************** END FireBase *******************/
 
         function getLocation(init) {
             function setMarkers(markerPoints) {
@@ -35,17 +74,6 @@ define(['mapbox-gl'], function(mapboxgl) {
                 $scope.geoData = geoData;
 
                 init && init();
-
-                $scope.markers = [];
-                $scope.crumbs.forEach(function(crumb) {
-                    $scope.markers.push({
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [crumb.coord_y, crumb.coord_x]
-                        }
-                    });
-                });
 
                 if ($scope.map.loaded()) {
                     setMarkers($scope.markers);
