@@ -1,4 +1,4 @@
-define(['bower_components/firebase/firebase'], function() {
+define([], function() {
    function FirebaseCtrl($scope) {
 
       try {

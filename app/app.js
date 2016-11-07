@@ -1,14 +1,15 @@
 define([
     './bower_components/angular/angular', 
     './bower_components/angular-route/angular-route',
-    './bower_components/firebase/firebase',
     './bower_components/angularfire/dist/angularfire',
     './bower_components/chance/chance',
     './services/main.es6',
     './controllers/main.es6', 
     './bower_components/angularjs-geolocation/src/geolocation'
-], function(rb) {
+], function() {
     'use strict';
+
+    window.firebase = firebase;
 
     // Declare app level module which depends on views, and components
     var app = angular.module('SoundCrumbs', [
