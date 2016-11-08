@@ -9,7 +9,7 @@ define([], function() {
         self.VKApi = VKApi;
         $scope.readonly = true;
 
-        VKApi.getUser(fields).then(user => {
+        VKApi.getUser(fields).then(function(user) {
             self.$scope.user = user;
             self.$scope.isOnline = (user.online !== 0);
             self.countFriends = user.counters.friends;

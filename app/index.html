@@ -6,35 +6,37 @@
   <title>SoundCrumbs</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/firebase.css">
-
   <link rel="stylesheet" href="vendor/mapbox-gl.css">
   <link rel="stylesheet" href="vendor/rb.css">
+  <link href='vendor/mapbox-gl.css' rel='stylesheet' />
 
-  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-
+  <!--<script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>-->
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="vendor/jquery.form.js"></script>
   <script src="vendor/rb.js"></script>
   <script src="//vk.com/js/api/openapi.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+  <!--<script src='vendor/mapbox-gl.js'></script>-->
 </head>
 <body>
-
-  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js'></script>
-  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet' />
-  <style>
-    body { margin:0; padding:0; }
-    #map { position:absolute; top:0; bottom:0; width:100%; }
-  </style>
-
   <div id="rb1" class="rb-wrapper"></div>
+  <div class="log"></div>
+
+  <!--нужно чтобы верстка уже была когда запускается ангуляр поэтому подгрузить bootup через require так не получится-->
+  <!--<script data-main="bootup" src="require.js"></script>-->
 
   <script>
-    var mainScreen = new rb.Screen("");
+    window.log = function(text) {
+      var log = $('.log');
+      log.html(log.html() + '<p>' + text + '</p>');
+    };
+
+    var historyScreen = new rb.Screen("");
     var mapScreen = new rb.Screen("" +
             "<div ng-controller='mapCtrl'>" +
             "<div id='map'></div>" +
@@ -42,23 +44,30 @@
             "<button class='recordButton-button' ng-click='goToRecord()'>+</button>" +
             "</div>" +
             "</div>", undefined, true);
-    mainScreen.addChild(mapScreen);
+    historyScreen.addChild(mapScreen);
+
     rb.start({rb1: mapScreen}, function() {
       rb.Instances.rb1.getControlManager().disableAll();
       window.rb1 = rb.Instances.rb1;
+
+      //todo это надо подключать, чтобы костыльнуть проблемы с пересчетом размеров при изменении размеров
+//      var smartResizer = new SmartResizer(rb1._mainDiv);
+//      rb1.addPlugin(smartResizer);
     });
 
+    // todo нужно чтобы это успело отработать раньше чем начнет грузиться bundle, чтобы верстка уже была
     $.get('partials/mapRecord.html', function(data) {
       var recordScreen = new rb.Screen('<div ng-controller="RecordAudioCtrl">' + data + '</div>', undefined, true);
       mapScreen.addChild(recordScreen);
     });
     $.get('partials/audioListener.html', function(data) {
       var audioListenerScreen = new rb.Screen('<div ng-controller="AudioListenerCtrl">' + data + '</div>', undefined, true);
-      mainScreen.addChild(audioListenerScreen);
+      historyScreen.addChild(audioListenerScreen);
     });
 
   </script>
 
   <script src="bundle.js"></script>
+
 </body>
 </html>

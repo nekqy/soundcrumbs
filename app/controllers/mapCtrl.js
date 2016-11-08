@@ -5,17 +5,14 @@ define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
           crumbsFilterRadius = 0.000225;
 
        /***************** BEGIN FireBase *******************/
-       try {
-          // Initialize firebase module
-          firebase.initializeApp({
-             apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-             authDomain: "soundcrumbs-168a9.firebaseapp.com",
-             databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-             storageBucket: "soundcrumbs-168a9.appspot.com",
-             messagingSenderId: "443143749176"
-          });
-       } catch(e) {
-       }
+      // Initialize firebase module
+      firebase.initializeApp({
+         apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+         authDomain: "soundcrumbs-168a9.firebaseapp.com",
+         databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+         storageBucket: "soundcrumbs-168a9.appspot.com",
+         messagingSenderId: "443143749176"
+      });
 
        var
           ref = firebase.database().ref('SoundCrumbs');
@@ -79,7 +76,12 @@ define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
        };
 
         function getLocation(init) {
+            log('<p class="tempLog">Загрузка локации...</p>');
+            isLocating = true;
             geolocation.getLocation().then(function(geoData){
+                $('.tempLog').remove();
+                isLocating = false;
+
                 $scope.geoData = geoData;
 
                 init && init();
@@ -96,11 +98,16 @@ define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
                       }
                    });
                 }
+            }, function(err) {
+                log(JSON.stringify(err))
             });
         }
 
+        var isLocating = false;
         setInterval(function() {
-            getLocation();
+            if (!isLocating) {
+                getLocation();
+            }
         }, 5000);
 
         getLocation(function() {
@@ -117,6 +124,11 @@ define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
                 boxZoom: false,
                 doubleClickZoom: false,
                 touchZoomRotate: false
+            });
+
+            $scope.map.on('error', function(err) {
+                //evented.fire('error', err);
+                log(JSON.stringify(err));
             });
 
             $scope.map.on('load', function() {

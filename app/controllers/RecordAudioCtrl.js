@@ -1,4 +1,4 @@
-define(['recorder'], function(Recorder) {
+ define(['recorder'], function(Recorder) {
     function CreateAudioCtrl($scope, VKApi, $http, $sce, geolocation) {
         var self = this;
         self.$scope = $scope;
@@ -33,9 +33,9 @@ define(['recorder'], function(Recorder) {
             return new Promise(function(resolve, reject) {
                 // надо иметь актуальный sid
                 $scope.info = 'getting session';
-                VKApi.getSession().then(session => {
+                VKApi.getSession().then(function(session) {
                     $scope.info = 'getting upload server';
-                    VKApi.getUploadServer().then(response => {
+                    VKApi.getUploadServer().then(function(response) {
                         $scope.info = 'getting location';
                         geolocation.getLocation().then(function(geoData){
                             $scope.info = 'posting audio';
@@ -52,7 +52,7 @@ define(['recorder'], function(Recorder) {
                                 contentType: false
                             }).done(function(res) {
                                 res = JSON.parse(res);
-                                VKApi.audioSave(res).then(vkData => {
+                                VKApi.audioSave(res).then(function(vkData) {
                                     resolve({
                                         geoData: geoData,
                                         vkData: vkData
@@ -65,25 +65,27 @@ define(['recorder'], function(Recorder) {
                             reject(err);
                         });
                     }, function(err) {
-                        $scope.info = JSON.stringify(err);
+                        reject(err);
                     });
                 }, function(err) {
-                    $scope.info = JSON.stringify(err);
+                    reject(err);
                 });
             });
         }
 
+        // закомментил!
+        // вероятно двойная загрузка может плохо сказываться на загрузке сайта, нужно было через сервис делать работу с firebase как VkApiProvider, и оттуда инититься и предоставлять абстрактное апи работы с базой
         // Initialize firebase module
-        try {
-            firebase.initializeApp({
-                apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-                authDomain: "soundcrumbs-168a9.firebaseapp.com",
-                databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-                storageBucket: "soundcrumbs-168a9.appspot.com",
-                messagingSenderId: "443143749176"
-            });
-        } catch(e) {
-        }
+        //try {
+        //    firebase.initializeApp({
+        //        apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+        //        authDomain: "soundcrumbs-168a9.firebaseapp.com",
+        //        databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+        //        storageBucket: "soundcrumbs-168a9.appspot.com",
+        //        messagingSenderId: "443143749176"
+        //    });
+        //} catch(e) {
+        //}
 
         $scope.isRecording = false;
         $scope.isNotRecording = true;
@@ -151,6 +153,7 @@ define(['recorder'], function(Recorder) {
                     $scope.goToBack();
                 }, function(err) {
                     $scope.info = JSON.stringify(err);
+                    log(JSON.stringify(err));
                     $scope.$apply();
                 });
             });
@@ -167,17 +170,20 @@ define(['recorder'], function(Recorder) {
             __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
         } catch (e) {
             alert('No web audio support in this browser!');
+            log('No web audio support in this browser!');
         }
 
         if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({audio: true}).then(startUserMedia, function(e) {
                 navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
                     __log('No live audio input: ' + e);
+                    log('No live audio input: ' + e);
                 });
             });
         } else {
             navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
                 __log('No live audio input: ' + e);
+                log('No live audio input: ' + e);
             });
         }
     }

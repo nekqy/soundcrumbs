@@ -2,141 +2,155 @@ define([], function() {
     function VKApi() {
         var settings = {};
 
-        this.setSettings = (vkSettings) => {
+        this.setSettings = function(vkSettings) {
             settings = vkSettings;
         };
 
-        this.$get = ['$rootScope', '$q', '$log', '$timeout', 'VK', ($rootScope, $q, $log, $timeout, VK) => {
+        this.$get = ['$rootScope', '$q', '$log', '$timeout', 'VK', function($rootScope, $q, $log, $timeout, VK) {
             if(typeof VK === "undefined")
                 throw new Error("You forgot include VK script");
             if(typeof settings.apiId === "undefined" && typeof settings.apiVersion === "undefined")
                 throw new Error("You forgot initialize settings in a config function");
             VK.init({ apiId: settings.apiId, apiVersion: settings.apiVersion });
 
-            var authenticate = () =>
-                $q((resolve, reject) => {
-                    VK.Auth.getLoginStatus(response => {
+            var authenticate = function() {
+                return $q(function(resolve, reject) {
+                    VK.Auth.getLoginStatus(function(response) {
                         if(response.session) {
                             var mid = response.session.mid;
-                            $timeout(() => resolve(mid), 0);
+                            $timeout(function() {return resolve(mid)}, 0);
                         } else {
-                            VK.Auth.login(response => $log.info(response, 'response'), 2 + 4 + 8 + 16 + 65536);
+                            VK.Auth.login(function(response) {return $log.info(response, 'response')}, 2 + 4 + 8 + 16);
                         }
                     });
                 });
+            };
 
-            var getMid = () => authenticate().then(mid => mid);
+            var getMid = function() {return authenticate().then(function(mid) {
+                return mid;
+            })};
 
-            var getSession = () => authenticate().then(mid =>
-                $q((resolve, reject) => {
-                    if(VK.Auth.getSession() != null) {
-                        var session = VK.Auth.getSession();
+            var getSession = function() {
+                return authenticate().then(function(mid) {
+                        return $q(function(resolve, reject) {
+                            if (VK.Auth.getSession() != null) {
+                                var session = VK.Auth.getSession();
 
-                        if(session.mid === mid) {
-                            resolve(session);
-                        } else {
-                            reject(new Error("This session does not correct for current user"));
-                        }
+                                if (session.mid === mid) {
+                                    resolve(session);
+                                } else {
+                                    reject(new Error("This session does not correct for current user"));
+                                }
+                            }
+                        })
+                    });
+            };
+
+            var getUser = function(fields, uid) {
+                return authenticate().then(function(mid) {
+                        return $q(function(resolve, reject) {
+                            VK.api('users.get', {
+                                user_ids: typeof uid === 'undefined' ? mid : uid.join(","),
+                                fields: fields.join(',')
+                            }, function(response) {
+                                if (response.response) {
+                                    $timeout(function() { return resolve(typeof uid !== 'undefined' ? response.response : response.response[0]) }, 0);
+                                }
+                            });
+                        })
+                    });
+            };
+
+            //var getFollowers = params => authenticate().then(mid => {
+            //    params = params || {};
+            //    params.mid = mid;
+            //
+            //    return $q((resolve, reject) => {
+            //        VK.api('users.getFollowers', params, response => {
+            //            if(response.response) {
+            //                $timeout(() => resolve(response.response), 0);
+            //            }
+            //        });
+            //    })
+            //});
+
+            var getAudio = function(params) {
+                return authenticate().then(function(mid) {
+                    params = params || {};
+                    params.mid = mid;
+
+                    return $q(function(resolve, reject) {
+                        VK.api('audio.search', params, function(response) {
+                            if (response.response) {
+                                $timeout(function() {return resolve(response.response)}, 0);
+                            }
+                        });
+                    })
+                });
+            };
+
+            //var getFriends = fields => authenticate().then(mid =>
+            //    $q((resolve, reject) => {
+            //        VK.api('friends.get', {
+            //            user_id: mid,
+            //            fields: fields.join(',')
+            //        }, response => {
+            //            if (response.response) {
+            //                $timeout(() => resolve(response.response), 0);
+            //            }
+            //        });
+            //    })
+            //);
+
+            var audioSave = function(fields) {
+                return authenticate().then(function(mid) {
+                    fields = fields || {};
+                    fields.mid = mid;
+
+                    return $q(function(resolve, reject) {
+                        VK.api('audio.save', fields, function(response) {
+                            if (response.response) {
+                                $timeout(function() { return resolve(response.response)}, 0);
+                            }
+                        });
+                    })
+                });
+            };
+
+            //var photosSearch = (lat, long) => authenticate().then(mid =>
+            //    $q((resolve, reject) => {
+            //        VK.api('photos.search', { lat, long }, (response) => {
+            //            if (response.response) {
+            //                $timeout(() => resolve(response.response), 0);
+            //            }
+            //        });
+            //    })
+            //);
+
+            var getUploadServer = function() {
+                return authenticate().then(function(mid) {
+                        return $q(function(resolve, reject) {
+                            VK.api('audio.getUploadServer', {}, function(response) {
+                                if (response.response) {
+                                    $timeout(function() {return resolve(response.response)}, 0);
+                                }
+                            });
+                        })
                     }
-                })
-            );
-
-            var getUser = (fields, uid) => authenticate().then(mid =>
-                $q((resolve, reject) => {
-                    VK.api('users.get', {
-                        user_ids: typeof uid === 'undefined' ? mid: uid.join(","),
-                        fields: fields.join(',')
-                    }, response => {
-                        if(response.response) {
-                            $timeout(() => resolve(typeof uid !== 'undefined' ? response.response: response.response[0]), 0);
-                        }
-                    });
-                })
-            );
-
-            var getFollowers = params => authenticate().then(mid => {
-                params = params || {};
-                params.mid = mid;
-
-                return $q((resolve, reject) => {
-                    VK.api('users.getFollowers', params, response => {
-                        if(response.response) {
-                            $timeout(() => resolve(response.response), 0);
-                        }
-                    });
-                })
-            });
-
-            var getAudio = params => authenticate().then(mid => {
-                params = params || {};
-                params.mid = mid;
-
-                return $q((resolve, reject) => {
-                    VK.api('audio.search', params, response => {
-                        if(response.response) {
-                            $timeout(() => resolve(response.response), 0);
-                        }
-                    });
-                })
-            });
-
-            var getFriends = fields => authenticate().then(mid =>
-                $q((resolve, reject) => {
-                    VK.api('friends.get', {
-                        user_id: mid,
-                        fields: fields.join(',')
-                    }, response => {
-                        if (response.response) {
-                            $timeout(() => resolve(response.response), 0);
-                        }
-                    });
-                })
-            );
-
-            var audioSave = fields => authenticate().then(mid => {
-                fields = fields || {};
-                fields.mid = mid;
-
-                return $q((resolve, reject) => {
-                    VK.api('audio.save', fields, response => {
-                        if (response.response) {
-                            $timeout(() => resolve(response.response), 0);
-                        }
-                    });
-                })
-            });
-
-            var photosSearch = (lat, long) => authenticate().then(mid =>
-                $q((resolve, reject) => {
-                    VK.api('photos.search', { lat, long }, (response) => {
-                        if (response.response) {
-                            $timeout(() => resolve(response.response), 0);
-                        }
-                    });
-                })
-            );
-
-            var getUploadServer = () => authenticate().then(mid =>
-                $q((resolve, reject) => {
-                    VK.api('audio.getUploadServer', {}, (response) => {
-                        if (response.response) {
-                            $timeout(() => resolve(response.response), 0);
-                        }
-                    });
-                })
-            );
+                );
+            };
 
             return {
-                authenticate,
-                getMid,
-                getUser,
-                audioSave,
-                getSession,
-                getFollowers,
-                getAudio,
-                getFriends,
-                photosSearch,
-                getUploadServer
+                authenticate: authenticate,
+                getMid: getMid,
+                getUser: getUser,
+                audioSave: audioSave,
+                getSession: getSession,
+                //getFollowers,
+                getAudio: getAudio,
+                //getFriends,
+                //photosSearch,
+                getUploadServer: getUploadServer
             };
         }];
     }

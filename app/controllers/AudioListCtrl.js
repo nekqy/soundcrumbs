@@ -13,7 +13,7 @@ define([], function() {
         $scope.getAudio = function() {
             VKApi.getAudio({
                 q: $scope.searchString
-            }).then(audioList => {
+            }).then(function(audioList) {
                 self.$scope.audioList = audioList;
             });
         };

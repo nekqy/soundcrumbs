@@ -12,7 +12,7 @@ define([
     window.firebase = firebase;
 
     // Declare app level module which depends on views, and components
-    var app = angular.module('SoundCrumbs', [
+    var app = window.app = angular.module('SoundCrumbs', [
         'ngRoute',
         'firebase',
         'SoundCrumbs.service',
