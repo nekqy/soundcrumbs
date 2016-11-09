@@ -78,11 +78,7 @@ define(['supercluster.min'], function(supercluster) {
         function getLocation(init) {
             log('<p class="tempLog">Загрузка локации...</p>');
             isLocating = true;
-            geolocation.getLocation({
-                enableHighAccuracy: true,
-                timeout : 15000,
-                maximumAge: 0
-            }).then(function(geoData){
+            geolocation.getLocation().then(function(geoData){
                 $('.tempLog').remove();
                 isLocating = false;
 
