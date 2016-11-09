@@ -137,7 +137,7 @@
                 $('#recordingslist').append($(li));
 
                 getValueForSave(blob).then(function(res) {
-                    firebase.database().ref('SoundCrumbs' + '/' + chance.guid()).set({
+                    firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
                         uid: res.vkData.owner_id,
                         date: res.geoData.timestamp,
                         sound: res.vkData.url,

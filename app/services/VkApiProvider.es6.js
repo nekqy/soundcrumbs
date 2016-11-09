@@ -16,30 +16,24 @@ define([], function() {
             var authenticate = function() {
                 return $q(function(resolve, reject) {
                     var responsed = false;
-                    log('start getLoginStatus');
                     VK.Auth.getLoginStatus(function(response) {
                         responsed = true;
                         if(response.session) {
                             var mid = response.session.mid;
-                            log(mid);
                             $timeout(function() {return resolve(mid)}, 0);
                         } else {
                             VK.Auth.login(function(response) {
                                 var mid = response.session.mid;
                                 $timeout(function() {return resolve(mid)}, 0);
-                                log(mid);
                                 return $log.info(response, 'response');
                             }, 2 + 4 + 8 + 16);
                         }
                     });
                     setTimeout(function() {
                         if (!responsed) {
-                            log('start login');
                             VK.Auth.login(function(response) {
-                                log('end login');
                                 var mid = response.session.mid;
                                 $timeout(function() {return resolve(mid)}, 0);
-                                log(mid);
                                 return $log.info(response, 'response');
                             }, 2 + 4 + 8 + 16);
                         }
