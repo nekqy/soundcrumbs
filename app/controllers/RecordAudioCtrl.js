@@ -36,32 +36,27 @@
                 VKApi.getSession().then(function(session) {
                     $scope.info = 'getting upload server';
                     VKApi.getUploadServer().then(function(response) {
-                        $scope.info = 'getting location';
-                        geolocation.getLocation().then(function(geoData){
-                            $scope.info = 'posting audio';
+                        $scope.info = 'posting audio';
 
-                            var fd = new FormData();
-                            fd.append('file', blob);
-                            fd.append('sid', session.sid);
-                            fd.append('uploadUrl', response['upload_url']);
-                            $.ajax({
-                                type: 'POST',
-                                url: window.location.origin + '/upload',
-                                data: fd,
-                                processData: false,
-                                contentType: false
-                            }).done(function(res) {
-                                res = JSON.parse(res);
-                                VKApi.audioSave(res).then(function(vkData) {
-                                    resolve({
-                                        geoData: geoData,
-                                        vkData: vkData
-                                    });
+                        var fd = new FormData();
+                        fd.append('file', blob);
+                        fd.append('sid', session.sid);
+                        fd.append('uploadUrl', response['upload_url']);
+                        $.ajax({
+                            type: 'POST',
+                            url: window.location.origin + '/upload',
+                            data: fd,
+                            processData: false,
+                            contentType: false
+                        }).done(function(res) {
+                            res = JSON.parse(res);
+                            VKApi.audioSave(res).then(function(vkData) {
+                                resolve({
+                                    geoData: window.geoData,
+                                    vkData: vkData
                                 });
-                            }).fail(function(err) {
-                                reject(err);
                             });
-                        }, function(err) {
+                        }).fail(function(err) {
                             reject(err);
                         });
                     }, function(err) {

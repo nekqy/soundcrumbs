@@ -82,7 +82,7 @@ define(['supercluster.min'], function(supercluster) {
                 $('.tempLog').remove();
                 isLocating = false;
 
-                $scope.geoData = geoData;
+                window.geoData = $scope.geoData = geoData;
 
                 init && init();
 
@@ -106,7 +106,7 @@ define(['supercluster.min'], function(supercluster) {
 
         var isLocating = false;
         setInterval(function() {
-            if (!isLocating) {
+            if (!isLocating && isMapScreen()) {
                 getLocation();
             }
         }, 15000);

@@ -3,13 +3,17 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         var log = $('.log');
         log.html(log.html() + '<p>' + text + '</p>');
     };
+    window.isMapScreen = function() {
+        if (!rb1) return false;
+        return rb1._screenManager.getCurScreen() === mapScreen;
+    };
 
     var historyScreen = new rb.Screen("");
     var mapScreen = new rb.Screen("" +
         "<div ng-controller='mapCtrl'>" +
         "<div id='map'></div>" +
         "<div class='recordButton'>" +
-        "<button class='recordButton-button' ng-click='goToRecord()'>+</button>" +
+        "<button class='recordButton-button' ng-if='geoData' ng-click='goToRecord()'>+</button>" +
         "</div>" +
         "</div>", undefined, true);
     historyScreen.addChild(mapScreen);
