@@ -14,19 +14,6 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         "</div>", undefined, true);
     historyScreen.addChild(mapScreen);
 
-
-    var load1 = new Promise(function(resolve) {
-        rb.start({rb1: mapScreen}, function() {
-            rb.Instances.rb1.getControlManager().disableAll();
-            window.rb1 = rb.Instances.rb1;
-
-            var smartResizer = new SmartResizer(rb1._mainDiv);
-            rb1.addPlugin(smartResizer);
-
-            resolve(true);
-        });
-    });
-
     var load2 = new Promise(function(resolve) {
         $.get('partials/mapRecord.html', function(data) {
             var recordScreen = new rb.Screen('<div ng-controller="RecordAudioCtrl">' + data + '</div>', undefined, true);
@@ -42,7 +29,17 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         });
     });
 
-    return Promise.all([load1, load2, load3]).then(function() {
-        rb1.reload();
+    return Promise.all([load2, load3]).then(function() {
+        return new Promise(function(resolve) {
+            rb.start({rb1: mapScreen}, function() {
+                rb.Instances.rb1.getControlManager().disableAll();
+                window.rb1 = rb.Instances.rb1;
+
+                var smartResizer = new SmartResizer(rb1._mainDiv);
+                rb1.addPlugin(smartResizer);
+
+                resolve(true);
+            });
+        });
     });
 });

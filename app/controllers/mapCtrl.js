@@ -99,6 +99,7 @@ define(['supercluster.min'], function(supercluster) {
                    });
                 }
             }, function(err) {
+                isLocating = false;
                 log(JSON.stringify(err))
             });
         }
