@@ -238,6 +238,9 @@ var Recorder = exports.Recorder = (function () {
                 cb(e.data.data);
             }
         };
+        this.worker.onerror = function (err) {
+            throw err;
+        };
     }
 
     _createClass(Recorder, [{
