@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="SoundCrumbs" class="no-js">
+<html lang="en" class="no-js">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,8 +7,8 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+  <!--<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">-->
+  <!--<link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">-->
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/firebase.css">
   <link rel="stylesheet" href="vendor/mapbox-gl.css">
@@ -20,52 +20,12 @@
   <script src="vendor/jquery.form.js"></script>
   <script src="vendor/rb.js"></script>
   <script src="//vk.com/js/api/openapi.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
-  <!--<script src='vendor/mapbox-gl.js'></script>-->
+  <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+  <script src='vendor/mapbox-gl.js'></script>
 </head>
 <body>
   <div id="rb1" class="rb-wrapper"></div>
   <div class="log"></div>
-
-  <!--нужно чтобы верстка уже была когда запускается ангуляр поэтому подгрузить bootup через require так не получится-->
-  <!--<script data-main="bootup" src="require.js"></script>-->
-
-  <script>
-    window.log = function(text) {
-      var log = $('.log');
-      log.html(log.html() + '<p>' + text + '</p>');
-    };
-
-    var historyScreen = new rb.Screen("");
-    var mapScreen = new rb.Screen("" +
-            "<div ng-controller='mapCtrl'>" +
-            "<div id='map'></div>" +
-            "<div class='recordButton'>" +
-            "<button class='recordButton-button' ng-click='goToRecord()'>+</button>" +
-            "</div>" +
-            "</div>", undefined, true);
-    historyScreen.addChild(mapScreen);
-
-    rb.start({rb1: mapScreen}, function() {
-      rb.Instances.rb1.getControlManager().disableAll();
-      window.rb1 = rb.Instances.rb1;
-
-      //todo это надо подключать, чтобы костыльнуть проблемы с пересчетом размеров при изменении размеров
-//      var smartResizer = new SmartResizer(rb1._mainDiv);
-//      rb1.addPlugin(smartResizer);
-    });
-
-    // todo нужно чтобы это успело отработать раньше чем начнет грузиться bundle, чтобы верстка уже была
-    $.get('partials/mapRecord.html', function(data) {
-      var recordScreen = new rb.Screen('<div ng-controller="RecordAudioCtrl">' + data + '</div>', undefined, true);
-      mapScreen.addChild(recordScreen);
-    });
-    $.get('partials/audioListener.html', function(data) {
-      var audioListenerScreen = new rb.Screen('<div ng-controller="AudioListenerCtrl">' + data + '</div>', undefined, true);
-      historyScreen.addChild(audioListenerScreen);
-    });
-
-  </script>
 
   <script src="bundle.js"></script>
 

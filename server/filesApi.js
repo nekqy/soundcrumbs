@@ -54,17 +54,6 @@ exports.init = function(app) {
     });
 
     function saveToVk(sid, name, mainRes, uploadUrl) {
-        var VK = require('vksdk');
-
-        var vk = new VK({
-            'appId'     : 5491230,
-            'appSecret' : 'sOAx342oSt5aULyhsbdJ',
-            'mode'      : 'oauth',
-            'version'   : '5.59'
-        });
-        vk.setSecureRequests(true);
-        vk.setToken(sid);
-
         var request = require('request');
 
         var params = {

@@ -1,4 +1,4 @@
-define(['mapbox-gl', 'supercluster.min'], function(mapboxgl, supercluster) {
+define(['supercluster.min'], function(supercluster) {
     function mapCtrl($scope, geolocation) {
        const
           // R = 0.00045 / 2 = ~25 метров, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters

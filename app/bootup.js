@@ -4,8 +4,6 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         log.html(log.html() + '<p>' + text + '</p>');
     };
 
-    setTimeout(function() {
-
     var historyScreen = new rb.Screen("");
     var mapScreen = new rb.Screen("" +
         "<div ng-controller='mapCtrl'>" +
@@ -16,24 +14,33 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         "</div>", undefined, true);
     historyScreen.addChild(mapScreen);
 
-    rb.start({rb1: mapScreen}, function() {
-        rb.Instances.rb1.getControlManager().disableAll();
-        window.rb1 = rb.Instances.rb1;
 
-        var smartResizer = new SmartResizer(rb1._mainDiv);
-        rb1.addPlugin(smartResizer);
+    var load1 = new Promise(function(resolve) {
+        rb.start({rb1: mapScreen}, function() {
+            rb.Instances.rb1.getControlManager().disableAll();
+            window.rb1 = rb.Instances.rb1;
+
+            var smartResizer = new SmartResizer(rb1._mainDiv);
+            rb1.addPlugin(smartResizer);
+
+            resolve(true);
+        });
     });
 
-    $.get('partials/mapRecord.html', function(data) {
-        var recordScreen = new rb.Screen('<div ng-controller="RecordAudioCtrl">' + data + '</div>', undefined, true);
-        mapScreen.addChild(recordScreen);
+    var load2 = new Promise(function(resolve) {
+        $.get('partials/mapRecord.html', function(data) {
+            var recordScreen = new rb.Screen('<div ng-controller="RecordAudioCtrl">' + data + '</div>', undefined, true);
+            mapScreen.addChild(recordScreen);
+            resolve(true);
+        });
     });
-    $.get('partials/audioListener.html', function(data) {
-        var audioListenerScreen = new rb.Screen('<div ng-controller="AudioListenerCtrl">' + data + '</div>', undefined, true);
-        historyScreen.addChild(audioListenerScreen);
+    var load3 = new Promise(function(resolve) {
+        $.get('partials/audioListener.html', function (data) {
+            var audioListenerScreen = new rb.Screen('<div ng-controller="AudioListenerCtrl">' + data + '</div>', undefined, true);
+            historyScreen.addChild(audioListenerScreen);
+            resolve(true);
+        });
     });
-    }, 5000);
 
-    app.run();
-
+    return Promise.all([load1, load2, load3]);
 });

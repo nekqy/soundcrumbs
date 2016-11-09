@@ -14,8 +14,7 @@
     "express-fileupload": "0.0.5",
     "node-uuid": "^1.4.7",
     "request": "^2.76.0",
-    "sox": "^0.1.0",
-    "vksdk": "^5.3.2"
+    "sox": "^0.1.0"
   },
   "scripts": {
     "build": "./node_modules/bower/bin/bower install && cd app && ../node_modules/webpack/bin/webpack.js --optimize-minimize",
