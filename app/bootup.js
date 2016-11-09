@@ -42,5 +42,7 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         });
     });
 
-    return Promise.all([load1, load2, load3]);
+    return Promise.all([load1, load2, load3]).then(function() {
+        rb1.reload();
+    });
 });

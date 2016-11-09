@@ -37,7 +37,11 @@
                     $scope.info = 'getting upload server';
                     VKApi.getUploadServer().then(function(response) {
                         $scope.info = 'getting location';
-                        geolocation.getLocation().then(function(geoData){
+                        geolocation.getLocation({
+                            enableHighAccuracy: true,
+                            timeout : 5000,
+                            maximumAge: 0
+                        }).then(function(geoData){
                             $scope.info = 'posting audio';
 
                             var fd = new FormData();
