@@ -91,8 +91,6 @@ define([
 
         }]);
 
-        angular.element(function() {
-            angular.bootstrap(document, ['soundcrumbs']);
-        });
+        angular.bootstrap(document, ['soundcrumbs']);
     });
 });
