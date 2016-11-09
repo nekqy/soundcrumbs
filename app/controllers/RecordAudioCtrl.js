@@ -33,13 +33,10 @@
             return new Promise(function(resolve, reject) {
                 // надо иметь актуальный sid
                 $scope.info = 'getting session';
-                log($scope.info);
                 VKApi.getSession().then(function(session) {
                     $scope.info = 'getting upload server';
-                    log($scope.info);
                     VKApi.getUploadServer().then(function(response) {
                         $scope.info = 'posting audio';
-                        log($scope.info);
 
                         var fd = new FormData();
                         fd.append('file', blob);
