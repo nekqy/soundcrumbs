@@ -80,7 +80,7 @@ define(['supercluster.min'], function(supercluster) {
             isLocating = true;
             geolocation.getLocation({
                 enableHighAccuracy: true,
-                timeout : 5000,
+                timeout : 15000,
                 maximumAge: 0
             }).then(function(geoData){
                 $('.tempLog').remove();
@@ -112,7 +112,7 @@ define(['supercluster.min'], function(supercluster) {
             if (!isLocating) {
                 getLocation();
             }
-        }, 5000);
+        }, 15000);
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';

@@ -39,7 +39,7 @@
                         $scope.info = 'getting location';
                         geolocation.getLocation({
                             enableHighAccuracy: true,
-                            timeout : 5000,
+                            timeout : 15000,
                             maximumAge: 0
                         }).then(function(geoData){
                             $scope.info = 'posting audio';
