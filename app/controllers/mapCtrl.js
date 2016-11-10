@@ -264,7 +264,11 @@ define(['supercluster.min'], function(supercluster) {
                     $scope.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
                 });
 
-                ref.on('value', $scope.applyCrumbsFilter);
+                // регаем функцию, которая будет срабатывать на изменения значений в firebase
+                // todo что-то я не понимаю почему нужна задержка, но без нее не всегда отрабатывает
+                setTimeout(function() {
+                    ref.on('value', $scope.applyCrumbsFilter);
+                }, 1000);
             });
         });
     }
