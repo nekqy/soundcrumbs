@@ -86,8 +86,6 @@ define(['supercluster.min'], function(supercluster) {
 
                 init && init();
 
-                $scope.applyCrumbsFilter();
-
                 if ($scope.map && $scope.map.loaded()) {
                    $scope.map.setCenter([$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]);
                    $scope.map.getSource('userCircle').setData({
@@ -109,7 +107,7 @@ define(['supercluster.min'], function(supercluster) {
             if (!isLocating && isMapScreen()) {
                 getLocation();
             }
-        }, 15000);
+        }, 30000);
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';
@@ -265,6 +263,8 @@ define(['supercluster.min'], function(supercluster) {
                     var features = $scope.map.queryRenderedFeatures(e.point, { layers: ['layer1', 'layer2'] });
                     $scope.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
                 });
+
+                ref.on('value', $scope.applyCrumbsFilter);
             });
         });
     }
