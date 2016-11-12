@@ -1,17 +1,19 @@
-<style>
-    .audioContainer {
-        margin: 5px;
-    }
-</style>
+<div class="listenContainer">
+    <div class="back recordContainer__back">
+        <button class="backButton cbutton" ng-click="goToBack()">
+            <i class="cbutton__icon fa fa-fw fa-arrow-left"></i>
+            <span class="cbutton__text">Back</span>
+        </button>
+    </div>
 
-<div><button ng-click="goToBack()">back</button></div>
-
-<div ng-if="audioList" ng-repeat="(key, value) in audioList">
-
-    <div class="audioContainer">
-        <audio controls preload="none">
-            <source ng-src="{{trustSrc(value.sound)}}">
-        </audio>
+    <div class="listenContainer__list">
+        <div ng-if="audioList" ng-repeat="(key, value) in audioList">
+            <div class="listenContainer__player">
+                <audio controls preload="none">
+                    <source ng-src="{{trustSrc(value.sound)}}">
+                </audio>
+            </div>
+        </div>
     </div>
 
 </div>

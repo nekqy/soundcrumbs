@@ -39,8 +39,9 @@
 .recordButton-button {
   width: 100%;
   height: 100%;
+  font-size: 2.7em;
 }
-.recordContainer {
+.recordContainer, .listenContainer {
   display: flex;
   /*justify-content: center;*/
   align-items: center;
@@ -61,23 +62,37 @@
 body { margin:0; padding:0; }
 #map { position:absolute; top:0; bottom:0; width:100%; }
 
-.recordContainer__back {
+.back {
   margin: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .recordContainer__record {
   margin: 10px;
 }
-.recordContainer__select {
+.recordContainer__select, .listenContainer__list {
   overflow: auto;
   text-align: center;
+  width: 500px;
 
   margin: 10px;
 }
-.recordContainer__title {
-  clear: both;
-  overflow: hidden;
-  white-space: nowrap;
+.listenContainer__list {
+  margin-top: 40px;
 }
-.recordContainer__result {
-  width: 400px;
+.recordContainer__title {
+  /*clear: both;*/
+  overflow: hidden;
+  /*white-space: nowrap;*/
+}
+
+.recordContainer__title__text {
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+.is-desktop .recordContainer__title__text {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }

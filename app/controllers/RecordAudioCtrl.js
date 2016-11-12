@@ -112,12 +112,17 @@
 
             $scope.isRecording = true;
             $scope.isNotRecording = false;
+            $scope.log = 'Recording...';
         };
         $scope.stopRecording = function() {
             recorder && recorder.stop();
             //button.disabled = true;
             //button.previousElementSibling.disabled = false;
             __log('Stopped recording.');
+
+            $scope.isRecording = false;
+            $scope.isNotRecording = false;
+            $scope.log = 'Saving...';
 
             var button = $('.stopButton');
             button.toggleClass('button-disabled', true);
@@ -130,6 +135,7 @@
         $scope.goToBack = function() {
             $scope.isRecording = false;
             $scope.isNotRecording = true;
+            $scope.log = '';
 
             var button = $('.stopButton');
             button.toggleClass('button-disabled', false);
