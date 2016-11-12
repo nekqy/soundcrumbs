@@ -42,11 +42,13 @@
 }
 .recordContainer {
   display: flex;
-  justify-content: center;
+  /*justify-content: center;*/
   align-items: center;
   width: 100%;
   height: 100%;
   position: absolute;
+
+  flex-direction: column;
 }
 .button-disabled {
   display: none;
@@ -58,3 +60,24 @@
 }
 body { margin:0; padding:0; }
 #map { position:absolute; top:0; bottom:0; width:100%; }
+
+.recordContainer__back {
+  margin: 10px;
+}
+.recordContainer__record {
+  margin: 10px;
+}
+.recordContainer__select {
+  overflow: auto;
+  text-align: center;
+
+  margin: 10px;
+}
+.recordContainer__title {
+  clear: both;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.recordContainer__result {
+  width: 400px;
+}

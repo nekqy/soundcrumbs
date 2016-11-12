@@ -1,8 +1,38 @@
 <div class="recordContainer">
-    <div>
+    <div class="recordContainer__back">
+        <button ng-if="isNotRecording" class="backButton" ng-click="goToBack()">back</button>
+    </div>
+    <div class="recordContainer__record">
         <button ng-if="isNotRecording" class="startButton" ng-click="startRecording()">record</button>
         <button ng-if="isRecording" class="stopButton" ng-click="stopRecording()">stop</button>
-        <button ng-if="isNotRecording" class="stopButton" ng-click="goToBack()">back</button>
     </div>
     <div ng-if="isRecording">Recording...</div>
+
+    <div ng-if="isNotRecording" class="recordContainer__select">
+        <div class="recordContainer__search">
+            Поиск:
+            <input ng-model="searchString">
+            <button ng-click="getAudio()">ok</button>
+        </div>
+        <div class="recordContainer__result">
+            <div ng-if="audioList" ng-repeat="(key, value) in audioList">
+
+                <div ng-if="value.aid">
+                    <div class="recordContainer__title">
+                        <marquee>
+                            {{value.artist}} - {{value.title}}
+                        </marquee>
+                    </div>
+                    <div class="recordContainer__player">
+                        <audio controls preload="none">
+                            <source ng-src="{{trustSrc(value.url)}}">
+                        </audio>
+                        <button ng-click="selectAudio(value)">select</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
 </div>

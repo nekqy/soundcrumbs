@@ -68,19 +68,37 @@
             });
         }
 
-        // закомментил!
-        // вероятно двойная загрузка может плохо сказываться на загрузке сайта, нужно было через сервис делать работу с firebase как VkApiProvider, и оттуда инититься и предоставлять абстрактное апи работы с базой
-        // Initialize firebase module
-        //try {
-        //    firebase.initializeApp({
-        //        apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-        //        authDomain: "soundcrumbs-168a9.firebaseapp.com",
-        //        databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-        //        storageBucket: "soundcrumbs-168a9.appspot.com",
-        //        messagingSenderId: "443143749176"
-        //    });
-        //} catch(e) {
-        //}
+        $scope.searchString = '';
+
+        $scope.getAudio = function() {
+            VKApi.getAudio({
+                q: $scope.searchString
+            }).then(function(audioList) {
+                $scope.audioList = audioList;
+            });
+        };
+        $scope.selectAudio = function(audio) {
+            function guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            }
+
+            VKApi.getSession().then(function (session) {
+                saveAudio({
+                    geoData: window.geoData,
+                    vkData: {
+                        title: guid(),
+                        owner_id: session.mid,
+                        url: audio.url
+                    }
+                });
+            }, logError);
+        };
 
         $scope.isRecording = false;
         $scope.isNotRecording = true;
@@ -133,25 +151,33 @@
                 li.appendChild(hf);
                 $('#recordingslist').append($(li));
 
-                getValueForSave(blob).then(function(res) {
-                    firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
-                        uid: res.vkData.owner_id,
-                        date: res.geoData.timestamp,
-                        sound: res.vkData.url,
-                        coord_x: res.geoData.coords.longitude,
-                        coord_y: res.geoData.coords.latitude,
-                        rating: 0
-                    });
-                    $scope.info = JSON.stringify(res);
-                    $scope.$apply();
-
-                    $scope.goToBack();
-                }, function(err) {
-                    $scope.info = JSON.stringify(err);
-                    log(JSON.stringify(err));
-                    $scope.$apply();
-                });
+                getValueForSave(blob).then(saveAudio, logError);
             });
+        }
+        function logError(err) {
+            $scope.info = JSON.stringify(err);
+            log(JSON.stringify(err));
+            if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
+                $scope.$apply();
+            }
+        }
+
+        function saveAudio(res) {
+            firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
+                uid: res.vkData.owner_id,
+                date: res.geoData.timestamp,
+                sound: res.vkData.url,
+                coord_x: res.geoData.coords.longitude,
+                coord_y: res.geoData.coords.latitude,
+                rating: 0
+            });
+            $scope.info = JSON.stringify(res);
+
+            if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
+                $scope.$apply();
+            }
+
+            $scope.goToBack();
         }
 
         try {
