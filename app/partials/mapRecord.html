@@ -10,8 +10,10 @@
 
     <div ng-if="isNotRecording" class="recordContainer__select">
         <div class="recordContainer__search">
-            Поиск:
-            <input ng-model="searchString">
+            <label>
+                Поиск:
+                <input ng-model="formData.searchString">
+            </label>
             <button ng-click="getAudio()">ok</button>
         </div>
         <div class="recordContainer__result">

@@ -51,9 +51,12 @@ define(['supercluster.min'], function(supercluster) {
           if ($scope.map.loaded()) {
              updateMarkers();
           } else {
-             $scope.map.on('load', function() {
-                updateMarkers();
-             });
+              var intervalIndex = setInterval(function() {
+                  if ($scope.map.loaded()) {
+                      updateMarkers();
+                      clearInterval(intervalIndex);
+                  }
+              }, 1000);
           }
        }
 
@@ -264,11 +267,7 @@ define(['supercluster.min'], function(supercluster) {
                     $scope.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
                 });
 
-                // регаем функцию, которая будет срабатывать на изменения значений в firebase
-                // todo что-то я не понимаю почему нужна задержка, но без нее не всегда отрабатывает
-                setTimeout(function() {
-                    ref.on('value', $scope.applyCrumbsFilter);
-                }, 1000);
+                ref.on('value', $scope.applyCrumbsFilter);
             });
         });
     }

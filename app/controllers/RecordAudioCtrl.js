@@ -68,11 +68,11 @@
             });
         }
 
-        $scope.searchString = '';
+        $scope.formData = {};
 
         $scope.getAudio = function() {
             VKApi.getAudio({
-                q: $scope.searchString
+                q: $scope.formData.searchString
             }).then(function(audioList) {
                 $scope.audioList = audioList;
             });
