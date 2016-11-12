@@ -1,5 +1,5 @@
 var webpack = require("webpack"),
-    NODE_ENV = process.env.NODE_ENV || 'development';
+    isDevelopment = !!process.env.isDevelopment;
 
 module.exports = {
    entry: "./app.js",
@@ -22,14 +22,14 @@ module.exports = {
    plugins: []
 };
 
-//if (NODE_ENV == 'production') {
-//   module.exports.plugins.push(
-//       new webpack.optimize.UglifyJsPlugin({
-//          compress: {
-//             warnings: false,
-//             drop_console: true,
-//             unsafe: true
-//          }
-//       })
-//   );
-//}
+if (!isDevelopment) {
+   module.exports.plugins.push(
+       new webpack.optimize.UglifyJsPlugin({
+          compress: {
+             warnings: false,
+             drop_console: true,
+             unsafe: true
+          }
+       })
+   );
+}

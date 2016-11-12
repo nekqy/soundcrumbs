@@ -1,6 +1,7 @@
 var
    express = require('express'),
    cors = require('cors'),
+   enforce = require('express-sslify'),
    app = express();
 
 // include before other routes
@@ -11,6 +12,10 @@ app.options('*', cors({
 }));
 
 app.use(cors());
+
+if (!process.env.isDevelopment) {
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

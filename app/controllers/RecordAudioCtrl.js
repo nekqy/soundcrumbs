@@ -1,4 +1,4 @@
- define(['recorder'], function(Recorder) {
+ define([], function() {
     function CreateAudioCtrl($scope, VKApi, $http, $sce, geolocation) {
         var self = this;
         self.$scope = $scope;

@@ -6,15 +6,16 @@
   "repository": "https://github.com/nekqy/soundcrumbs",
   "license": "MIT",
   "dependencies": {
-    "webpack": "^1.13.3",
-    "bower": "^1.7.7",
     "body-parser": "^1.15.2",
+    "bower": "^1.7.7",
     "cors": "^2.8.1",
     "express": "^4.14.0",
     "express-fileupload": "0.0.5",
+    "express-sslify": "^1.1.0",
     "node-uuid": "^1.4.7",
     "request": "^2.76.0",
-    "sox": "^0.1.0"
+    "sox": "^0.1.0",
+    "webpack": "^1.13.3"
   },
   "scripts": {
     "build": "./node_modules/bower/bin/bower install && cd app && ../node_modules/webpack/bin/webpack.js",
