@@ -1,8 +1,13 @@
 define(['supercluster.min'], function(supercluster) {
     function mapCtrl($scope, geolocation) {
-       const
-          // R = 0.00045 / 2 = ~25 метров, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
-          crumbsFilterRadius = 0.000225;
+        // R = 0.000009 = ~1 метр, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
+       const crumbsFilterRadius = 0.000640; // 71.2444741076951 метров
+
+        // пересчет в метры + еще чуть чуть чтобы окружность точки была внутри окружности охвата
+        function calcMeters(coordDiff) {
+            var koef = 100/0.000440;
+            return coordDiff * koef;
+        }
 
        /***************** BEGIN FireBase *******************/
       // Initialize firebase module
@@ -89,6 +94,8 @@ define(['supercluster.min'], function(supercluster) {
 
                 init && init();
 
+                $scope.applyCrumbsFilter();
+
                 if ($scope.map && $scope.map.loaded()) {
                    $scope.map.setCenter([$scope.geoData.coords.longitude, $scope.geoData.coords.latitude]);
                    $scope.map.getSource('userCircle').setData({
@@ -162,7 +169,7 @@ define(['supercluster.min'], function(supercluster) {
                   "source": "userCircle",
                   "type": "circle",
                   "paint": {
-                     "circle-radius": 75,
+                     "circle-radius": calcMeters(crumbsFilterRadius),
                      "circle-color": '#aff',
                      "circle-opacity": 0.3,
                      "circle-pitch-scale": 'viewport'
@@ -187,7 +194,7 @@ define(['supercluster.min'], function(supercluster) {
                     "filter": ["!has", "point_count"],
                     "paint": {
                         "circle-color": '#f28cb1',
-                        "circle-radius": 12
+                        "circle-radius": 18
                     }
                 });
 
