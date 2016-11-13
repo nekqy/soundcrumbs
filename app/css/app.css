@@ -91,6 +91,9 @@ body { margin:0; padding:0; }
   white-space: nowrap;
   overflow-x: scroll;
   overflow-y: hidden;
+
+  width: 100%;
+  max-width: 500px;
 }
 .is-desktop .recordContainer__title__text {
   overflow-x: hidden;
