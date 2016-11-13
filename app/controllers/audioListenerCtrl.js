@@ -8,6 +8,12 @@ define([], function() {
         $scope.goToBack = function() {
             rb1.move('top');
         };
+        $scope.isMyAudio = function(audio) {
+            return audio.uid === '299971';
+        };
+        $scope.deleteAudio = function(audio) {
+            console.log(audio);
+        };
 
     }
 

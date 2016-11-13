@@ -169,10 +169,12 @@
         }
 
         function saveAudio(res) {
+            var description = prompt('Введите описание (необязательно)');
             firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
                 uid: res.vkData.owner_id,
                 date: res.geoData.timestamp,
                 sound: res.vkData.url,
+                description: description || '',
                 coord_x: res.geoData.coords.longitude,
                 coord_y: res.geoData.coords.latitude,
                 rating: 0
