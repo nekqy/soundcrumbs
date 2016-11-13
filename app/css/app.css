@@ -74,7 +74,8 @@ body { margin:0; padding:0; }
 .recordContainer__select, .listenContainer__list {
   overflow: auto;
   text-align: center;
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
 
   margin: 10px;
 }
@@ -87,7 +88,7 @@ body { margin:0; padding:0; }
   /*white-space: nowrap;*/
 }
 
-.recordContainer__title__text {
+.recordContainer__title__text, .listenContainer__title__text {
   white-space: nowrap;
   overflow-x: scroll;
   overflow-y: hidden;
@@ -95,7 +96,7 @@ body { margin:0; padding:0; }
   width: 100%;
   max-width: 500px;
 }
-.is-desktop .recordContainer__title__text {
+.is-desktop .recordContainer__title__text, .is-desktop .listenContainer__title__text {
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
