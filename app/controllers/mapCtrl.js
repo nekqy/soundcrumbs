@@ -1,5 +1,5 @@
 define(['supercluster.min'], function(supercluster) {
-    function mapCtrl($scope, geolocation) {
+    function mapCtrl($scope, VKApi, geolocation) {
         // R = 0.000009 = ~1 метр, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
        const crumbsFilterRadius = 0.000640; // 71.2444741076951 метров
 
@@ -19,8 +19,7 @@ define(['supercluster.min'], function(supercluster) {
          messagingSenderId: "443143749176"
       });
 
-       var
-          ref = firebase.database().ref('SoundCrumbs');
+       var ref = firebase.database().ref('SoundCrumbs');
 
        function applySnapshot(snapshot) {
           var
@@ -117,7 +116,7 @@ define(['supercluster.min'], function(supercluster) {
             if (!isLocating && isMapScreen()) {
                 getLocation();
             }
-        }, 30000);
+        }, 10000);
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';
@@ -261,10 +260,15 @@ define(['supercluster.min'], function(supercluster) {
                     var audioListener = $('[ng-controller="AudioListenerCtrl"]');
                     var scope = angular.element(audioListener[0]).scope();
                     scope.audioList = audios;
+                    scope.ref = ref;
 
-                    rb1.move('bottom');
-
-                    scope.$apply();
+                    VKApi.getSession().then(function (session) {
+                        scope.mid = session.mid;
+                        rb1.move('bottom');
+                        scope.$apply();
+                    }, function(err) {
+                        alert(JSON.stringify(err));
+                    });
                 });
 
                 // Use the same approach as above to indicate that the symbols are clickable

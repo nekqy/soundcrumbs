@@ -14,7 +14,7 @@
                 <audio controls preload="none">
                     <source ng-src="{{trustSrc(value.sound)}}">
                 </audio>
-                <i ng-click="deleteAudio(value)" class="cbutton fa fa-remove"></i>
+                <i ng-if="isMyAudio(value)" ng-click="deleteAudio(value)" class="cbutton fa fa-remove"></i>
             </div>
         </div>
     </div>
