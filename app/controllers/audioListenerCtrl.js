@@ -12,6 +12,9 @@ define([], function() {
             return audio.uid.toString() === $scope.mid.toString();
         };
         $scope.deleteAudio = function(audio) {
+            var isOk = confirm('Вы уверены?');
+            if (!isOk) return;
+
             var ref = $scope.ref;
 
             // todo надо было так структурировать чтобы можно было несколько запросов делать
