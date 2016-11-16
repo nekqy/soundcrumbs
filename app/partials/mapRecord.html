@@ -1,19 +1,10 @@
 <div class="recordContainer">
     <div class="back recordContainer__back">
-        <button ng-if="isNotRecording" class="backButton cbutton" ng-click="goToBack()">
-            <i class="cbutton__icon fa fa-fw fa-arrow-left"></i>
-            <span class="cbutton__text">Back</span>
-        </button>
+        <i ng-if="isNotRecording" ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
     </div>
     <div class="recordContainer__record">
-        <button ng-if="isNotRecording" class="startButton cbutton" ng-click="startRecording()">
-            <i class="cbutton__icon fa fa-fw fa-microphone"></i>
-            <span class="cbutton__text">Search audio</span>
-        </button>
-        <button ng-if="isRecording" class="stopButton cbutton" ng-click="stopRecording()">
-            <i class="cbutton__icon fa fa-fw fa-stop"></i>
-            <span class="cbutton__text">Search audio</span>
-        </button>
+        <i ng-if="isNotRecording" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
+        <i ng-if="isRecording" ng-click="stopRecording()" class="stopButton cbutton fa fa-stop"></i>
     </div>
     <div class="recordContainer__log">{{log}}</div>
 
@@ -22,10 +13,7 @@
             Поиск:
             <input ng-model="formData.searchString">
         </label>
-        <button ng-click="getAudio()" class="cbutton">
-            <i class="cbutton__icon fa fa-fw fa-search"></i>
-            <span class="cbutton__text">Search audio</span>
-        </button>
+        <i  ng-click="getAudio()" class="cbutton fa fa-search"></i>
     </div>
     <div ng-if="isNotRecording" class="recordContainer__select">
         <div ng-if="audioList" ng-repeat="(key, value) in audioList">
@@ -40,10 +28,7 @@
                     <audio controls preload="none">
                         <source ng-src="{{trustSrc(value.url)}}">
                     </audio>
-                    <button ng-click="selectAudio(value)" class="cbutton">
-                        <i class="cbutton__icon fa fa-fw fa-plus-square-o"></i>
-                        <span class="cbutton__text">Select audio</span>
-                    </button>
+                    <i ng-click="selectAudio(value)" class="cbutton fa fa-plus-square-o"></i>
                 </div>
             </div>
 

@@ -1,27 +1,14 @@
 /* app css stylesheet */
-
-.menu {
-  list-style: none;
-  border-bottom: 0.1em solid black;
-  margin-bottom: 2em;
-  padding: 0 0 0.5em;
+.cbutton {
+  color: #488acb;
+  vertical-align: middle;
+  font-size: 1.4em;
 }
-
-.menu:before {
-  content: "[";
+.cbutton:hover {
+  text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
 }
-
-.menu:after {
-  content: "]";
-}
-
-.menu > li {
-  display: inline;
-}
-
-.menu > li + li:before {
-  content: "|";
-  padding-right: 0.3em;
+.cbutton:active {
+  color: #33f;
 }
 
 .SoundCrumbs__displayNone {
@@ -39,7 +26,7 @@
 .recordButton-button {
   width: 100%;
   height: 100%;
-  font-size: 2.7em;
+  font-size: 3.5em;
 }
 .recordContainer, .listenContainer {
   display: flex;
@@ -99,4 +86,12 @@ body { margin:0; padding:0; }
 .is-desktop .recordContainer__title__text, .is-desktop .listenContainer__title__text {
   overflow-x: hidden;
   text-overflow: ellipsis;
+}
+.recordContainer__player, .listenContainer__player {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.recordContainer__player audio, .listenContainer__player audio {
+  width: 400px;
 }

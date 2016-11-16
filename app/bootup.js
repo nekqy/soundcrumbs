@@ -27,11 +27,7 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         "<div ng-controller='mapCtrl'>" +
         "<div id='map'></div>" +
         "<div class='recordButton'>" +
-        "<button class='recordButton-button cbutton' ng-if='geoData' ng-click='goToRecord()'>" +
-        '<i class="cbutton__icon fa fa-fw fa-plus-square-o"></i>' +
-        '<span class="cbutton__text">Add audio</span>' +
-        "</button>" +
-        //"<button class='recordButton-button' ng-if='geoData' ng-click='goToRecord()'>+</button>" +
+        '<i ng-if="geoData" ng-click="goToRecord()" class="recordButton-button cbutton fa fa-plus-square-o"></i>' +
         "</div>" +
         "</div>", undefined, true);
     historyScreen.addChild(mapScreen);

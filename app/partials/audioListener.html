@@ -1,27 +1,20 @@
 <div class="listenContainer">
     <div class="back recordContainer__back">
-        <button class="backButton cbutton" ng-click="goToBack()">
-            <i class="cbutton__icon fa fa-fw fa-arrow-left"></i>
-            <span class="cbutton__text">Back</span>
-        </button>
+        <i ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
     </div>
 
     <div class="listenContainer__list">
         <div ng-if="audioList" ng-repeat="(key, value) in audioList">
+            <div class="listenContainer__title">
+                <p class="listenContainer__title__text">
+                    {{value.description}}
+                </p>
+            </div>
             <div class="listenContainer__player">
-                <div class="listenContainer__title">
-                    <p class="listenContainer__title__text">
-                        {{value.description}}
-                    </p>
-                </div>
                 <audio controls preload="none">
                     <source ng-src="{{trustSrc(value.sound)}}">
                 </audio>
-                <button ng-click="deleteAudio(value)" class="cbutton">
-                    <i class="cbutton__icon fa fa-fw fa-remove"></i>
-                    <span class="cbutton__text">Delete audio</span>
-                </button>
-
+                <i ng-click="deleteAudio(value)" class="cbutton fa fa-remove"></i>
             </div>
         </div>
     </div>
