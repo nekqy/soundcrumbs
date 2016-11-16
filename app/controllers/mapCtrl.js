@@ -254,7 +254,13 @@ define(['supercluster.min'], function(supercluster) {
                     });
 
                     var audios = foundFeatures.map(function(feature) {
-                        return feature.properties;
+                        var res = feature.properties;
+                        res.dateStr = new Date(res.date).toLocaleDateString();
+                        res.description = res.description || '[ нет описания ]';
+                        return res;
+                    });
+                    audios = audios.sort(function(a, b) {
+                        return a.date > b.date;
                     });
 
                     var audioListener = $('[ng-controller="AudioListenerCtrl"]');

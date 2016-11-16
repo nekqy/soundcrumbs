@@ -7,7 +7,7 @@
         <div ng-if="audioList" ng-repeat="(key, value) in audioList">
             <div class="listenContainer__title">
                 <p class="listenContainer__title__text">
-                    {{value.description}}
+                    {{value.dateStr}}: {{value.description}}
                 </p>
             </div>
             <div class="listenContainer__player">
