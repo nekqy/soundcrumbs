@@ -271,7 +271,6 @@ define(['supercluster.min'], function(supercluster) {
                     VKApi.getSession().then(function (session) {
                         scope.mid = session.mid;
                         rb1.move('bottom');
-                        scope.$apply();
                     }, function(err) {
                         alert(JSON.stringify(err));
                     });

@@ -7,7 +7,6 @@
   "private": true,
   "dependencies": {
     "angular": "~1.5.8",
-    "angular-route": "~1.5.8",
     "angularjs-geolocation": "~0.1.1",
     "angularfire": "~2.1.0"
   }
