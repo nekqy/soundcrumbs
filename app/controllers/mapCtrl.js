@@ -120,7 +120,7 @@ define(['supercluster.min'], function(supercluster) {
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';
-            $scope.map = new mapboxgl.Map({
+            window.mapboxInst = $scope.map = new mapboxgl.Map({
                 container: 'map', // container id
                 style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
                 center: [$scope.geoData.coords.longitude, $scope.geoData.coords.latitude], // starting position

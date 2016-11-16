@@ -53,6 +53,12 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
                 rb.Instances.rb1.getControlManager().disableAll();
                 window.rb1 = rb.Instances.rb1;
 
+                rb1.afterRenderDispatcher.add(function(side, screen) {
+                    if (typeof mapboxInst !== 'undefined' && screen === mapScreen) {
+                        mapboxInst.resize();
+                    }
+                });
+
                 var smartResizer = new SmartResizer(rb1._mainDiv);
                 rb1.addPlugin(smartResizer);
 

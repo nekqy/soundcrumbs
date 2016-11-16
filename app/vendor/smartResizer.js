@@ -1,1 +1,71 @@
-define([],function(){"use strict";function i(i,t,e){var n;return function(){function r(){e||i.apply(s,o),n=null}var s=this,o=arguments;n?clearTimeout(n):e&&i.apply(s,o),n=setTimeout(r,t||100)}}function t(i){if(!(i instanceof $))throw Error("SmartResizer module - init - wrong mainDiv arg: "+i);this.mainDiv=i,this.width=i.width(),this.height=i.height();var t=this;this._smartResizeHandler=function(){var i,e,n,r=$(window),s=(r.width(),r.height(),t.mainDiv.find(".rb__center"));n=1,i=t.width*n,e=t.height*n,t.mainDiv.css({width:i,height:e}),s.css({"margin-left":i,"margin-top":e})},this._smartResizeHandler(),$(window).smartresize(this._smartResizeHandler)}return $.fn.smartresize=function(t){return t?this.on("resize",i(t)):this.trigger("smartresize")},rb.IPlugin.inherite(t),t.prototype.configure=function(){},t.prototype.destroy=function(){$(window).off("resize")},t});
+define([], function() {
+    "use strict";
+
+    // debouncing function from John Hann
+    // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+    function debounce(func, threshold, execAsap) {
+        var timeout;
+
+        return function debounced () {
+            var obj = this, args = arguments;
+            function delayed () {
+                if (!execAsap)
+                    func.apply(obj, args);
+                timeout = null;
+            }
+
+            if (timeout)
+                clearTimeout(timeout);
+            else if (execAsap)
+                func.apply(obj, args);
+
+            timeout = setTimeout(delayed, threshold || 100);
+        };
+    }
+
+    // smartresize
+    $.fn['smartresize'] = function(fn){
+        return fn ? this.on('resize', debounce(fn)) : this.trigger('smartresize');
+    };
+
+    function SmartResizer(mainDiv) {
+        if (mainDiv instanceof $) {
+            this.mainDiv = mainDiv;
+        } else {
+            throw new Error('SmartResizer module - init - wrong mainDiv arg: ' + mainDiv);
+        }
+
+        this.width = mainDiv.width();
+        this.height = mainDiv.height();
+
+        var self = this;
+
+        this._smartResizeHandler = function() {
+            var
+                rbCenter = self.mainDiv.find('.rb__center'),
+                newWidth = $(window).width(),
+                newHeight = $(window).height();
+
+            self.mainDiv.css({'width': newWidth, 'height': newHeight});
+            rbCenter.css({'margin-left': newWidth, 'margin-top': newHeight});
+
+            if (typeof mapboxInst !== 'undefined') {
+                $('.mapboxgl-canvas').css({'width': newWidth, 'height': newHeight});
+                mapboxInst.resize();
+            }
+        };
+
+        this._smartResizeHandler();
+        $(window).smartresize(this._smartResizeHandler);
+    }
+    rb.IPlugin.inherite(SmartResizer);
+
+    SmartResizer.prototype.configure = function() {
+
+    };
+    SmartResizer.prototype.destroy = function() {
+        $(window).off('resize');
+    };
+
+    return SmartResizer;
+});
