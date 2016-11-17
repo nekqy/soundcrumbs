@@ -84,10 +84,10 @@ define(['supercluster.min'], function(supercluster) {
        };
 
         function getLocation(init) {
-            log('<p class="tempLog">Загрузка локации...</p>');
+            isDevelopment && log('<p class="tempLog">Загрузка локации...</p>');
             isLocating = true;
             geolocation.getLocation().then(function(geoData){
-                $('.tempLog').remove();
+                isDevelopment && $('.tempLog').remove();
                 isLocating = false;
 
                 window.geoData = $scope.geoData = geoData;

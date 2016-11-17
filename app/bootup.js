@@ -1,7 +1,11 @@
 define(['./vendor/smartResizer'], function(SmartResizer) {
     window.log = function(text) {
-        var log = $('.log');
-        log.html(log.html() + '<p>' + text + '</p>');
+        if (isDevelopment) {
+            var log = $('.log');
+            log.html(log.html() + '<p>' + text + '</p>');
+        } else {
+            alert(text);
+        }
     };
     window.isMapScreen = function() {
         if (!rb1) return false;

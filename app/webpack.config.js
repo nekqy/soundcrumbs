@@ -1,5 +1,5 @@
 var webpack = require("webpack"),
-    isDevelopment = !!process.env.isDevelopment;
+    isDevelopment = process.env.isDevelopment === 'true';
 
 module.exports = {
    entry: "./app.js",
@@ -19,7 +19,11 @@ module.exports = {
          './node_modules/'
       ]
    },
-   plugins: []
+   plugins: [
+       new webpack.DefinePlugin({
+          isDevelopment: isDevelopment
+       })
+   ]
 };
 
 if (!isDevelopment) {
