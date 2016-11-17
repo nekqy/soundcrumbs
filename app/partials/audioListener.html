@@ -14,6 +14,9 @@
                 <audio controls preload="none">
                     <source ng-src="{{trustSrc(value.sound)}}">
                 </audio>
+                <span class="sc-rating">{{value.rating}}</span><!--+ value.liked.length - value.disliked.length-->
+                <i ng-click="toggleLikeAudio(value, true)" class="cbutton fa fa-thumbs-up"></i>
+                <i ng-click="toggleLikeAudio(value, false)" class="cbutton fa fa-thumbs-down"></i>
                 <i ng-if="isMyAudio(value)" ng-click="deleteAudio(value)" class="cbutton fa fa-remove"></i>
             </div>
         </div>

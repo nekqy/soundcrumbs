@@ -32,10 +32,11 @@ define(['supercluster.min'], function(supercluster) {
              val = point.val();
              px = val['coord_x'];
              py = val['coord_y'];
-             if (Math.pow(px - x, 2) + Math.pow(py - y, 2) <= sqrRadius) {
+             if (!val.removed && Math.pow(px - x, 2) + Math.pow(py - y, 2) <= sqrRadius) {
                 $scope.markers.push({
                    "type": "Feature",
                    "properties": val,
+                   "key": point.getKey(),
                    "geometry": {
                       "type": "Point",
                       "coordinates": [px, py]
@@ -257,7 +258,9 @@ define(['supercluster.min'], function(supercluster) {
                         var res = feature.properties;
                         res.dateStr = new Date(res.date).toLocaleDateString();
                         res.description = res.description || '[ нет описания ]';
-                        return res;
+                        res.rating = 10 + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
+                        res.key = feature.key; // Передаем также первичный ключ записи, чтобы дальше было в БД легко найти нужную запись
+                       return res;
                     });
                     audios = audios.sort(function(a, b) {
                         return a.date > b.date;

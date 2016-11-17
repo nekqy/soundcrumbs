@@ -22,6 +22,10 @@ define([
             'birthdate', 'city', 'country', 'timezone', 'photo', 'photo_medium',
             'photo_big', 'domain', 'has_mobile', 'rate', 'contacts', 'education', 'online', 'counters']);
 
+        app.constant('AUDIO_RATING_MINIMAL', 0);
+
+        app.constant('AUDIO_RATING_INITIAL', 10);
+
         app.config(['VKApiProvider', function(VKApiProvider) {
             VKApiProvider.setSettings({
                 apiId: 5491230,

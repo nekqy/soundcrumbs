@@ -1,5 +1,5 @@
 define([], function() {
-    function AudioListenerCtrl($scope, $sce) {
+    function AudioListenerCtrl($scope, AUDIO_RATING_MINIMAL, AUDIO_RATING_INITIAL, $sce) {
 
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
@@ -11,25 +11,44 @@ define([], function() {
         $scope.isMyAudio = function(audio) {
             return audio.uid.toString() === $scope.mid.toString();
         };
-        $scope.deleteAudio = function(audio) {
-            var isOk = confirm('Вы уверены?');
-            if (!isOk) return;
-
-            var ref = $scope.ref;
-
-            // todo надо было так структурировать чтобы можно было несколько запросов делать
-            // https://codedump.io/share/U5MXVQDGfPS/1/firebase---how-do-i-write-multiple-orderbychild-for-extracting-data
-            ref.orderByChild("date").equalTo(audio.date).on('value', function(snapshot){
-                // todo тут будет баг, если записей с одинаковой датой больше 10, 11ю не найдем
-                snapshot.forEach(function(point) {
-                    var val = point.val();
-                    if (val.uid.toString() === $scope.mid.toString()) {
-                        ref.child(point.getKey()).remove();
-                        $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
+        $scope.toggleLikeAudio = function(audio, like) {
+            var
+               fbAudio = $scope.ref.child(audio.key),
+               fbAudioLikeField = fbAudio.child('liked'),
+               fbAudioDislikeField,
+               rating = AUDIO_RATING_INITIAL;
+            fbAudioLikeField.once('value', function(likeSn) {
+                rating += likeSn.numChildren();
+                if (likeSn.hasChild($scope.mid)) {
+                    rating--;
+                }
+                fbAudioDislikeField = fbAudio.child('disliked');
+                fbAudioDislikeField.once('value', function(dislikeSn) {
+                    rating -= dislikeSn.numChildren();
+                    if (dislikeSn.hasChild($scope.mid)) {
+                        rating++;
+                    }
+                    if (like) {
+                        fbAudioLikeField.child($scope.mid).set(true);
+                        fbAudioDislikeField.child($scope.mid).remove();
+                        rating++;
+                    } else {
+                        fbAudioLikeField.child($scope.mid).remove();
+                        fbAudioDislikeField.child($scope.mid).set(true);
+                        rating--;
+                    }
+                    audio.rating = rating;
+                    if (rating < AUDIO_RATING_MINIMAL) {
+                        fbAudio.child('removed').set(true);
                     }
                 });
             });
-
+        };
+        $scope.deleteAudio = function(audio) {
+            if (confirm('Вы уверены?')) {
+                $scope.ref.child(audio.key + '/removed').set(true);
+                $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
+            }
         };
 
     }
