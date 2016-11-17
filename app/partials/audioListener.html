@@ -15,9 +15,10 @@
                     <source ng-src="{{trustSrc(value.sound)}}">
                 </audio>
                 <span class="sc-rating">{{value.rating}}</span><!--+ value.liked.length - value.disliked.length-->
-                <i ng-click="toggleLikeAudio(value, true)" class="cbutton fa fa-thumbs-up"></i>
-                <i ng-click="toggleLikeAudio(value, false)" class="cbutton fa fa-thumbs-down"></i>
-                <i ng-if="isMyAudio(value)" ng-click="deleteAudio(value)" class="cbutton fa fa-remove"></i>
+                <i ng-click="toggleLikeAudio(value, true)" class="cbutton cbutton__like fa fa-thumbs-up"></i>
+                <i ng-click="toggleLikeAudio(value, false)" class="cbutton cbutton__dislike fa fa-thumbs-down"></i>
+                <i ng-if="isMyAudio(value) === true" ng-click="deleteAudio(value)" class="cbutton cbutton__delete fa fa-remove"></i>
+                <i ng-if="isMyAudio(value) === false" class="cbutton cbutton__empty fa fa-remove"></i>
             </div>
         </div>
     </div>

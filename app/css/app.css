@@ -1,16 +1,36 @@
-.cbutton, .sc-rating {
-  color: #488acb;
+.cbutton {
+  color: #48c;
+  cursor: pointer;
   vertical-align: middle;
   font-size: 1.4em;
-}
-.cbutton {
-  cursor: pointer;
 }
 .cbutton:hover {
   text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
 }
 .cbutton:active {
   color: #33f;
+}
+
+.cbutton__like {
+  color: #6ca;
+}
+.cbutton__dislike {
+  color: #d46;
+}
+.cbutton__delete {
+  color: #48c;
+}
+.cbutton__empty {
+  opacity: 0;
+  cursor: default;
+}
+
+.sc-rating {
+  color: #999;
+  vertical-align: middle;
+  font-size: 1em;
+  display: inline-block;
+  width: 24px;
 }
 
 .recordButton {
@@ -88,5 +108,5 @@ body { margin:0; padding:0; }
   align-items: center;
 }
 .recordContainer__player audio, .listenContainer__player audio {
-  width: 300px;
+  width: calc(100% - 150px);
 }
