@@ -93,7 +93,7 @@ define([], function() {
             res = JSON.parse(res);
             console.log(res);
             if ( res.removed ) {
-              alert("Файл был удален из вконтакте");
+              alert("Запись была удалена из ВКонтакте");
               $scope.ref.child(audio.key + '/removed').set(true);
               $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
               $scope.$apply();
@@ -115,7 +115,7 @@ define([], function() {
         }
 
         $scope.getShareUrl = function(data) {
-          var title; 
+          var title;
           if (data.description)
             title = "Прийди туда и послушай " + data.description + " в SoundCrumbs";
           else
@@ -125,7 +125,7 @@ define([], function() {
           var image = encodeURIComponent('http://static-maps.yandex.ru/1.x/?lang=en-US&ll=' + data.coord_x +
                 ',' + data.coord_y + '&z=13&l=map&size=600,300&pt='+ data.coord_x +
                 ',' + data.coord_y +',pmgrm');
-          var link = encodeURIComponent('http://www.openstreetmap.org/?mlat=' + data.coord_y + '&mlon=' + data.coord_x + 
+          var link = encodeURIComponent('http://www.openstreetmap.org/?mlat=' + data.coord_y + '&mlon=' + data.coord_x +
                  '&zoom=18#map=18/' + data.coord_y + '/' + data.coord_x);
 
           return "https://vk.com/share.php?url=" + link + "&title=" + title + "&description=" + title +
