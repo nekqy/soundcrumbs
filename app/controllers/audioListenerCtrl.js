@@ -13,7 +13,7 @@ define([], function() {
         } catch(e) {}
 
         var ref = firebase.database().ref('SoundCrumbs');
-        
+
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -38,11 +38,11 @@ define([], function() {
 
                 if (likeSn.hasChild($scope.mid)) {
                     rating--;
-                    
+
                 }
                 fbAudioDislikeField = fbAudio.child('disliked');
                 fbAudioDislikeField.once('value', function(dislikeSn) {
-                    
+
                     rating -= dislikeSn.numChildren();
                     disliked += dislikeSn.numChildren();
                     if (dislikeSn.hasChild($scope.mid)) {
@@ -86,10 +86,24 @@ define([], function() {
             }
         };
         $scope.addToHistory = function(audio, event) {
-            VKApi.getSession().then(function(session) {
-                saveToHistory(audio, session.mid);
-            });
-            changePlayerTarget(event);
+          $.ajax({
+              type: 'GET',
+              url: window.location.origin + '/check?url=' + encodeURIComponent(audio.sound),
+          }).done(function(res) {
+            res = JSON.parse(res);
+            console.log(res);
+            if ( res.removed ) {
+              alert("Файл был удален из вконтакте");
+              $scope.ref.child(audio.key + '/removed').set(true);
+              $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
+              $scope.$apply();
+            }
+          });
+
+          VKApi.getSession().then(function(session) {
+              saveToHistory(audio, session.mid);
+          });
+          changePlayerTarget(event);
         };
 
         function changePlayerTarget(event) {
