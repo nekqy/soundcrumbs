@@ -5,22 +5,20 @@
     </div>
 
     <div class="recordContainer__log">{{log}}</div>
-    <div ng-if="isNotRecording&&isNotUploadingFile" class="recordContainer__search">
-        <input ng-model="formData.searchString2" placeholder="Поиск аудиозаписей..." class="recordContainer__searchString">
-        <i  ng-click="clearSearch()" class="cbutton fa fa-remove recordContainer__search-clearButton"></i>
-        <i  ng-click="getAudio()" class="cbutton fa fa-search"></i>
 
-        <i  ng-click="openUploadForm()" class="cbutton fa fa-upload"></i>
-        <i ng-if="isNotRecording && searchMode" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
-    </div>
-
-    <div class="l_record">
+    <div class="l_record" ng-if="isNotRecording&&isNotUploadingFile">
       <div class="l_record__header">
         <div class="b_header-search">
           <div>
-            <i class="b_header-search__icon fa fa-search" aria-hidden="true"></i>
-            <input class="b_header-search__input" type="text" ng-model="formData.searchString" ng-keyup="onKey()" >
-            <i  ng-click="clearSearch()" class="b_header-search__clear fa fa-remove "></i>
+            <div class="b_header-search-container" ng-class="{'-search' : searchMode}">
+              <i class="b_header-search__icon fa fa-search" aria-hidden="true"></i>
+              <input class="b_header-search__input" type="text" ng-model="formData.searchString" ng-keyup="onKey()" >
+              <i ng-if="formData.searchString" ng-click="clearSearch()" class="b_header-search__clear fa fa-remove" ng-class="{'-search' : searchMode}"></i>
+            </div>
+            <div class="b_header-record-controllers">
+              <i  ng-click="openUploadForm()" class="cbutton fa fa-upload"></i>
+              <i ng-if="isNotRecording && searchMode" ng-click="startRecording()"  class="startButton cbutton fa fa-microphone"></i>
+            </div>
           </div>
         </div>
       </div>
