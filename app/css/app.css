@@ -211,19 +211,17 @@ body {
 }
 
 @media (min-width: 768px) {
-  .l_record { min-width: 480px; }
+  .l_record { max-width: 480px; }
 }
 
 @media (min-width: 1280px) {
-  .l_record { min-width: 640px; }
+  .l_record { max-width: 640px; }
 }
 
 .b_header-search
 {
   position: relative;
   z-index: 15;
-
-  float: left;
 
   box-sizing: border-box;
   width: 100%;
@@ -376,7 +374,99 @@ body {
 
 /* ====== Listener screen ====== */
 
+.records-list
+{
+  width: 100%;
+  min-width: 320px;
+  max-width: 600px;
+  width: 600px;
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+  list-style: none;
+  margin: 0;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
 
+@media (min-width: 768px) {
+  .records-list { max-width: 480px; }
+}
+
+@media (min-width: 1280px) {
+  .records-list { max-width: 640px; }
+}
+
+.records-list__element
+{
+  background-color: #fff;
+  display: block;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 1px rgba(97, 127, 152, 0.2), 1px 0 0 rgba(97, 127, 152, 0.1), -1px 0 0 rgba(97, 127, 152, 0.1);
+}
+
+.records-list__description
+{
+  box-sizing: border-box;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.records-list__add {
+  float: left;
+}
+
+.records-list {
+  margin-top: 8px;
+}
+
+.records-list__element {
+  margin-top: 20px;
+  position: relative;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
+
+.records-list__add {
+  width: 32px;
+  color: #999;
+  font-size: 1.1rem;
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 0px;
+  padding: 9px 0;
+  height: 100%;
+  text-shadow: 1px 1px 22px rgba(255, 255, 255, 1);
+}
+
+.records-list__add:hover {
+  color: rgba(153, 153, 153, 0.8);
+  cursor: pointer;
+}
+
+.records-list__audio {
+  border-top: 1px solid rgba(0, 0, 0, .08);
+  height: 32px;
+}
+
+.records-list__audio > audio {
+  height: 32px;
+  margin: 0;
+  border-radius: 2px;
+  width: 100%;
+}
+
+.records-list__element {
+  padding: 0;
+}
+
+.records-list__description, .history-list__description {
+  overflow: hidden;
+  word-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 
 /* ====== Listener screen and ====== */
 
