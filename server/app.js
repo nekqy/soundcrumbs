@@ -14,7 +14,7 @@ app.options('*', cors({
 app.use(cors());
 
 if (!process.env.isDevelopment) {
-    //app.use(enforce.HTTPS({ trustProtoHeader: true }));
+    app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 app.all('*', function(req, res, next) {
@@ -33,7 +33,7 @@ app.use(function(req, res, next) {
 
 app.use(express.static('app'));
 
-app.listen(process.env.PORT || 85, function () {
+app.listen(process.env.PORT || 3000, function () {
     console.log('Listening...');
 });
 
