@@ -4,6 +4,7 @@ body {
 
 .cbutton {
   color: #48c;
+  border-color: #48c;
   cursor: pointer;
   vertical-align: middle;
   font-size: 1.4em;
@@ -13,6 +14,7 @@ body {
   text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
 }
 .cbutton:active {
+  border-color: #2A5885;
   color: #2A5885;
 }
 
@@ -518,7 +520,7 @@ body { margin:0; padding:0; }
   color: rgba(112, 112, 112, 0.3);
 }
 .recordButton-button.buttonRecord {
-    border: 8px solid #48C;
+    border: 8px solid;
     width: 50px;
     height: 50px;
     display: inline-block;
