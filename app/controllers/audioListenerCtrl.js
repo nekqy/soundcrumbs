@@ -1,6 +1,6 @@
 define([], function() {
     function AudioListenerCtrl($scope, AUDIO_RATING_INITIAL, AUDIO_LIKE_RATIO_MINIMAL, $sce, VKApi) {
-        
+
         // Initialize firebase module
         try {
           firebase.initializeApp({
@@ -55,7 +55,7 @@ define([], function() {
                             fbAudioDislikeField.child($scope.mid).remove();
                             rating++;
                             isDisliked = false;
-                            isLiked = true;    
+                            isLiked = true;
                         }
                     } else {
                         if(isDisliked){
@@ -84,11 +84,20 @@ define([], function() {
                 $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
             }
         };
-        $scope.addToHistory = function(audio) {
+        $scope.addToHistory = function(audio, event) {
             VKApi.getSession().then(function(session) {
                 saveToHistory(audio, session.mid);
             });
+            changePlayerTarget(event);
         };
+
+        function changePlayerTarget(event) {
+          if (window.playerTarget != null) {
+            window.playerTarget.pause();
+            window.playerTarget.currentTime = 0;
+          }
+          window.playerTarget = event.target;
+        }
 
         function saveToHistory(audio, mid) {
             firebase.database().ref('History' + '/' + audio.key + mid).set({

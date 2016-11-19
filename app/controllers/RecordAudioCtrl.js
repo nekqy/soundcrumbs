@@ -115,6 +115,14 @@ define([], function() {
            }, logError);
        };
 
+       $scope.changePlayerTarget = function(event) {
+         if (window.playerTarget != null) {
+           window.playerTarget.pause();
+           window.playerTarget.currentTime = 0;
+         }
+         window.playerTarget = event.target;
+       }
+
        $scope.isRecording = false;
        $scope.isNotRecording = true;
        $scope.isUploadingFile = false;
