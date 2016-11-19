@@ -12,7 +12,7 @@
           <div class="history-list__description" ng-if="!value.description">[ нет описания ]</div>
           <div class="history-list__controls-block">
             <div class="history-list__date">{{value.dateStr}}</div>
-            <div class="history-list__rating">{{value.rating}}</div>
+            <div class="history-list__rating" ng-class="{'-bad': value.rating < 0, '-good': value.rating > 0}">{{value.rating}}</div>
             <div class="history-list__share">
               <a target="_blank" href="{{value.shareUrl}}">
                 <i class="fa fa-share-alt" aria-hidden="true"></i>
