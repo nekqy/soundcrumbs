@@ -99,6 +99,7 @@ exports.init = function(app) {
         request(params, function (err, resp, body) {
             if (err) {
                 console.log('Error!');
+                console.error(err);
                 unlinkFiles(name);
                 mainRes.status(500).send(err);
             } else {
