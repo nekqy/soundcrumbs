@@ -56,6 +56,10 @@ define([], function() {
                                    geoData: window.geoData,
                                    vkData: vkData
                                });
+                           }, function(err) {
+                                alert("Не удалось сохранить запись.");
+                                console.log(err);
+                                reject(err);
                            });
                        }).fail(function(err) {
                            reject(err);
@@ -210,6 +214,8 @@ define([], function() {
            if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
                $scope.$apply();
            }
+           if (!isDevelopment)
+            $scope.goToBack();
        }
 
        function saveAudio(res) {
