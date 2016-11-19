@@ -1,5 +1,18 @@
 define([], function() {
-    function AudioListenerCtrl($scope, AUDIO_RATING_INITIAL, AUDIO_LIKE_RATIO_MINIMAL, $sce, VKApi) {
+    function AudioListenerCtrl($scope, AUDIO_RATING_INITIAL, AUDIO_LIKE_RATIO_MINIMAL, $sce) {
+
+        // Initialize firebase module
+        try {
+          firebase.initializeApp({
+             apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+             authDomain: "soundcrumbs-168a9.firebaseapp.com",
+             databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+             storageBucket: "soundcrumbs-168a9.appspot.com",
+             messagingSenderId: "443143749176"
+          });
+        } catch(e) {}
+
+        var ref = firebase.database().ref('SoundCrumbs');
 
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
@@ -66,6 +79,24 @@ define([], function() {
                 date: Date.now(),
                 sound: audio.sound
             });
+        }
+
+        function countRecordsInCrumbsArea() {
+            const crumbsFilterRadius = 0.00450; // ~500 метров
+            var
+               x = window.geoData.coords.longitude,
+               y = window.geoData.coords.latitude,
+               sqrRadius = Math.pow(crumbsFilterRadius, 2),
+               resultObjects = [];
+            ref.orderByChild('coord_x').startAt(x - crumbsFilterRadius).endAt(x + crumbsFilterRadius).on('value', function(snapshot) {
+               snapshot.forEach(function(point) {
+                   val = point.val();
+                   if (!val.removed && Math.pow(val['coord_x'] - x, 2) + Math.pow(val['coord_y'] - y, 2) <= sqrRadius) {
+                     resultObjects.push(point)
+                   }
+               });
+            });
+            return resultObjects.length;
         }
     }
 
