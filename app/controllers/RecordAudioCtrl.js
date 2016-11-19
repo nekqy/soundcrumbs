@@ -72,11 +72,19 @@
         $scope.formData = {};
         $scope.audioList = [];
 
+        $scope.clearSearch = function() {
+            $scope.audioList = [];
+            $scope.formData.searchString = '';
+            $scope.searchMode = false;
+        };
+
         $scope.getAudio = function() {
+            $scope.useSmallRecordButton = true;
             VKApi.getAudio({
                 q: $scope.formData.searchString
             }).then(function(audioList) {
                 $scope.audioList = audioList;
+                $scope.searchMode = true;
             });
         };
         $scope.selectAudio = function(audio) {
@@ -147,6 +155,8 @@
 
             var button = $('.stopButton');
             button.toggleClass('button-disabled', false);
+
+            $scope.clearSearch();
 
             rb1.move('left');
         };

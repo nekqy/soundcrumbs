@@ -5,6 +5,39 @@ var
 exports.init = function(app) {
     app.use(fileUpload());
 
+    app.post('/uploadmp3', function(req, mainRes) {
+        var sampleFile;
+
+        if (!req.files) {
+            mainRes.send('{"error": "error! No files were uploaded"}');
+            return;
+        }
+        if (!req.body.sid) {
+            mainRes.send('{"error": "error! no sid"}');
+            return;
+        }
+        if (!req.body.uploadUrl) {
+            mainRes.send('{"error": "error! no uploadUrl"}');
+            return;
+        }
+
+        sampleFile = req.files.file;
+        var uuid = require('node-uuid');
+
+        var name = uuid.v4();
+
+        console.log('saving to: ' + __dirname + '/' + name + '.mp3');
+        sampleFile.mv(__dirname + '/' + name + '.mp3', function(err) {
+            if (err) {
+                mainRes.status(500).send(err);
+            }
+            else {
+                console.log('audiofile saved');
+                saveToVk(req.body.sid, name, mainRes, req.body.uploadUrl);
+            }
+        });
+    });
+
     app.post('/upload', function(req, mainRes) {
         var sampleFile;
 
