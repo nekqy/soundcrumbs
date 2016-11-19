@@ -73,7 +73,7 @@ exports.init = function(app) {
                 console.log('exists:' ,fs.existsSync(__dirname + '/' + name + '.wav'));
                 var job = sox.transcode('server/' + name + '.wav', 'server/' + name + '.mp3');
                 job.on('error', function(err) {
-                    console.error(err);
+                    console.log(JSON.stringify(err));
                     fs.rename(__dirname + '/' + name + '.wav', __dirname + '/' + name + '.mp3');
                     saveToVk(req.body.sid, name, mainRes);
                 });
