@@ -13,7 +13,7 @@ define([], function() {
         } catch(e) {}
 
         var ref = firebase.database().ref('SoundCrumbs');
-        
+
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -38,11 +38,11 @@ define([], function() {
 
                 if (likeSn.hasChild($scope.mid)) {
                     rating--;
-                    
+
                 }
                 fbAudioDislikeField = fbAudio.child('disliked');
                 fbAudioDislikeField.once('value', function(dislikeSn) {
-                    
+
                     rating -= dislikeSn.numChildren();
                     disliked += dislikeSn.numChildren();
                     if (dislikeSn.hasChild($scope.mid)) {
@@ -86,10 +86,24 @@ define([], function() {
             }
         };
         $scope.addToHistory = function(audio, event) {
-            VKApi.getSession().then(function(session) {
-                saveToHistory(audio, session.mid);
-            });
-            changePlayerTarget(event);
+          $.ajax({
+              type: 'GET',
+              url: window.location.origin + '/check?url=' + encodeURIComponent(audio.sound),
+          }).done(function(res) {
+            res = JSON.parse(res);
+            console.log(res);
+            if ( res.removed ) {
+              alert("Запись была удалена из ВКонтакте");
+              $scope.ref.child(audio.key + '/removed').set(true);
+              $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
+              $scope.$apply();
+            }
+          });
+
+          VKApi.getSession().then(function(session) {
+              saveToHistory(audio, session.mid);
+          });
+          changePlayerTarget(event);
         };
 
         function changePlayerTarget(event) {
@@ -98,6 +112,24 @@ define([], function() {
             window.playerTarget.currentTime = 0;
           }
           window.playerTarget = event.target;
+        }
+
+        $scope.getShareUrl = function(data) {
+          var title;
+          if (data.description)
+            title = "Прийди туда и послушай " + data.description + " в SoundCrumbs";
+          else
+            title = "Прийди туда и послушай запись в SoundCrumbs";
+          title = encodeURIComponent(title);
+
+          var image = encodeURIComponent('http://static-maps.yandex.ru/1.x/?lang=en-US&ll=' + data.coord_x +
+                ',' + data.coord_y + '&z=13&l=map&size=600,300&pt='+ data.coord_x +
+                ',' + data.coord_y +',pmgrm');
+          var link = encodeURIComponent('http://www.openstreetmap.org/?mlat=' + data.coord_y + '&mlon=' + data.coord_x +
+                 '&zoom=18#map=18/' + data.coord_y + '/' + data.coord_x);
+
+          return "https://vk.com/share.php?url=" + link + "&title=" + title + "&description=" + title +
+               "&image=" + image + "&noparse=false";
         }
 
         function saveToHistory(audio, mid) {
