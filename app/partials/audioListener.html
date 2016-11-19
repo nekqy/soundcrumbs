@@ -11,7 +11,7 @@
                 </p>
             </div>
             <div class="listenContainer__player">
-                <audio controls preload="none" ng-play="addToHistory(value)">
+                <audio controls preload="none" ng-play="addToHistory(value, $event)" >
                     <source ng-src="{{trustSrc(value.sound)}}">
                 </audio>
                 <i ng-click="toggleLikeAudio(value, true)" class="cbutton cbutton__like fa fa-thumbs-up"></i>

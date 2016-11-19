@@ -35,5 +35,7 @@ define([
         }]);
 
         angular.bootstrap(document, ['soundcrumbs']);
+
+        window.playerTarget = null;
     });
 });

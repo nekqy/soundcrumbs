@@ -56,6 +56,10 @@ define([], function() {
                                    geoData: window.geoData,
                                    vkData: vkData
                                });
+                           }, function(err) {
+                                alert("Не удалось сохранить запись.");
+                                console.log(err);
+                                reject(err);
                            });
                        }).fail(function(err) {
                            reject(err);
@@ -110,6 +114,14 @@ define([], function() {
                });
            }, logError);
        };
+
+       $scope.changePlayerTarget = function(event) {
+         if (window.playerTarget != null) {
+           window.playerTarget.pause();
+           window.playerTarget.currentTime = 0;
+         }
+         window.playerTarget = event.target;
+       }
 
        $scope.isRecording = false;
        $scope.isNotRecording = true;
@@ -177,15 +189,44 @@ define([], function() {
        };
 
       $scope.submitClick = function() {
-          var inp = document.getElementById("file");
+        var inp = document.getElementById("file");
 
-          if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
-
+        if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
             getValueForSave(inp.files[0]).then(saveAudio, logError);
             $scope.log = "Uploading file";
-          }
-          else { alert( "Не верный формат файла" ) }
-      }
+        }
+        else {
+           alert("Поддерживаются только mp3 и wav.");
+        }
+      };
+
+      $scope.cancelRecord = function() {
+        $('#l_modal').hide();
+        console.log('hide');
+      };
+
+      $scope.sendAudio = function() {
+        var description =  $('#sendAudio').val();
+
+        console.log('description = ' + description);
+
+        firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
+           uid: res.vkData.owner_id,
+           date: res.geoData.timestamp,
+           sound: res.vkData.url,
+           description: description || '',
+           coord_x: res.geoData.coords.longitude,
+           coord_y: res.geoData.coords.latitude
+        });
+        $scope.info = JSON.stringify(res);
+
+        if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
+          $scope.$apply();
+        }
+
+        $scope.goToBack();
+      };
+
        function createDownloadLink() {
            recorder && recorder.exportWAV(function(blob) {
                var url = URL.createObjectURL(blob);
@@ -210,6 +251,8 @@ define([], function() {
            if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
                $scope.$apply();
            }
+           if (!isDevelopment)
+            $scope.goToBack();
        }
 
        function saveAudio(res) {
@@ -217,7 +260,10 @@ define([], function() {
               return val.aid === audioId;
            });
            var defaultDescription = addingAudio ? addingAudio.artist + ' - ' + addingAudio.title : '';
-           var description = prompt('Введите описание (необязательно)', defaultDescription);
+           $('.b_form__input').val(defaultDescription);
+           $('#l_modal').show();
+
+           /*var description = prompt('Введите описание (необязательно)', defaultDescription);
            firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
                uid: res.vkData.owner_id,
                date: res.geoData.timestamp,
@@ -232,8 +278,10 @@ define([], function() {
                $scope.$apply();
            }
 
-           $scope.goToBack();
+           $scope.goToBack();*/
        }
+
+
 
        try {
            // webkit shim

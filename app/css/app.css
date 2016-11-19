@@ -1,3 +1,7 @@
+body {
+  background-image: url("../img/bg.png");
+}
+
 .cbutton {
   color: #48c;
   cursor: pointer;
@@ -129,6 +133,11 @@
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, .08);
   box-sizing: border-box;
+}
+
+.fa-calendar, .fa-bar-chart {
+  color: #666;
+  margin-right: 10px;
 }
 
 .history-list__date, .history-list__rating, .history-list__share
@@ -348,6 +357,13 @@
 
 /* ====== End record screen ====== */
 
+/* ====== Listener screen ====== */
+
+
+
+/* ====== Listener screen and ====== */
+
+
 .recordContainer, .listenContainer {
   display: flex;
   align-items: center;
@@ -356,8 +372,6 @@
   position: absolute;
 
   flex-direction: column;
-
-  background-image: url("../img/bg.png");
 }
 .button-disabled {
   display: none;
