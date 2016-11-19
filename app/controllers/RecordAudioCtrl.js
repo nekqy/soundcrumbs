@@ -202,11 +202,12 @@ define([], function() {
 
       $scope.cancelRecord = function() {
         $('#l_modal').hide();
-        console.log('hide');
+        $scope.goToBack();
       };
 
       $scope.sendAudio = function() {
-        var description =  $('#sendAudio').val();
+        var description =  $('.b_form__input').val();
+        var res = $scope.tmp_res;
 
         console.log('description = ' + description);
 
@@ -224,6 +225,7 @@ define([], function() {
           $scope.$apply();
         }
 
+        $('#l_modal').hide();
         $scope.goToBack();
       };
 
@@ -259,6 +261,9 @@ define([], function() {
            var addingAudio = $scope.audioList.find(function(val) {
               return val.aid === audioId;
            });
+
+            $scope.tmp_res = res;
+
            var defaultDescription = addingAudio ? addingAudio.artist + ' - ' + addingAudio.title : '';
            $('.b_form__input').val(defaultDescription);
            $('#l_modal').show();

@@ -13,8 +13,7 @@ define([], function() {
         } catch(e) {}
 
         var ref = firebase.database().ref('SoundCrumbs');
-        var isLiked = false,
-            isDisliked = false;
+        
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -36,37 +35,39 @@ define([], function() {
             fbAudioLikeField.once('value', function(likeSn) {
                 rating += likeSn.numChildren();
                 liked += likeSn.numChildren();
+
                 if (likeSn.hasChild($scope.mid)) {
                     rating--;
+                    
                 }
                 fbAudioDislikeField = fbAudio.child('disliked');
                 fbAudioDislikeField.once('value', function(dislikeSn) {
+                    
                     rating -= dislikeSn.numChildren();
                     disliked += dislikeSn.numChildren();
                     if (dislikeSn.hasChild($scope.mid)) {
                         rating++;
                     }
                     if (like) {
-                        if(isLiked){
+                        if(audio.likeState == 'liked'){
+                            audio.likeState = '';
                             fbAudioDislikeField.child($scope.mid).remove();
-                            isLiked = false;
                         } else {
                             fbAudioLikeField.child($scope.mid).set(true);
                             fbAudioDislikeField.child($scope.mid).remove();
                             rating++;
-                            isDisliked = false;
-                            isLiked = true;
+
+                            audio.likeState = "liked";
                         }
                     } else {
-                        if(isDisliked){
+                        if(audio.likeState == 'disliked'){
                             fbAudioDislikeField.child($scope.mid).remove();
-                            isDisliked = false;
+                            audio.likeState = '';
                         } else {
                             fbAudioLikeField.child($scope.mid).remove();
                             fbAudioDislikeField.child($scope.mid).set(true);
                             rating--;
-                            isDisliked = true;
-                            isLiked = false;
+                            audio.likeState = 'disliked';
                         }
                     }
                     audio.rating = rating;
