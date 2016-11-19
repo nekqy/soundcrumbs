@@ -152,10 +152,11 @@ body {
 }
 
 .history-list__date, .history-list__rating, .history-list__share,
-.audioListenList__control__date, .audioListenList__rating
+.audioListenList__control__date, .audioListenList__rating,
+.audioListenList__download
 {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 10px 8px;
 }
 
 .history-list__rating,
@@ -176,7 +177,7 @@ body {
   color: #3fc372;
 }
 
-.history-list__share
+.history-list__share, .audioListenList__download
 {
   float: right;
 }
