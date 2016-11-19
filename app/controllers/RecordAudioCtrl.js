@@ -80,15 +80,41 @@ define([], function() {
            $scope.audioList = [];
            $scope.formData.searchString = '';
            $scope.searchMode = false;
+           $scope.showList = false;
+           clearInterval($scope.timer);
        };
+
+       $scope.onkeyf = false;
+       $scope.searchStr = '';
+       $scope.timer = null;
+       $scope.showList = true;
+       $scope.onKey = function() {
+          if($scope.onkeyf)
+            return;
+          $scope.showList = true;
+          $scope.onkeyf = true;
+          //$scope.getAudio();
+
+          $scope.timer = setInterval(function()
+          {
+            if($scope.searchStr !== $scope.formData.searchString)
+              $scope.getAudio();
+
+            $scope.searchStr = $scope.formData.searchString;
+            $scope.onkeyf = false;
+          }, 1000);
+       }
 
        $scope.getAudio = function() {
            $scope.useSmallRecordButton = true;
            VKApi.getAudio({
                q: $scope.formData.searchString
            }).then(function(audioList) {
-               $scope.audioList = audioList;
-               $scope.searchMode = true;
+              if($scope.showList)
+              {
+                $scope.audioList = audioList;
+                $scope.searchMode = true;
+              }
            });
        };
        $scope.selectAudio = function(audio) {
