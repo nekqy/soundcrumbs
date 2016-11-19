@@ -4,15 +4,18 @@ body {
 
 .cbutton {
   color: #48c;
+  border-color: #48c;
   cursor: pointer;
   vertical-align: middle;
   font-size: 1.4em;
+  z-index: 2;
 }
 .cbutton:hover {
   text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
 }
 .cbutton:active {
-  color: #48c;
+  border-color: #2A5885;
+  color: #2A5885;
 }
 
 .cbutton.cbuttons__color__active {
@@ -28,8 +31,8 @@ body {
 }
 
 .sc-rating {
-  color: #999;
   vertical-align: middle;
+  text-align: center;
   font-size: 1em;
   display: inline-block;
   width: 24px;
@@ -80,7 +83,7 @@ body {
   z-index: -1;
 }
 
-.history-layout
+.history-layout, .audioList-layout
 {
   min-width: 320px;
   margin: 0 auto;
@@ -88,11 +91,11 @@ body {
 }
 
 @media (min-width: 768px) {
-  .history-layout { min-width: 480px; }
+  .history-layout, .audioList-layout { min-width: 480px; }
 }
 
 @media (min-width: 1280px) {
-  .history-layout { min-width: 640px; }
+  .history-layout, .audioList-layout { min-width: 640px; }
 }
 
 .history-title
@@ -100,7 +103,7 @@ body {
   margin-bottom: 0;
 }
 
-.history-list
+.history-list, .audioListenList
 {
   width: 100%;
   max-width: 600px;
@@ -109,7 +112,7 @@ body {
   padding: 0;
 }
 
-.history-list__element
+.history-list__element, .audioListenList__element
 {
   background-color: #fff;
   display: block;
@@ -118,18 +121,26 @@ body {
   box-shadow: 0 1px 1px rgba(97, 127, 152, 0.2), 1px 0 0 rgba(97, 127, 152, 0.1), -1px 0 0 rgba(97, 127, 152, 0.1);
 }
 
-.history-list__description
+.history-list__description, .audioListenList__description
 {
   box-sizing: border-box;
   padding: 10px 20px;
   width: 100%;
 }
 
-.history-list__controls-block
+.audioListenList__description {
+}
+
+.history-list__controls-block, .audioListenList__audio-block,
+.audioListenList__control-block, .audioListenList__description-block
 {
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, .08);
   box-sizing: border-box;
+}
+
+.audioListenList__description-block {
+  position: relative;
 }
 
 .fa-calendar, .fa-bar-chart {
@@ -137,28 +148,33 @@ body {
   margin-right: 10px;
 }
 
-.history-list__date, .history-list__rating, .history-list__share
+.history-list__date, .history-list__rating, .history-list__share,
+.audioListenList__control__date, .audioListenList__rating
 {
   display: inline-block;
   padding: 10px 20px;
 }
 
-.history-list__date, .history-list__rating
+.history-list__date, .history-list__rating, .audioListenList__control__date,
+.audioListenList__rating
 {
   border-right: 1px solid rgba(0, 0, 0, .08);
 }
 
-.history-list__rating
+.history-list__rating,
+.audioListenList__rating
 {
   padding-left: 14px
 }
 
-.history-list__rating.-bad
+.history-list__rating.-bad,
+.audioListenList__rating-value.-bad
 {
   color: #ff3466;
 }
 
-.history-list__rating.-good
+.history-list__rating.-good,
+.audioListenList__rating-value.-good
 {
   color: #3fc372;
 }
@@ -166,6 +182,12 @@ body {
 .history-list__share
 {
   float: right;
+}
+
+.audioListenList__delete-audio {
+  position: absolute;
+  top: 8px;
+  right: 9px;
 }
 
 .history-list__share:hover
@@ -397,7 +419,7 @@ body { margin:0; padding:0; }
 .recordContainer__record {
   margin: 10px;
 }
-.recordContainer__select, .listenContainer__list {
+.recordContainer__select {
   overflow: auto;
   text-align: center;
   width: 100%;
@@ -405,7 +427,7 @@ body { margin:0; padding:0; }
 
   margin: 10px;
 }
-.listenContainer__list {
+.audioListenList {
   margin-top: 40px;
 }
 .recordContainer__title {
@@ -480,7 +502,7 @@ body { margin:0; padding:0; }
   text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
 }
 .recordContainer__record:active .cbutton {
-  color: #33f;
+  color: #2A5885;
 }
 .recordContainer__text {
   position: absolute;
@@ -496,4 +518,17 @@ body { margin:0; padding:0; }
   font-size: 24px;
   font-family: 'Arial';
   color: rgba(112, 112, 112, 0.3);
+}
+.recordButton-button.buttonRecord {
+    border: 8px solid;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    border-radius: 50px;
+    vertical-align: middle;
+    line-height: 36px;
+    text-align: center;
+    font-size: 40px;
+    box-sizing: border-box;
+    font-style: normal;
 }

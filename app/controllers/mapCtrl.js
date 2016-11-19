@@ -193,7 +193,7 @@ define(['supercluster.min'], function(supercluster) {
                     "type": "circle",
                     "source": "route",
                     "paint": {
-                        "circle-color": '#f28cb1',
+                        "circle-color": '#FF9F47',
                         "circle-radius": 18
                     },
                     "filter": [">=", "point_count", 0]
@@ -205,7 +205,7 @@ define(['supercluster.min'], function(supercluster) {
                     "source": "route",
                     "filter": ["!has", "point_count"],
                     "paint": {
-                        "circle-color": '#f28cb1',
+                        "circle-color": '#FF9F47',
                         "circle-radius": 18
                     }
                 });
@@ -265,7 +265,7 @@ define(['supercluster.min'], function(supercluster) {
                         }
                         begin += numPoints;
                     });
-                    
+
                     var audioListener = $('[ng-controller="AudioListenerCtrl"]');
                     var scope = angular.element(audioListener[0]).scope();
                     scope.ref = ref;
