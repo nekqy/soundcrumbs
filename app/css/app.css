@@ -113,3 +113,68 @@ body { margin:0; padding:0; }
 .recordContainer__player audio, .listenContainer__player audio {
   width: calc(100% - 150px);
 }
+.recordContainer__searchString {
+  padding-right: 24px;
+  width: 164px;
+}
+.recordContainer__search {
+  position: relative;
+  padding: 12px 64px 0 20px;
+}
+.recordContainer__search i {
+  width: 32px;
+  text-align: center;
+}
+.recordContainer__search-clearButton {
+  display: none;
+  font-size: 18px;
+}
+.recordContainer__inSearchMode .recordContainer__search-clearButton {
+  display: inline-block;
+}
+.recordContainer__inSearchMode .recordContainer__search {
+  padding-right: 0;
+}
+.recordContainer__record {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 24px 0;
+  text-align: center;
+  background-color: #ddd;
+  cursor: pointer;
+}
+.recordContainer__record .cbutton {
+  cursor: pointer;
+  vertical-align: middle;
+  font-size: 32px;
+}
+.recordContainer__record:hover {
+  background-color: #ccc;
+}
+.recordContainer__record:active {
+  background-color: #aaa;
+}
+.recordContainer__record:hover .cbutton {
+  text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
+}
+.recordContainer__record:active .cbutton {
+  color: #33f;
+}
+.recordContainer__text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  vertical-align: middle;
+  bottom: 0;
+  top: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-family: 'Arial';
+  color: rgba(112, 112, 112, 0.3);
+}
