@@ -10,6 +10,7 @@
 
         var audio_context;
         var recorder;
+        var audioId;
         function startUserMedia(stream) {
             var input = audio_context.createMediaStreamSource(stream);
             __log('Media stream created.');
@@ -89,6 +90,7 @@
             }
 
             VKApi.getSession().then(function (session) {
+                audioId = audio.aid;
                 saveAudio({
                     geoData: window.geoData,
                     vkData: {
@@ -109,6 +111,8 @@
             //button.disabled = true;
             //button.nextElementSibling.disabled = false;
             __log('Recording...');
+
+            audioId = null;
 
             $scope.isRecording = true;
             $scope.isNotRecording = false;
@@ -169,7 +173,11 @@
         }
 
         function saveAudio(res) {
-            var description = prompt('Введите описание (необязательно)');
+            var addingAudio = $scope.audioList.find(function(val) {
+               return val.aid === audioId;
+            });
+            var defaultDescription = addingAudio ? addingAudio.artist + ' - ' + addingAudio.title : '';
+            var description = prompt('Введите описание (необязательно)', defaultDescription);
             firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
                 uid: res.vkData.owner_id,
                 date: res.geoData.timestamp,
