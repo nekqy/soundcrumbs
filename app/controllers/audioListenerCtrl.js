@@ -31,18 +31,18 @@ define([], function() {
                fbAudioLikeField = fbAudio.child('liked'),
                fbAudioDislikeField,
                rating = AUDIO_RATING_INITIAL,
-               liked,
-               disliked;
+               liked = like ? 1 : 0,
+               disliked = like ? 0 : 1;
             fbAudioLikeField.once('value', function(likeSn) {
                 rating += likeSn.numChildren();
-                liked = likeSn.numChildren();
+                liked += likeSn.numChildren();
                 if (likeSn.hasChild($scope.mid)) {
                     rating--;
                 }
                 fbAudioDislikeField = fbAudio.child('disliked');
                 fbAudioDislikeField.once('value', function(dislikeSn) {
                     rating -= dislikeSn.numChildren();
-                    disliked = dislikeSn.numChildren();
+                    disliked += dislikeSn.numChildren();
                     if (dislikeSn.hasChild($scope.mid)) {
                         rating++;
                     }
@@ -70,7 +70,9 @@ define([], function() {
                         }
                     }
                     audio.rating = rating;
-                    if (disliked != 0 && liked != 0 && liked / disliked <= AUDIO_LIKE_RATIO_MINIMAL) {
+                    if (liked == 0 && disliked > 5 ||
+                            liked > 0 && disliked/liked > 5 ||
+                            liked + disliked > 5 + countRecordsInCrumbsArea() / 5 && disliked/liked > 1.5) {
                         fbAudio.child('removed').set(true);
                     }
                 });
