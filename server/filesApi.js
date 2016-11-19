@@ -75,7 +75,7 @@ exports.init = function(app) {
                 job.on('error', function(err) {
                     console.log(JSON.stringify(err));
                     fs.rename(__dirname + '/' + name + '.wav', __dirname + '/' + name + '.mp3');
-                    saveToVk(req.body.sid, name, mainRes);
+                    saveToVk(req.body.sid, name, mainRes, req.body.uploadUrl);
                 });
                 job.on('end', function() {
                     console.log('audiofile converted');
