@@ -18,7 +18,7 @@
                     </p>
                 </div>
                 <div class="recordContainer__player">
-                    <audio controls preload="none">
+                    <audio controls preload="none" ng-play="changePlayerTarget($event)">
                         <source ng-src="{{trustSrc(value.url)}}">
                     </audio>
                     <i ng-click="selectAudio(value)" class="cbutton fa fa-plus-square-o"></i>
@@ -40,7 +40,7 @@
         </form>
     </div>
 
-    <div class="recordContainer__record" ng-if="isNotRecording && !searchMode" ng-click="startRecording()">
+    <div class="recordContainer__record" ng-if="isNotRecording && !searchMode && !log" ng-click="startRecording()">
         <i class="startButton cbutton fa fa-microphone"></i>
     </div>
 
