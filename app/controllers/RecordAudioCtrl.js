@@ -70,6 +70,7 @@
         }
 
         $scope.formData = {};
+        $scope.audioList = [];
 
         $scope.getAudio = function() {
             VKApi.getAudio({
@@ -140,6 +141,9 @@
             $scope.isRecording = false;
             $scope.isNotRecording = true;
             $scope.log = '';
+
+            $scope.formData = {};
+            $scope.audioList = [];
 
             var button = $('.stopButton');
             button.toggleClass('button-disabled', false);
