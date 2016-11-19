@@ -187,10 +187,39 @@ define([], function() {
             getValueForSave(inp.files[0]).then(saveAudio, logError);
             $scope.log = "Uploading file";
         }
-        else { 
+        else {
            alert("Поддерживаются только mp3 и wav.");
         }
-      }
+      };
+
+      $scope.cancelRecord = function() {
+        $('#l_modal').hide();
+        console.log('hide');
+      };
+
+      $scope.sendAudio = function() {
+        $('#sendAudio').val(defaultDescription);
+        var description =  $('#sendAudio').val();
+
+        console.log('description = ' + description);
+
+        firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
+           uid: res.vkData.owner_id,
+           date: res.geoData.timestamp,
+           sound: res.vkData.url,
+           description: description || '',
+           coord_x: res.geoData.coords.longitude,
+           coord_y: res.geoData.coords.latitude
+        });
+        $scope.info = JSON.stringify(res);
+
+        if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
+          $scope.$apply();
+        }
+
+        $scope.goToBack();
+      };
+
        function createDownloadLink() {
            recorder && recorder.exportWAV(function(blob) {
                var url = URL.createObjectURL(blob);
@@ -224,7 +253,9 @@ define([], function() {
               return val.aid === audioId;
            });
            var defaultDescription = addingAudio ? addingAudio.artist + ' - ' + addingAudio.title : '';
-           var description = prompt('Введите описание (необязательно)', defaultDescription);
+           $('#l_modal').show();
+
+           /*var description = prompt('Введите описание (необязательно)', defaultDescription);
            firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
                uid: res.vkData.owner_id,
                date: res.geoData.timestamp,
@@ -239,8 +270,10 @@ define([], function() {
                $scope.$apply();
            }
 
-           $scope.goToBack();
+           $scope.goToBack();*/
        }
+
+
 
        try {
            // webkit shim

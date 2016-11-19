@@ -134,6 +134,11 @@ body {
   box-sizing: border-box;
 }
 
+.fa-calendar, .fa-bar-chart {
+  color: #666;
+  margin-right: 10px;
+}
+
 .history-list__date, .history-list__rating, .history-list__share
 {
   display: inline-block;
