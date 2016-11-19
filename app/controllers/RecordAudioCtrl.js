@@ -56,6 +56,10 @@ define([], function() {
                                    geoData: window.geoData,
                                    vkData: vkData
                                });
+                           }, function(err) {
+                                alert("Не удалось сохранить запись.");
+                                console.log(err);
+                                reject(err);
                            });
                        }).fail(function(err) {
                            reject(err);
@@ -179,12 +183,13 @@ define([], function() {
       $scope.submitClick = function() {
           var inp = document.getElementById("file");
 
-          if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
-
+        if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
             getValueForSave(inp.files[0]).then(saveAudio, logError);
             $scope.log = "Uploading file";
-          }
-          else { alert( "Не верный формат файла" ) }
+        }
+        else { 
+           alert("Поддерживаются только mp3 и wav.");
+        }
       }
        function createDownloadLink() {
            recorder && recorder.exportWAV(function(blob) {
@@ -210,6 +215,8 @@ define([], function() {
            if ($scope.$$phase !== '$apply' && $scope.$$phase !== '$digest') {
                $scope.$apply();
            }
+           if (!isDevelopment)
+            $scope.goToBack();
        }
 
        function saveAudio(res) {

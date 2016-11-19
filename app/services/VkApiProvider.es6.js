@@ -126,6 +126,8 @@ define([], function() {
                         VK.api('audio.save', fields, function(response) {
                             if (response.response) {
                                 $timeout(function() { return resolve(response.response)}, 0);
+                            } else {
+                                $timeout(function() { return reject(response) }, 0);
                             }
                         });
                     })
