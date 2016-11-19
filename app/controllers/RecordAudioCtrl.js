@@ -246,7 +246,7 @@ define([], function() {
            log('No web audio support in this browser!');
        }
 
-       if (navigator.mediaDevices.getUserMedia) {
+       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
            navigator.mediaDevices.getUserMedia({audio: true}).then(startUserMedia, function(e) {
                navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
                    __log('No live audio input: ' + e);
