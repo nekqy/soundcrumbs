@@ -131,11 +131,14 @@ body {
 .audioListenList__description {
 }
 
+.audioListenList__audio-block audio {
+  width: 100%;
+}
+
 .history-list__controls-block, .audioListenList__audio-block,
 .audioListenList__control-block, .audioListenList__description-block
 {
   width: 100%;
-  border-top: 1px solid rgba(0, 0, 0, .08);
   box-sizing: border-box;
 }
 
@@ -153,12 +156,6 @@ body {
 {
   display: inline-block;
   padding: 10px 20px;
-}
-
-.history-list__date, .history-list__rating, .audioListenList__control__date,
-.audioListenList__rating
-{
-  border-right: 1px solid rgba(0, 0, 0, .08);
 }
 
 .history-list__rating,
@@ -409,6 +406,7 @@ body { margin:0; padding:0; }
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
 }
 
 .back.-right {
