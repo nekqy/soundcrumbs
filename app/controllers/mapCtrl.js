@@ -2,6 +2,8 @@ define(['supercluster.min'], function(supercluster) {
     function mapCtrl($scope, VKApi, geolocation) {
         // R = 0.000009 = ~1 метр, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
        const crumbsFilterRadius = 0.000640; // 71.2444741076951 метров
+       var lastRef = null;
+
 
         // пересчет в метры + еще чуть чуть чтобы окружность точки была внутри окружности охвата
         function calcMeters(coordDiff) {
@@ -51,7 +53,7 @@ define(['supercluster.min'], function(supercluster) {
                    "type": "FeatureCollection",
                    "features": $scope.markers
                 });
-             }
+              }
           }
           if ($scope.map.loaded()) {
              updateMarkers();
@@ -69,7 +71,11 @@ define(['supercluster.min'], function(supercluster) {
           var
              startX = $scope.geoData.coords.longitude - crumbsFilterRadius,
              endX = $scope.geoData.coords.longitude + crumbsFilterRadius;
-          ref.orderByChild('coord_x').startAt(startX).endAt(endX).on('value', function(snapshot) {
+          if (lastRef) {
+            lastRef.off('value');
+          }
+          lastRef = ref.orderByChild('coord_x').startAt(startX).endAt(endX);
+          lastRef.on('value', function(snapshot) {
              applySnapshot(snapshot);
           });
        };
@@ -285,8 +291,6 @@ define(['supercluster.min'], function(supercluster) {
                     var features = $scope.map.queryRenderedFeatures(e.point, { layers: ['layer1', 'layer2'] });
                     $scope.map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
                 });
-
-                ref.on('value', $scope.applyCrumbsFilter);
             });
         });
     }
