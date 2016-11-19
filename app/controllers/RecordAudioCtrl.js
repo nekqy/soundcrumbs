@@ -176,8 +176,7 @@
                 sound: res.vkData.url,
                 description: description || '',
                 coord_x: res.geoData.coords.longitude,
-                coord_y: res.geoData.coords.latitude,
-                rating: 0
+                coord_y: res.geoData.coords.latitude
             });
             $scope.info = JSON.stringify(res);
 

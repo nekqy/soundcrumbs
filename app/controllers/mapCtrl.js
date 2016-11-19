@@ -1,5 +1,5 @@
 define(['supercluster.min'], function(supercluster) {
-    function mapCtrl($scope, VKApi, geolocation) {
+    function mapCtrl($scope, VKApi, geolocation, AUDIO_RATING_INITIAL) {
         // R = 0.000009 = ~1 метр, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
        const crumbsFilterRadius = 0.000640; // 71.2444741076951 метров
 
@@ -262,7 +262,7 @@ define(['supercluster.min'], function(supercluster) {
                         var res = feature.properties;
                         res.dateStr = new Date(res.date).toLocaleDateString();
                         res.description = res.description || '[ нет описания ]';
-                        res.rating = 10 + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
+                        res.rating = AUDIO_RATING_INITIAL + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
                         res.key = feature.key; // Передаем также первичный ключ записи, чтобы дальше было в БД легко найти нужную запись
                        return res;
                     });
