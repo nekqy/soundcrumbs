@@ -1,6 +1,5 @@
 define([], function() {
-    function AudioListenerCtrl($scope, AUDIO_RATING_MINIMAL, AUDIO_RATING_INITIAL, $sce) {
-
+    function AudioListenerCtrl($scope, AUDIO_RATING_MINIMAL, AUDIO_RATING_INITIAL, $sce, VKApi) {
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -50,7 +49,19 @@ define([], function() {
                 $scope.audioList.splice($scope.audioList.indexOf(audio), 1);
             }
         };
+        $scope.addToHistory = function(audio) {
+            VKApi.getSession().then(function(session) {
+                saveToHistory(audio, session.mid);
+            });
+        };
 
+        function saveToHistory(audio, mid) {
+            firebase.database().ref('History' + '/' + btoa(mid + audio.sound)).set({
+                uid: mid,
+                date: Date.now(),
+                sound: audio.sound
+            });
+        }
     }
 
     return AudioListenerCtrl;

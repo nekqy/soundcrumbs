@@ -2,6 +2,7 @@ define([
     './bootup',
     './bower_components/angular/angular',
     './bower_components/angularfire/dist/angularfire',
+    '../node_modules/ng-media-events/src/ng-media-events',
     './services/main.es6',
     './controllers/main.es6', 
     './bower_components/angularjs-geolocation/src/geolocation'
@@ -15,7 +16,8 @@ define([
             'firebase',
             'SoundCrumbs.service',
             'SoundCrumbs.controllers',
-            'geolocation'
+            'geolocation',
+            'ngMedia'
         ]);
 
         app.constant('fields', ['uid', 'first_name', 'last_name', 'nickname', 'sex',
