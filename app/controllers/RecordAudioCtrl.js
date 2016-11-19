@@ -183,12 +183,13 @@ define([], function() {
       $scope.submitClick = function() {
           var inp = document.getElementById("file");
 
-          if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
-
+        if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
             getValueForSave(inp.files[0]).then(saveAudio, logError);
             $scope.log = "Uploading file";
-          }
-          else { alert( "Не верный формат файла" ) }
+        }
+        else { 
+           alert("Поддерживаются только mp3 и wav.");
+        }
       }
        function createDownloadLink() {
            recorder && recorder.exportWAV(function(blob) {
