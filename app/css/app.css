@@ -270,7 +270,8 @@ body {
 }
 
 .fa-microphone {
-  right: 5%
+  right: 10%;
+  width: 5%!important;
 }
 
 .b_header-search > div
