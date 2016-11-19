@@ -1,0 +1,27 @@
+<div class="listenContainer">
+    <div class="back historyContainer__back -right">
+        <i ng-click="goToBack()" class="cbutton fa fa-chevron-right"></i>
+    </div>
+
+    <div class="history-layout">
+      <h2 class="history-title"><span>История</span></h2>
+
+      <ul class="history-list">
+        <li class="history-list__element" ng-repeat="(key, value) in historyList|orderBy:'date':true">
+          <div class="history-list__description" ng-if="value.description">{{value.description}}</div>
+          <div class="history-list__description" ng-if="!value.description">[ нет описания ]</div>
+          <div class="history-list__controls-block">
+            <div class="history-list__date">{{value.dateStr}}</div>
+            <div class="history-list__rating">{{value.rating}}</div>
+            <div class="history-list__share">
+              <a target="_blank" href="{{value.shareUrl}}">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+</div>

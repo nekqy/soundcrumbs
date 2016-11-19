@@ -10,6 +10,7 @@
 
         var audio_context;
         var recorder;
+        var audioId;
         function startUserMedia(stream) {
             var input = audio_context.createMediaStreamSource(stream);
             __log('Media stream created.');
@@ -69,6 +70,7 @@
         }
 
         $scope.formData = {};
+        $scope.audioList = [];
 
         $scope.clearSearch = function() {
             $scope.audioList = [];
@@ -97,6 +99,7 @@
             }
 
             VKApi.getSession().then(function (session) {
+                audioId = audio.aid;
                 saveAudio({
                     geoData: window.geoData,
                     vkData: {
@@ -117,6 +120,8 @@
             //button.disabled = true;
             //button.nextElementSibling.disabled = false;
             __log('Recording...');
+
+            audioId = null;
 
             $scope.isRecording = true;
             $scope.isNotRecording = false;
@@ -144,6 +149,9 @@
             $scope.isRecording = false;
             $scope.isNotRecording = true;
             $scope.log = '';
+
+            $scope.formData = {};
+            $scope.audioList = [];
 
             var button = $('.stopButton');
             button.toggleClass('button-disabled', false);
@@ -179,15 +187,18 @@
         }
 
         function saveAudio(res) {
-            var description = prompt('Введите описание (необязательно)');
+            var addingAudio = $scope.audioList.find(function(val) {
+               return val.aid === audioId;
+            });
+            var defaultDescription = addingAudio ? addingAudio.artist + ' - ' + addingAudio.title : '';
+            var description = prompt('Введите описание (необязательно)', defaultDescription);
             firebase.database().ref('SoundCrumbs' + '/' + res.vkData.title).set({
                 uid: res.vkData.owner_id,
                 date: res.geoData.timestamp,
                 sound: res.vkData.url,
                 description: description || '',
                 coord_x: res.geoData.coords.longitude,
-                coord_y: res.geoData.coords.latitude,
-                rating: 0
+                coord_y: res.geoData.coords.latitude
             });
             $scope.info = JSON.stringify(res);
 

@@ -1,5 +1,5 @@
 define(['supercluster.min'], function(supercluster) {
-    function mapCtrl($scope, VKApi, geolocation) {
+    function mapCtrl($scope, VKApi, geolocation, AUDIO_RATING_INITIAL) {
         // R = 0.000009 = ~1 метр, формула: http://stackoverflow.com/questions/639695/how-to-convert-latitude-or-longitude-to-meters
        const crumbsFilterRadius = 0.000640; // 71.2444741076951 метров
        var lastRef = null;
@@ -13,13 +13,15 @@ define(['supercluster.min'], function(supercluster) {
 
        /***************** BEGIN FireBase *******************/
       // Initialize firebase module
-      firebase.initializeApp({
-         apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-         authDomain: "soundcrumbs-168a9.firebaseapp.com",
-         databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-         storageBucket: "soundcrumbs-168a9.appspot.com",
-         messagingSenderId: "443143749176"
-      });
+      try {
+        firebase.initializeApp({
+           apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+           authDomain: "soundcrumbs-168a9.firebaseapp.com",
+           databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+           storageBucket: "soundcrumbs-168a9.appspot.com",
+           messagingSenderId: "443143749176"
+        });
+      } catch(e) {}
 
        var ref = firebase.database().ref('SoundCrumbs');
 
@@ -87,6 +89,10 @@ define(['supercluster.min'], function(supercluster) {
 
        $scope.goToRecord = function() {
            rb1.move('right');
+       };
+
+       $scope.goToHistory = function() {
+           rb1.move('left');
        };
 
         function getLocation(init) {
@@ -264,7 +270,7 @@ define(['supercluster.min'], function(supercluster) {
                         var res = feature.properties;
                         res.dateStr = new Date(res.date).toLocaleDateString();
                         res.description = res.description || '[ нет описания ]';
-                        res.rating = 10 + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
+                        res.rating = AUDIO_RATING_INITIAL + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
                         res.key = feature.key; // Передаем также первичный ключ записи, чтобы дальше было в БД легко найти нужную запись
                        return res;
                     });
