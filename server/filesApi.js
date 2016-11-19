@@ -73,9 +73,9 @@ exports.init = function(app) {
                 console.log('exists:' ,fs.existsSync(__dirname + '/' + name + '.wav'));
                 var job = sox.transcode('server/' + name + '.wav', 'server/' + name + '.mp3');
                 job.on('error', function(err) {
-                    console.error(err);
+                    console.log(JSON.stringify(err));
                     fs.rename(__dirname + '/' + name + '.wav', __dirname + '/' + name + '.mp3');
-                    saveToVk(req.body.sid, name, mainRes);
+                    saveToVk(req.body.sid, name, mainRes, req.body.uploadUrl);
                 });
                 job.on('end', function() {
                     console.log('audiofile converted');
@@ -99,6 +99,7 @@ exports.init = function(app) {
         request(params, function (err, resp, body) {
             if (err) {
                 console.log('Error!');
+                console.error(err);
                 unlinkFiles(name);
                 mainRes.status(500).send(err);
             } else {

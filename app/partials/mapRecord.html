@@ -1,13 +1,14 @@
 <div class="recordContainer" ng-class="{'recordContainer__inSearchMode':searchMode}">
-    <span class="recordContainer__text" ng-if="isNotRecording && !searchMode">Для добавления аудиозаписи<br/>воспользуйтесь поиском или...<br/>создайте собственную!<br/></span>
+    <span class="recordContainer__text" ng-if="isNotRecording && isNotUploadingFile && !searchMode">Для добавления аудиозаписи<br/>воспользуйтесь поиском или...<br/>создайте собственную!<br/></span>
     <div class="back recordContainer__back">
-        <i ng-if="isNotRecording" ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
+        <i ng-if="isNotRecording&&isNotUploadingFile" ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
     </div>
+
     <div class="recordContainer__log">{{log}}</div>
-    <div ng-if="isNotRecording" class="recordContainer__search">
-        <input ng-model="formData.searchString" placeholder="Поиск аудиозаписей..." class="recordContainer__searchString"><i  ng-click="clearSearch()" class="cbutton fa fa-remove recordContainer__search-clearButton"></i><i  ng-click="getAudio()" class="cbutton fa fa-search"></i><i ng-if="isNotRecording && searchMode" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
+    <div ng-if="isNotRecording&&isNotUploadingFile" class="recordContainer__search">
+        <input ng-model="formData.searchString" placeholder="Поиск аудиозаписей..." class="recordContainer__searchString"><i  ng-click="clearSearch()" class="cbutton fa fa-remove recordContainer__search-clearButton"></i><i  ng-click="getAudio()" class="cbutton fa fa-search"></i><i  ng-click="openUploadForm()" class="cbutton fa fa-upload"></i><i ng-if="isNotRecording && searchMode" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
     </div>
-    <div ng-if="isNotRecording" class="recordContainer__select">
+    <div ng-if="isNotRecording&&isNotUploadingFile" class="recordContainer__select">
         <div ng-if="audioList" ng-repeat="(key, value) in audioList">
 
             <div ng-if="value.aid">
@@ -26,8 +27,36 @@
 
         </div>
     </div>
+
+    <div ng-if="isNotRecording&&isUploadingFile&&!log">
+        <form ref='uploadForm'
+            id='uploadForm'
+            encType="multipart/form-data">
+
+            <input type="hidden" name="sid" value="{{sid}}"/>
+            <input id="file" type="file" ng-model="fileInput" name="file" />
+            <input id="submitButton" type='submit' ng-click="submitClick()" value='Upload!' />
+            <input type="reset" ng-click="closeUploadForm()" value="Cancel"></input>
+        </form>
+    </div>
+
     <div class="recordContainer__record" ng-if="isNotRecording && !searchMode" ng-click="startRecording()">
         <i class="startButton cbutton fa fa-microphone"></i>
     </div>
-    <i ng-if="isRecording" ng-click="stopRecording()" class="stopButton cbutton fa fa-stop"></i>
+
+    <div ng-if="isRecording" class="recordContainer__record" ng-if="isNotRecording && !searchMode" ng-click="stopRecording()">
+        <i class="stopButton cbutton fa fa-stop"></i>
+    </div>
+
+    <div id="l_modal" class="l_modal-bg">
+      <div class="b_modal">
+        <div class="b_modal__form">
+          <input class="b_form__input" placeholder="Описание записи" type="text">
+          <div class="b_form__controls">
+            <div class="b_form__button -cancel" ng-click="cancelRecord()">Cancel</div>
+            <div class="b_form__button -save" ng-click="saveRecord()">Save</div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

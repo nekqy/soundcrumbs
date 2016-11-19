@@ -1,6 +1,6 @@
 define([], function() {
     function AudioListenerCtrl($scope, AUDIO_RATING_INITIAL, AUDIO_LIKE_RATIO_MINIMAL, $sce, VKApi) {
-
+        
         // Initialize firebase module
         try {
           firebase.initializeApp({
@@ -13,7 +13,8 @@ define([], function() {
         } catch(e) {}
 
         var ref = firebase.database().ref('SoundCrumbs');
-
+        var isLiked = false,
+            isDisliked = false;
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -30,32 +31,48 @@ define([], function() {
                fbAudioLikeField = fbAudio.child('liked'),
                fbAudioDislikeField,
                rating = AUDIO_RATING_INITIAL,
-               liked,
-               disliked;
+               liked = like ? 1 : 0,
+               disliked = like ? 0 : 1;
             fbAudioLikeField.once('value', function(likeSn) {
                 rating += likeSn.numChildren();
-                liked = likeSn.numChildren();
+                liked += likeSn.numChildren();
                 if (likeSn.hasChild($scope.mid)) {
                     rating--;
                 }
                 fbAudioDislikeField = fbAudio.child('disliked');
                 fbAudioDislikeField.once('value', function(dislikeSn) {
                     rating -= dislikeSn.numChildren();
-                    disliked = dislikeSn.numChildren();
+                    disliked += dislikeSn.numChildren();
                     if (dislikeSn.hasChild($scope.mid)) {
                         rating++;
                     }
                     if (like) {
-                        fbAudioLikeField.child($scope.mid).set(true);
-                        fbAudioDislikeField.child($scope.mid).remove();
-                        rating++;
+                        if(isLiked){
+                            fbAudioDislikeField.child($scope.mid).remove();
+                            isLiked = false;
+                        } else {
+                            fbAudioLikeField.child($scope.mid).set(true);
+                            fbAudioDislikeField.child($scope.mid).remove();
+                            rating++;
+                            isDisliked = false;
+                            isLiked = true;    
+                        }
                     } else {
-                        fbAudioLikeField.child($scope.mid).remove();
-                        fbAudioDislikeField.child($scope.mid).set(true);
-                        rating--;
+                        if(isDisliked){
+                            fbAudioDislikeField.child($scope.mid).remove();
+                            isDisliked = false;
+                        } else {
+                            fbAudioLikeField.child($scope.mid).remove();
+                            fbAudioDislikeField.child($scope.mid).set(true);
+                            rating--;
+                            isDisliked = true;
+                            isLiked = false;
+                        }
                     }
                     audio.rating = rating;
-                    if (disliked != 0 && liked != 0 && liked / disliked <= AUDIO_LIKE_RATIO_MINIMAL) {
+                    if (liked == 0 && disliked > 5 ||
+                            liked > 0 && disliked/liked > 5 ||
+                            liked + disliked > 5 + countRecordsInCrumbsArea() / 5 && disliked/liked > 1.5) {
                         fbAudio.child('removed').set(true);
                     }
                 });
