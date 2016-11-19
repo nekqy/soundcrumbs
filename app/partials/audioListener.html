@@ -11,7 +11,7 @@
                 </p>
             </div>
             <div class="listenContainer__player">
-                <audio controls preload="none">
+                <audio controls preload="none" onplay="addToHistory(value)">
                     <source ng-src="{{trustSrc(value.sound)}}">
                 </audio>
                 <span class="sc-rating">{{value.rating}}</span><!--+ value.liked.length - value.disliked.length-->
