@@ -206,7 +206,7 @@ define([], function() {
       };
 
       $scope.sendAudio = function() {
-        var description =  $('#sendAudio').val();
+        var description =  $('.b_form__input').val();
         var res = $scope.tmp_res;
 
         console.log('description = ' + description);
@@ -225,6 +225,7 @@ define([], function() {
           $scope.$apply();
         }
 
+        $('#l_modal').hide();
         $scope.goToBack();
       };
 
