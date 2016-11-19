@@ -74,7 +74,7 @@ define([], function() {
         };
 
         function saveToHistory(audio, mid) {
-            firebase.database().ref('History' + '/' + btoa(mid + audio.sound)).set({
+            firebase.database().ref('History' + '/' + audio.key + mid).set({
                 uid: mid,
                 date: Date.now(),
                 sound: audio.sound
