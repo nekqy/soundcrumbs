@@ -1,7 +1,9 @@
-<div class="recordContainer">
+<div class="recordContainer" ng-class="{'recordContainer__inSearchMode':searchMode}">
+    <span class="recordContainer__text" ng-if="isNotRecording && !searchMode">Для добавления аудиозаписи<br/>воспользуйтесь поиском или...<br/>создайте собственную!<br/></span>
     <div class="back recordContainer__back">
         <i ng-if="isNotRecording&&isNotUploadingFile" ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
     </div>
+<<<<<<< HEAD
     <div class="recordContainer__record">
         <i ng-if="isNotRecording&&isNotUploadingFile" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
         <i ng-if="isRecording" ng-click="stopRecording()" class="stopButton cbutton fa fa-stop"></i>
@@ -15,6 +17,11 @@
             <input ng-model="formData.searchString">
         </label>
         <i  ng-click="getAudio()" class="cbutton fa fa-search"></i>
+=======
+    <div class="recordContainer__log">{{log}}</div>
+    <div ng-if="isNotRecording" class="recordContainer__search">
+        <input ng-model="formData.searchString" placeholder="Поиск аудиозаписей..." class="recordContainer__searchString"><i  ng-click="clearSearch()" class="cbutton fa fa-remove recordContainer__search-clearButton"></i><i  ng-click="getAudio()" class="cbutton fa fa-search"></i><i ng-if="isNotRecording && searchMode" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
+>>>>>>> fc104c4f4817798c91577072a637e75f3f64de37
     </div>
     <div ng-if="isNotRecording&&isNotUploadingFile" class="recordContainer__select">
         <div ng-if="audioList" ng-repeat="(key, value) in audioList">
@@ -35,6 +42,7 @@
 
         </div>
     </div>
+<<<<<<< HEAD
     <div ng-if="isNotRecording&&isUploadingFile&&!log">
         <form ref='uploadForm'
             id='uploadForm'
@@ -47,3 +55,10 @@
         </form>
     </div>
 </div>
+=======
+    <div class="recordContainer__record" ng-if="isNotRecording && !searchMode" ng-click="startRecording()">
+        <i class="startButton cbutton fa fa-microphone"></i>
+    </div>
+    <i ng-if="isRecording" ng-click="stopRecording()" class="stopButton cbutton fa fa-stop"></i>
+</div>
+>>>>>>> fc104c4f4817798c91577072a637e75f3f64de37

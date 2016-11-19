@@ -62,7 +62,6 @@ define([], function() {
                        });
                    }, function(err) {
                        reject(err);
-
                    });
                }, function(err) {
                    reject(err);
@@ -71,12 +70,21 @@ define([], function() {
        }
 
        $scope.formData = {};
+       $scope.audioList = [];
+
+       $scope.clearSearch = function() {
+           $scope.audioList = [];
+           $scope.formData.searchString = '';
+           $scope.searchMode = false;
+       };
 
        $scope.getAudio = function() {
+           $scope.useSmallRecordButton = true;
            VKApi.getAudio({
                q: $scope.formData.searchString
            }).then(function(audioList) {
                $scope.audioList = audioList;
+               $scope.searchMode = true;
            });
        };
        $scope.selectAudio = function(audio) {
@@ -116,11 +124,10 @@ define([], function() {
            __log('Recording...');
 
            audioId = null;
-
-           $scope.isRecording = true;
            $scope.isUploadingFile = false;
-           $scope.isNotRecording = false;
            $scope.isNotUploadingFile = true;
+           $scope.isRecording = true;
+           $scope.isNotRecording = false;
            $scope.log = 'Recording...';
        };
        $scope.stopRecording = function() {
@@ -145,10 +152,17 @@ define([], function() {
            $scope.isRecording = false;
            $scope.isNotRecording = true;
            $scope.log = '';
+
            $scope.isUploadingFile = false;
            $scope.isNotUploadingFile = true;
+
+           $scope.formData = {};
+           $scope.audioList = [];
+
            var button = $('.stopButton');
            button.toggleClass('button-disabled', false);
+
+           $scope.clearSearch();
 
            rb1.move('left');
        };
@@ -168,10 +182,7 @@ define([], function() {
             $scope.log = "Uploading file";
           }
           else { alert( "Не верный формат файла" ) }
-
-
       }
-
        function createDownloadLink() {
            recorder && recorder.exportWAV(function(blob) {
                var url = URL.createObjectURL(blob);
@@ -248,8 +259,6 @@ define([], function() {
                log('No live audio input: ' + e);
            });
        }
-
-
    }
 
    return CreateAudioCtrl;

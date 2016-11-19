@@ -1,6 +1,6 @@
 define([], function() {
     function AudioListenerCtrl($scope, AUDIO_RATING_INITIAL, AUDIO_LIKE_RATIO_MINIMAL, $sce, VKApi) {
-
+        
         // Initialize firebase module
         try {
           firebase.initializeApp({
@@ -13,7 +13,8 @@ define([], function() {
         } catch(e) {}
 
         var ref = firebase.database().ref('SoundCrumbs');
-
+        var isLiked = false,
+            isDisliked = false;
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -46,13 +47,27 @@ define([], function() {
                         rating++;
                     }
                     if (like) {
-                        fbAudioLikeField.child($scope.mid).set(true);
-                        fbAudioDislikeField.child($scope.mid).remove();
-                        rating++;
+                        if(isLiked){
+                            fbAudioDislikeField.child($scope.mid).remove();
+                            isLiked = false;
+                        } else {
+                            fbAudioLikeField.child($scope.mid).set(true);
+                            fbAudioDislikeField.child($scope.mid).remove();
+                            rating++;
+                            isDisliked = false;
+                            isLiked = true;    
+                        }
                     } else {
-                        fbAudioLikeField.child($scope.mid).remove();
-                        fbAudioDislikeField.child($scope.mid).set(true);
-                        rating--;
+                        if(isDisliked){
+                            fbAudioDislikeField.child($scope.mid).remove();
+                            isDisliked = false;
+                        } else {
+                            fbAudioLikeField.child($scope.mid).remove();
+                            fbAudioDislikeField.child($scope.mid).set(true);
+                            rating--;
+                            isDisliked = true;
+                            isLiked = false;
+                        }
                     }
                     audio.rating = rating;
                     if (disliked != 0 && liked != 0 && liked / disliked <= AUDIO_LIKE_RATIO_MINIMAL) {
