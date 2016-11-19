@@ -43,5 +43,20 @@
     <div class="recordContainer__record" ng-if="isNotRecording && !searchMode" ng-click="startRecording()">
         <i class="startButton cbutton fa fa-microphone"></i>
     </div>
-    <i ng-if="isRecording" ng-click="stopRecording()" class="stopButton cbutton fa fa-stop"></i>
+
+    <div ng-if="isRecording" class="recordContainer__record" ng-if="isNotRecording && !searchMode" ng-click="stopRecording()">
+        <i class="stopButton cbutton fa fa-stop"></i>
+    </div>
+
+    <div id="l_modal" class="l_modal-bg">
+      <div class="b_modal">
+        <div class="b_modal__form">
+          <input class="b_form__input" placeholder="Описание записи" type="text">
+          <div class="b_form__controls">
+            <div class="b_form__button -cancel" ng-click="cancelRecord()">Cancel</div>
+            <div class="b_form__button -save" ng-click="saveRecord()">Save</div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
