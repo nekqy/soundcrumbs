@@ -107,7 +107,7 @@ define([], function() {
         };
 
         function changePlayerTarget(event) {
-          if (window.playerTarget != null) {
+          if (window.playerTarget != null && window.playerTarget !== event.target) {
             window.playerTarget.pause();
             window.playerTarget.currentTime = 0;
           }
