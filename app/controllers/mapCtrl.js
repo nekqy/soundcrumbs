@@ -83,6 +83,10 @@ define(['supercluster.min'], function(supercluster) {
            rb1.move('right');
        };
 
+       $scope.goToHistory = function() {
+           rb1.move('left');
+       };
+
         function getLocation(init) {
             isDevelopment && log('<p class="tempLog">Загрузка локации...</p>');
             isLocating = true;
