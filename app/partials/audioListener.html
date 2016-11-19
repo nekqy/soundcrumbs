@@ -1,26 +1,44 @@
 <div class="listenContainer">
     <div class="back recordContainer__back">
-        <i ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
+        <i ng-click="goToBack()" class="backButton cbutton fa fa-arrow-up"></i>
     </div>
 
-    <div class="listenContainer__list">
-        <div ng-if="audioList" ng-repeat="(key, value) in audioList">
-            <div class="listenContainer__title">
-                <p class="listenContainer__title__text">
-                    {{value.dateStr}}: {{value.description}}
-                </p>
-            </div>
-            <div class="listenContainer__player">
-                <audio controls preload="none" ng-play="addToHistory(value, $event)" >
-                    <source ng-src="{{trustSrc(value.sound)}}">
-                </audio>
-                <i ng-click="toggleLikeAudio(value, true)" class="cbutton cbuttons__color fa fa-thumbs-up" ng-class="{'cbuttons__color__active': value.likeState==='liked'}"></i>
-                <span class="sc-rating">{{value.rating}}</span><!--+ value.liked.length - value.disliked.length-->
-                <i ng-click="toggleLikeAudio(value, false)" class="cbutton cbuttons__color fa fa-thumbs-down" ng-class="{'cbuttons__color__active': value.likeState==='disliked'}"></i>
-                <i ng-if="isMyAudio(value) === true" ng-click="deleteAudio(value)" class="cbutton cbuttons__color fa fa-remove"></i>
-                <i ng-if="isMyAudio(value) === false" class="cbutton cbutton__empty fa fa-remove"></i>
-            </div>
-        </div>
+    <div class="audioList-layout">
+      <ul class="audioListenList">
+          <li class="audioListenList__element" ng-if="audioList" ng-repeat="(key, value) in audioList">
+              <div class="audioListenList__description-block">
+                <div class="audioListenList__description" ng-if="value.description">{{value.description}}</div>
+                <div class="audioListenList__description-list__description" ng-if="!value.description">[ нет описания ]</div>
+                <div class="audioListenList__delete-audio">
+                  <i ng-if="isMyAudio(value) === true" ng-click="deleteAudio(value)" class="cbutton cbuttons__color fa fa-remove"></i>
+                  <i ng-if="isMyAudio(value) === false" class="cbutton cbutton__empty fa fa-remove"></i>
+                </div>
+              </div>
+              <div class="audioListenList__audio-block">
+                  <audio class="audioListenList__audio" controls preload="none" ng-play="addToHistory(value, $event)" >
+                      <source ng-src="{{trustSrc(value.sound)}}">
+                  </audio>
+              </div>
+              <div class="audioListenList__control-block">
+                  <div class="audioListenList__control__date"><i class="fa fa-calendar" aria-hidden="true"></i>{{value.dateStr}}</div>
+                  <div class="audioListenList__rating">
+                    <i ng-click="toggleLikeAudio(value, true)" class="cbutton cbuttons__color fa fa-thumbs-up" ng-class="{'cbuttons__color__active': value.likeState==='liked'}"></i>
+                    <div class="audioListenList__rating-value sc-rating" ng-class="{'-bad': value.rating < 0, '-good': value.rating > 0}"></i>{{value.rating}}</div>
+                    <i ng-click="toggleLikeAudio(value, false)" class="cbutton cbuttons__color fa fa-thumbs-down" ng-class="{'cbuttons__color__active': value.likeState==='disliked'}"></i>
+                  </div>
+                  <div class="history-list__share">
+                    <a target="_blank" href="{{getShareUrl(value)}}">
+                      <i class="fa fa-share-alt" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                  <div class="audioListenList__download">
+                    <i class="cbutton cbuttons__color fa fa-download"></i>
+                  </div>
+              </div>
+          </li>
+          <li></li>
+          <li></li>
+      </ul>
     </div>
 
 </div>

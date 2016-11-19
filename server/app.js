@@ -33,6 +33,22 @@ app.use(function(req, res, next) {
 
 app.use(express.static('app'));
 
+app.get('/check', function(req, res) {
+    var request = require('request');
+    var params = {
+      uri: req.query.url,
+      type: 'HEAD'
+    };
+
+    request(params, function(err, resp, body) {
+      console.log(resp.statusCode);
+      if (resp.statusCode == 404) {
+        res.send('{"removed": true}');
+      } else
+        res.send('{"removed": false}');
+    })
+});
+
 app.listen(process.env.PORT || 3000, function () {
     console.log('Listening...');
 });
