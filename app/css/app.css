@@ -450,7 +450,7 @@ body { margin:0; padding:0; }
   align-items: center;
 }
 .recordContainer__player audio, .listenContainer__player audio {
-  width: calc(100% - 150px);
+  width: calc(100% - 60px);
 }
 .recordContainer__searchString {
   padding-right: 24px;
