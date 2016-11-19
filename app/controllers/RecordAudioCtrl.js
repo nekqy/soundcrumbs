@@ -181,7 +181,7 @@ define([], function() {
        };
 
       $scope.submitClick = function() {
-          var inp = document.getElementById("file");
+        var inp = document.getElementById("file");
 
         if ( inp.files[0] && (inp.files[0].type == "audio/mp3" || inp.files[0].type == "audio/wav") ) {
             getValueForSave(inp.files[0]).then(saveAudio, logError);
@@ -198,7 +198,6 @@ define([], function() {
       };
 
       $scope.sendAudio = function() {
-        $('#sendAudio').val(defaultDescription);
         var description =  $('#sendAudio').val();
 
         console.log('description = ' + description);
@@ -253,6 +252,7 @@ define([], function() {
               return val.aid === audioId;
            });
            var defaultDescription = addingAudio ? addingAudio.artist + ' - ' + addingAudio.title : '';
+           $('.b_form__input').val(defaultDescription);
            $('#l_modal').show();
 
            /*var description = prompt('Введите описание (необязательно)', defaultDescription);
