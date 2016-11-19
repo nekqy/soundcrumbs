@@ -4,7 +4,7 @@ define(['./audioListenerCtrl', './CreateAudioCtrl', './RecordAudioCtrl', './mapC
         'AudioListenerCtrl': ['$scope', 'AUDIO_RATING_MINIMAL', 'AUDIO_RATING_INITIAL', '$sce', 'VKApi', AudioListenerCtrl],
         'CreateAudioCtrl': ['$scope', 'VKApi', '$http', '$sce', CreateAudioCtrl],
         'RecordAudioCtrl': ['$scope', 'VKApi', '$http', '$sce', 'geolocation', RecordAudioCtrl],
+        'mapCtrl': ['$scope', 'VKApi', 'geolocation', mapCtrl],
         'HistoryCtrl': ['$scope', 'VKApi', HistoryCtrl],
-        'mapCtrl': ['$scope', 'VKApi', 'geolocation', mapCtrl]
     });
 });

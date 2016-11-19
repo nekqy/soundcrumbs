@@ -26,14 +26,18 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
         }
     })();
 
-    var historyScreen = new rb.Screen("");
-    var mapScreen = new rb.Screen("" +
-        "<div ng-controller='mapCtrl'>" +
-        "<div id='map'></div>" +
-        "<div class='recordButton'>" +
-        '<i ng-if="geoData" ng-click="goToRecord()" class="recordButton-button cbutton fa fa-plus-square-o"></i>' +
-        "</div>" +
-        "</div>", undefined, true);
+    var historyScreen = new rb.Screen("", undefined, true);
+
+    var mapScreen = new rb.Screen(' \
+        <div ng-controller="mapCtrl"> \
+          <div id="map"></div> \
+          <div class="historyButton"> \
+            <i ng-if="geoData" ng-click="goToHistory()" class="recordButton-button cbutton fa fa-history"></i> \
+          </div> \
+          <div class="recordButton"> \
+            <i ng-if="geoData" ng-click="goToRecord()" class="recordButton-button cbutton fa fa-plus-square-o"></i> \
+          </div> \
+        </div>', undefined, true);
     historyScreen.addChild(mapScreen);
 
     var load2 = new Promise(function(resolve) {
@@ -50,8 +54,14 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
             resolve(true);
         });
     });
+    var load4 = new Promise(function(resolve) {
+        $.get('partials/userHistory.html', function (data) {
+            historyScreen.html = '<div ng-controller="HistoryCtrl">' + data + '</div>';
+            resolve(true);
+        });
+    });
 
-    return Promise.all([load2, load3]).then(function() {
+    return Promise.all([load2, load3, load4]).then(function() {
         return new Promise(function(resolve) {
             rb.start({rb1: mapScreen}, function() {
                 rb.Instances.rb1.getControlManager().disableAll();

@@ -11,13 +11,15 @@ define(['supercluster.min'], function(supercluster) {
 
        /***************** BEGIN FireBase *******************/
       // Initialize firebase module
-      firebase.initializeApp({
-         apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
-         authDomain: "soundcrumbs-168a9.firebaseapp.com",
-         databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
-         storageBucket: "soundcrumbs-168a9.appspot.com",
-         messagingSenderId: "443143749176"
-      });
+      try {
+        firebase.initializeApp({
+           apiKey: "AIzaSyBKj6ihhb0upcL8cdclGN7PUeCNzCRom5I",
+           authDomain: "soundcrumbs-168a9.firebaseapp.com",
+           databaseURL: "https://soundcrumbs-168a9.firebaseio.com",
+           storageBucket: "soundcrumbs-168a9.appspot.com",
+           messagingSenderId: "443143749176"
+        });
+      } catch(e) {}
 
        var ref = firebase.database().ref('SoundCrumbs');
 
@@ -81,6 +83,10 @@ define(['supercluster.min'], function(supercluster) {
 
        $scope.goToRecord = function() {
            rb1.move('right');
+       };
+
+       $scope.goToHistory = function() {
+           rb1.move('left');
        };
 
         function getLocation(init) {
