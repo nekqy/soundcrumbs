@@ -1,21 +1,22 @@
 <div class="recordContainer">
     <div class="back recordContainer__back">
-        <i ng-if="isNotRecording" ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
+        <i ng-if="isNotRecording&&isNotUploadingFile" ng-click="goToBack()" class="backButton cbutton fa fa-arrow-left"></i>
     </div>
     <div class="recordContainer__record">
-        <i ng-if="isNotRecording" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
+        <i ng-if="isNotRecording&&isNotUploadingFile" ng-click="startRecording()" class="startButton cbutton fa fa-microphone"></i>
         <i ng-if="isRecording" ng-click="stopRecording()" class="stopButton cbutton fa fa-stop"></i>
+        <i ng-if="isNotRecording" ng-click="openUploadForm()" class="cbutton fa fa-upload"></i>
     </div>
     <div class="recordContainer__log">{{log}}</div>
 
-    <div ng-if="isNotRecording" class="recordContainer__search">
+    <div ng-if="isNotRecording&&isNotUploadingFile" class="recordContainer__search">
         <label>
             Поиск:
             <input ng-model="formData.searchString">
         </label>
         <i  ng-click="getAudio()" class="cbutton fa fa-search"></i>
     </div>
-    <div ng-if="isNotRecording" class="recordContainer__select">
+    <div ng-if="isNotRecording&&isNotUploadingFile" class="recordContainer__select">
         <div ng-if="audioList" ng-repeat="(key, value) in audioList">
 
             <div ng-if="value.aid">
@@ -33,5 +34,16 @@
             </div>
 
         </div>
+    </div>
+    <div ng-if="isNotRecording&&isUploadingFile&&!log">
+        <form ref='uploadForm'
+            id='uploadForm'
+            encType="multipart/form-data">
+
+            <input type="hidden" name="sid" value="{{sid}}"/>
+            <input id="file" type="file" ng-model="fileInput" name="file" />
+            <input id="submitButton" type='submit' ng-click="submitClick()" value='Upload!' />
+            <input type="reset" ng-click="closeUploadForm()" value="Cancel"></input>
+        </form>
     </div>
 </div>
