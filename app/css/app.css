@@ -12,17 +12,15 @@ body {
   text-shadow: 0px 0px 5px rgba(100,100,100,0.5);
 }
 .cbutton:active {
-  color: #33f;
+  color: #48c;
 }
 
-.cbutton__like {
-  color: #6ca;
-}
-.cbutton__dislike {
-  color: #d46;
-}
-.cbutton__delete {
+.cbutton.cbuttons__color__active {
   color: #48c;
+}
+
+.cbuttons__color {
+  color: #999;
 }
 .cbutton__empty {
   opacity: 0;
@@ -372,6 +370,7 @@ body {
 
   flex-direction: column;
 }
+
 .button-disabled {
   display: none;
 }

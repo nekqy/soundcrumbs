@@ -4,7 +4,7 @@ define(['supercluster.min'], function(supercluster) {
        const crumbsFilterRadius = 0.000640; // 71.2444741076951 метров
        var lastRef = null;
 
-
+        var curMid = null;
         // пересчет в метры + еще чуть чуть чтобы окружность точки была внутри окружности охвата
         function calcMeters(coordDiff) {
             var koef = 100/0.000440;
@@ -265,26 +265,26 @@ define(['supercluster.min'], function(supercluster) {
                         }
                         begin += numPoints;
                     });
-
-                    var audios = foundFeatures.map(function(feature) {
-                        var res = feature.properties;
-                        res.dateStr = new Date(res.date).toLocaleDateString();
-                        res.description = res.description || '[ нет описания ]';
-                        res.rating = AUDIO_RATING_INITIAL + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
-                        res.key = feature.key; // Передаем также первичный ключ записи, чтобы дальше было в БД легко найти нужную запись
-                       return res;
-                    });
-                    audios = audios.sort(function(a, b) {
-                        return a.date > b.date;
-                    });
-
+                    
                     var audioListener = $('[ng-controller="AudioListenerCtrl"]');
                     var scope = angular.element(audioListener[0]).scope();
-                    scope.audioList = audios;
                     scope.ref = ref;
 
                     VKApi.getSession().then(function (session) {
-                        scope.mid = session.mid;
+                        curMid = scope.mid = session.mid;
+                        var audios = foundFeatures.map(function(feature) {
+                            var res = feature.properties;
+                            res.dateStr = new Date(res.date).toLocaleDateString();
+                            res.description = res.description || '[ нет описания ]';
+                            res.likeState = res.liked && res.liked[curMid] ? 'liked' : res.disliked && res.disliked[curMid] ? 'disliked' : '';
+                            res.rating = AUDIO_RATING_INITIAL + (res.liked ? Object.keys(res.liked).length : 0) - (res.disliked ? Object.keys(res.disliked).length : 0);
+                            res.key = feature.key; // Передаем также первичный ключ записи, чтобы дальше было в БД легко найти нужную запись
+                            return res;
+                        });
+                        audios = audios.sort(function(a, b) {
+                            return a.date > b.date;
+                        });
+                        scope.audioList = audios;
                         rb1.move('bottom');
                     }, function(err) {
                         alert(JSON.stringify(err));
