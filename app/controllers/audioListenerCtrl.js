@@ -1,5 +1,6 @@
 define([], function() {
-    function AudioListenerCtrl($scope, AUDIO_RATING_MINIMAL, AUDIO_RATING_INITIAL, $sce, VKApi) {
+    function AudioListenerCtrl($scope, AUDIO_RATING_INITIAL, AUDIO_LIKE_RATIO_MINIMAL, $sce) {
+
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
@@ -15,15 +16,19 @@ define([], function() {
                fbAudio = $scope.ref.child(audio.key),
                fbAudioLikeField = fbAudio.child('liked'),
                fbAudioDislikeField,
-               rating = AUDIO_RATING_INITIAL;
+               rating = AUDIO_RATING_INITIAL,
+               liked,
+               disliked;
             fbAudioLikeField.once('value', function(likeSn) {
                 rating += likeSn.numChildren();
+                liked = likeSn.numChildren();
                 if (likeSn.hasChild($scope.mid)) {
                     rating--;
                 }
                 fbAudioDislikeField = fbAudio.child('disliked');
                 fbAudioDislikeField.once('value', function(dislikeSn) {
                     rating -= dislikeSn.numChildren();
+                    disliked = dislikeSn.numChildren();
                     if (dislikeSn.hasChild($scope.mid)) {
                         rating++;
                     }
@@ -37,7 +42,7 @@ define([], function() {
                         rating--;
                     }
                     audio.rating = rating;
-                    if (rating < AUDIO_RATING_MINIMAL) {
+                    if (disliked != 0 && liked != 0 && liked / disliked <= AUDIO_LIKE_RATIO_MINIMAL) {
                         fbAudio.child('removed').set(true);
                     }
                 });
