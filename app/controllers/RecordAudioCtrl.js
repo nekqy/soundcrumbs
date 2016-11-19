@@ -115,6 +115,7 @@ define([], function() {
        $scope.isNotRecording = true;
        $scope.isUploadingFile = false;
        $scope.isNotUploadingFile = true;
+       $scope.cantUserMedia = false;
 
        $scope.startRecording = function() {
            //var button = $('.startButton')[0];
@@ -256,10 +257,14 @@ define([], function() {
                });
            });
        } else {
-           navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-               __log('No live audio input: ' + e);
-               log('No live audio input: ' + e);
-           });
+           if (navigator.getUserMedia) {
+               navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+                   __log('No live audio input: ' + e);
+                   log('No live audio input: ' + e);
+               });
+           } else {
+               $scope.cantUserMedia = true;
+           }
        }
    }
 
