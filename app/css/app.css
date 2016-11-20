@@ -153,7 +153,7 @@ body {
 
 .history-list__date, .history-list__rating, .history-list__share,
 .audioListenList__control__date, .audioListenList__rating,
-.audioListenList__download
+.audioListenList__download, .history-list__map
 {
   display: inline-block;
   padding: 10px 8px;
@@ -177,7 +177,7 @@ body {
   color: #3fc372;
 }
 
-.history-list__share, .audioListenList__download
+.history-list__share, .audioListenList__download, .history-list__map
 {
   float: right;
 }
@@ -191,6 +191,12 @@ body {
 .history-list__share:hover
 {
 
+}
+
+.fa-map-marker
+{
+  color: #999;
+  font-size: 1.1rem;
 }
 
 .fa-share-alt

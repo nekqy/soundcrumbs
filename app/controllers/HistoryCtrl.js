@@ -35,6 +35,7 @@ define([], function () {
 							audio.rating = Object.keys(trackData.liked || {}).length - Object.keys(trackData.disliked || {}).length;
 
 							audio.shareUrl = getShareUrl(trackData);
+							audio.mapUrl = getMapUrl(trackData);
 						});
 					});
 
@@ -42,6 +43,11 @@ define([], function () {
 				});
 			});
 		});
+
+		function getMapUrl(data) {
+			return 'http://www.openstreetmap.org/?mlat=' + data.coord_y + '&mlon=' + data.coord_x + 
+				   '&zoom=18#map=18/' + data.coord_y + '/' + data.coord_x;
+		};
 
 		function getShareUrl(data) {
 			var title; 
@@ -54,8 +60,7 @@ define([], function () {
 			var image = encodeURIComponent('http://static-maps.yandex.ru/1.x/?lang=en-US&ll=' + data.coord_x +
 						',' + data.coord_y + '&z=13&l=map&size=600,300&pt='+ data.coord_x +
 						',' + data.coord_y +',pmgrm');
-			var link = encodeURIComponent('http://www.openstreetmap.org/?mlat=' + data.coord_y + '&mlon=' + data.coord_x + 
-					   '&zoom=18#map=18/' + data.coord_y + '/' + data.coord_x);
+			var link = encodeURIComponent(getMapUrl(data));
 
 			return "https://vk.com/share.php?url=" + link + "&title=" + title + "&description=" + title +
 				   "&image=" + image + "&noparse=false";
