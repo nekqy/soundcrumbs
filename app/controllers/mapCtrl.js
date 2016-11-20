@@ -25,6 +25,13 @@ define(['supercluster.min'], function(supercluster) {
 
        var ref = firebase.database().ref('SoundCrumbs');
 
+        // todo костыль
+        rb1.afterRenderDispatcher.add(function(side, screen) {
+            if (screen._id === 'screen_2') {
+                $scope.applyCrumbsFilter();
+            }
+        });
+
        function applySnapshot(snapshot) {
           var
              x = $scope.geoData.coords.longitude,
