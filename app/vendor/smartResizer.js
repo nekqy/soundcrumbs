@@ -22,6 +22,7 @@ define([], function() {
             timeout = setTimeout(delayed, threshold || 100);
         };
     }
+    window.debounce = debounce;
 
     // smartresize
     $.fn['smartresize'] = function(fn){

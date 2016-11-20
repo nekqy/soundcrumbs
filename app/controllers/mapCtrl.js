@@ -282,7 +282,12 @@ define(['supercluster.min'], function(supercluster) {
                             return res;
                         });
                         audios = audios.sort(function(a, b) {
-                            return a.date > b.date;
+                            //var isRatingEqual = a.rating === b.rating;
+                            //if (!isRatingEqual) {
+                            //    return a.rating < b.rating;
+                            //} else {
+                                return a.date < b.date;
+                            //}
                         });
                         scope.audioList = audios;
                         rb1.move('bottom');

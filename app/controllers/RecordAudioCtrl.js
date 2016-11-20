@@ -88,22 +88,22 @@ define([], function() {
        $scope.searchStr = '';
        $scope.timer = null;
        $scope.showList = true;
-       $scope.onKey = function() {
+       $scope.onKey = window.debounce(function() {
           if($scope.onkeyf)
             return;
           $scope.showList = true;
           $scope.onkeyf = true;
           //$scope.getAudio();
 
-          $scope.timer = setInterval(function()
-          {
+          //$scope.timer = setInterval(function()
+          //{
             if($scope.searchStr !== $scope.formData.searchString)
               $scope.getAudio();
 
             $scope.searchStr = $scope.formData.searchString;
             $scope.onkeyf = false;
-          }, 1000);
-       }
+          //}, 1000);
+       }, 1000);
 
        $scope.getAudio = function() {
            $scope.useSmallRecordButton = true;
