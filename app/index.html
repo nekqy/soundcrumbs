@@ -35,6 +35,53 @@
   <div class="log"></div>
 
   <script src="bundle.js"></script>
+  <script>
+    var locs = [
+      {
+        latitude: 57.630993,
+        longitude: 39.840542
+      },
+      {
+        latitude: 57.631332,
+        longitude: 39.841258
+      },
+      {
+        latitude: 57.631332,
+        longitude: 39.842258
+      },
+      {
+        latitude: 57.631332,
+        longitude: 39.843258
+      }
+    ];
 
+    var next;
+    var reset;
+    var geoloc = window.navigator.geolocation.getCurrentPosition;
+    setTimeout(function() {
+      navigator.geolocation.getCurrentPosition = function(success, failure) { 
+        success({ coords: { 
+            latitude: locs[0].latitude, 
+            longitude: locs[0].longitude,
+        }, timestamp: Date.now() }); 
+      }
+
+      next = function(i) {
+        if (i < locs.length)
+        {
+          navigator.geolocation.getCurrentPosition = function(success, failure) { 
+          success({ coords: { 
+                latitude: locs[i].latitude, 
+                longitude: locs[i].longitude,
+             }, timestamp: Date.now() }); 
+          }
+        }
+      };
+
+      reset = function() {
+        window.navigator.geolocation.getCurrentPosition = geoloc;
+      };
+    }, 2000);
+  </script>
 </body>
 </html>

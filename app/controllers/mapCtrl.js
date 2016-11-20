@@ -129,7 +129,7 @@ define(['supercluster.min'], function(supercluster) {
             if (!isLocating && isMapScreen()) {
                 getLocation();
             }
-        }, 10000);
+        }, 2000);
 
         getLocation(function() {
             mapboxgl.accessToken = 'pk.eyJ1Ijoic291bmRjcnVtYnMiLCJhIjoiY2l2NWljOG5rMDAwaTJ5bmllNDdsZnk0bCJ9.RJEBZJSiTUPBXi4sOQkrTw';
