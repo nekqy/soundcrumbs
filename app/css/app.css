@@ -235,6 +235,10 @@ body {
   .l_record { max-width: 640px; }
 }
 
+.center-form {
+  margin: auto auto;
+}
+
 .b_header-search
 {
   position: relative;

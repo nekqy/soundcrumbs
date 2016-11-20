@@ -38,14 +38,14 @@
       </ul>
     </div>
 
-    <div ng-if="isNotRecording&&isUploadingFile&&!log">
+    <div ng-if="isNotRecording&&isUploadingFile&&!log" class="center-form">
         <form ref='uploadForm'
             id='uploadForm'
             encType="multipart/form-data">
 
             <input type="hidden" name="sid" value="{{sid}}"/>
             <input id="file" type="file" ng-model="fileInput" name="file" />
-            <input id="submitButton" type='submit' ng-click="submitClick()" value='Upload!' />
+            <input id="submitButton" type='submit' ng-click="submitClick()" value='Upload' />
             <input type="reset" ng-click="closeUploadForm()" value="Cancel"></input>
         </form>
     </div>
