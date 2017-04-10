@@ -35,52 +35,5 @@
   <div class="log"></div>
 
   <script src="bundle.js"></script>
-  <script>
-    var locs = [
-      {
-        latitude: 57.631190,
-        longitude: 39.840892
-      },
-      {
-        latitude: 57.626903,
-        longitude: 39.884537
-      },
-      {
-        latitude: 57.633906,
-        longitude: 39.859251
-      }
-    ];
-
-    var next;
-    var reset;
-    var geoloc = window.navigator.geolocation.getCurrentPosition;
-    setTimeout(function() {
-      navigator.geolocation.getCurrentPosition = function(success, failure) { 
-        success({ coords: { 
-            latitude: locs[0].latitude, 
-            longitude: locs[0].longitude,
-        }, timestamp: Date.now() }); 
-      }
-
-      next = function(i) {
-        if (i < locs.length)
-        {
-          navigator.geolocation.getCurrentPosition = function(success, failure) { 
-          success({ coords: { 
-                latitude: locs[i].latitude, 
-                longitude: locs[i].longitude,
-             }, timestamp: Date.now() }); 
-          }
-        }
-        else {
-          console.log("Last point is " + (i - 1) + ". Try reset() for real geolocation.")
-        }
-      };
-
-      reset = function() {
-        window.navigator.geolocation.getCurrentPosition = geoloc;
-      };
-    }, 2000);
-  </script>
 </body>
 </html>

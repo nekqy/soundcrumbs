@@ -35,7 +35,7 @@ define(['./vendor/smartResizer'], function(SmartResizer) {
             <i ng-if="geoData" ng-click="goToHistory()" class="recordButton-button cbutton fa fa-history"></i> \
           </div> \
           <div class="recordButton"> \
-            <i ng-if="geoData" ng-click="goToRecord()" class="recordButton-button cbutton buttonRecord">✚</i> \
+            <i ng-if="geoData" ng-click="goToRecord()" class="recordButton-button cbutton fa fa-plus-square-o"></i> \
           </div> \
         </div>', undefined, true);
     historyScreen.addChild(mapScreen);
